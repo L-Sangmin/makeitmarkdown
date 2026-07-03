@@ -109,8 +109,17 @@
         <div class="pane-body" id="original-body"></div>
       </section>
       <section class="pane" aria-label="Converted Markdown">
-        <h2 class="pane-title">Markdown <span id="md-size" class="pane-title-note"></span></h2>
+        <h2 class="pane-title">Markdown
+          <span id="md-size" class="pane-title-note"></span>
+          <button type="button" id="md-exact" class="md-exact" title="Load the o200k tokenizer (~2 MB, once) and count exactly">count exactly</button>
+          <span class="bar-spacer"></span>
+          <span class="pane-seg" role="group" aria-label="Markdown view">
+            <button type="button" id="md-view-raw" class="pane-seg-btn is-active" aria-pressed="true">Raw</button>
+            <button type="button" id="md-view-preview" class="pane-seg-btn" aria-pressed="false">Preview</button>
+          </span>
+        </h2>
         <pre class="pane-body md-raw" id="markdown-body"></pre>
+        <div class="pane-body md-preview" id="markdown-preview" hidden></div>
       </section>
       <section class="pane" aria-label="Fidelity report">
         <h2 class="pane-title">Fidelity report</h2>

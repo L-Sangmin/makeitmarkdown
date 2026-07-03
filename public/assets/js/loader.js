@@ -10,6 +10,7 @@ const SCRIPT_LIBS = {
   turndownPluginGfm: `${VENDOR}/turndown-plugin-gfm-1.0.2.js`,
   Readability: `${VENDOR}/readability-0.6.0.js`,
   XLSX: `${VENDOR}/xlsx-0.20.3.full.min.js`,
+  GPTTokenizer_o200k_base: `${VENDOR}/gpt-tokenizer-o200k_base-3.4.0.min.js`,
 };
 
 const LIBS_BY_EXT = {
@@ -69,4 +70,10 @@ export async function ensureLibsFor(filename) {
   for (const name of LIBS_BY_EXT[ext] ?? []) {
     await ensureLib(name);
   }
+}
+
+// The exact-token counter is never needed for conversion itself — it loads
+// only when the user asks for an exact count (~2MB, once).
+export async function ensureTokenizer() {
+  await ensureLib("GPTTokenizer_o200k_base");
 }

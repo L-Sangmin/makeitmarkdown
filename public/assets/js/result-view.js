@@ -5,6 +5,7 @@
 // parser found — never promised as "preserved".
 
 import { renderDependencyDag } from "./ipynb-dag.js";
+import { qcChecks } from "./md-utils.js";
 
 const escapeHtml = (s) =>
   String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -19,6 +20,17 @@ export function renderResult(payload, els) {
 export function setMarkdown(els, markdown) {
   els.markdown.textContent = markdown;
   els.mdSize.textContent = sizeNote(markdown);
+  els._markdown = markdown;
+  if (els.preview && !els.preview.hidden) renderPreview(els);
+}
+
+// Rendered view of the current Markdown — how a chat UI would display it.
+// marked + DOMPurify are static on the page (the notebook preview uses them).
+export function renderPreview(els) {
+  els.preview.innerHTML = globalThis.DOMPurify.sanitize(
+    globalThis.marked.parse(els._markdown ?? ""),
+    { USE_PROFILES: { html: true } }
+  );
 }
 
 // The DAG bakes theme colors into its SVG — re-render it when the theme flips.
@@ -183,12 +195,26 @@ function renderFidelity(container, result) {
     counts.map(([label, n]) => `${n} ${label} detected`).join(", ") +
     `. ${warnings.length} warning${warnings.length === 1 ? "" : "s"}.`;
 
+  const checks = qcChecks(result);
+  const checksHtml = checks
+    .map(
+      (c) => `
+      <li class="${c.pass ? "qc-pass" : "qc-fail"}">
+        <span class="qc-mark">${c.pass ? "✓" : "✗"}</span>
+        <span><strong>${escapeHtml(c.label)}</strong> — ${escapeHtml(c.note)}</span>
+      </li>`
+    )
+    .join("");
+
   container.innerHTML = `
     <p class="sr-only">${escapeHtml(srSummary)}</p>
-    <div class="qc" aria-hidden="true">
-      <div class="qc-score"><span class="count-num" data-n="${score}">0</span><span class="qc-pct">%</span></div>
-      <div class="qc-label">QC score<span>5-point structural check</span></div>
-    </div>
+    <button type="button" class="qc qc-toggle" aria-expanded="false"
+      aria-label="QC score ${score} percent — show the five structural checks">
+      <div class="qc-score" aria-hidden="true"><span class="count-num" data-n="${score}">0</span><span class="qc-pct">%</span></div>
+      <div class="qc-label" aria-hidden="true">QC score<span>5-point structural check · details</span></div>
+      <svg class="qc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <ul class="qc-checks" hidden>${checksHtml}</ul>
     <div class="counts" aria-hidden="true">
       ${counts
         .map(
@@ -208,6 +234,15 @@ function renderFidelity(container, result) {
     ${warnHtml}
     ${result.notebook ? `<h3 class="fidelity-sub">Cell dependencies</h3><div class="dag-wrap">${dagSvg(result.notebook)}</div>` : ""}
   `;
+
+  const toggle = container.querySelector(".qc-toggle");
+  const checkList = container.querySelector(".qc-checks");
+  toggle.addEventListener("click", () => {
+    const open = checkList.hidden;
+    checkList.hidden = !open;
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.classList.toggle("is-open", open);
+  });
 
   animateCounts(container);
 }

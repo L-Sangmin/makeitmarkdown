@@ -70,16 +70,49 @@ export function extractMdTables(markdown) {
   return tables;
 }
 
-// QC per HANDOFF §16, expressed as a fraction instead of a boolean.
-export function qcScore(r) {
-  const checks = [
-    (r.title?.length ?? 0) > 0,
-    (r.sections?.length ?? 0) >= 3,
-    (r.figures ?? []).every((f) => f.url && f.caption),
-    (r.tables ?? []).every((t) => t.markdown),
-    !r.sections?.some((s) => /\?\?|□□/.test(s.content)),
+// The five structural QC checks, individually labelled so the fidelity
+// panel can show which ones passed. qcScore stays the same fraction.
+export function qcChecks(r) {
+  return [
+    {
+      label: "Title recovered",
+      pass: (r.title?.length ?? 0) > 0,
+      note: "a real document title was found",
+    },
+    {
+      label: "Sectioned structure",
+      pass: (r.sections?.length ?? 0) >= 3,
+      note: "at least three sections with headings",
+    },
+    {
+      label: "Figures addressable",
+      pass: (r.figures ?? []).every((f) => f.url && f.caption),
+      note: "every detected figure has a file and a caption",
+    },
+    {
+      label: "Tables intact",
+      pass: (r.tables ?? []).every((t) => t.markdown),
+      note: "every detected table produced Markdown markup",
+    },
+    {
+      label: "No extraction noise",
+      pass: !r.sections?.some((s) => /\?\?|□□/.test(s.content)),
+      note: "no ??/□□ replacement-character debris in the text",
+    },
   ];
-  return checks.filter(Boolean).length / checks.length;
+}
+
+export function qcScore(r) {
+  const checks = qcChecks(r);
+  return checks.filter((c) => c.pass).length / checks.length;
+}
+
+// Exact token count via the lazily-loaded o200k tokenizer (loader.js
+// ensureTokenizer). Throws if the vendor script isn't loaded yet.
+export function countTokensExact(text) {
+  const t = globalThis.GPTTokenizer_o200k_base;
+  if (!t?.encode) throw new Error("tokenizer not loaded");
+  return t.encode(text).length;
 }
 
 export function toArrayBuffer(src) {

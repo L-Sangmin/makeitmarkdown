@@ -575,6 +575,9 @@ kbd {
 }
 
 .pane-title {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
   margin: 0;
   padding: 0.75rem 1rem 0.625rem;
   font-size: 0.6875rem;
@@ -586,12 +589,51 @@ kbd {
 }
 
 .pane-title-note {
-  float: right;
   font-family: var(--font-mono);
   font-weight: 400;
   letter-spacing: 0;
   text-transform: none;
   color: var(--fg-faint);
+}
+
+.md-exact {
+  font-family: var(--font-mono);
+  font-size: 0.65625rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 0.0625rem 0.25rem;
+}
+
+.md-exact:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.md-exact:disabled { color: var(--fg-faint); cursor: default; }
+
+.pane-seg {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.pane-seg-btn {
+  padding: 0.125rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--fg-faint);
+  transition: color var(--ease), background-color var(--ease);
+}
+
+.pane-seg-btn + .pane-seg-btn { border-left: 1px solid var(--border); }
+.pane-seg-btn:hover { color: var(--fg); }
+
+.pane-seg-btn.is-active {
+  color: var(--fg);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 .pane-body {
@@ -611,6 +653,50 @@ kbd {
   white-space: pre-wrap;
   word-break: break-word;
 }
+
+/* ② rendered preview — the Markdown as a chat UI would show it */
+
+.md-preview { font-size: 0.8125rem; line-height: 1.65; }
+.md-preview > :first-child { margin-top: 0; }
+.md-preview h1, .md-preview h2, .md-preview h3, .md-preview h4 {
+  margin: 1.25rem 0 0.5rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.md-preview h1 { font-size: 1.25rem; }
+.md-preview h2 { font-size: 1.0625rem; }
+.md-preview h3 { font-size: 0.9375rem; }
+.md-preview h4 { font-size: 0.875rem; }
+.md-preview p, .md-preview ul, .md-preview ol { margin: 0 0 0.75rem; }
+.md-preview ul, .md-preview ol { padding-left: 1.25rem; }
+.md-preview code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+  padding: 0.05em 0.3em;
+  border-radius: 4px;
+}
+.md-preview pre {
+  padding: 0.625rem 0.75rem;
+  background: color-mix(in srgb, var(--fg) 4%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  margin: 0 0 0.75rem;
+}
+.md-preview pre code { background: none; padding: 0; }
+.md-preview table { border-collapse: collapse; margin: 0 0 0.75rem; font-size: 0.78125rem; }
+.md-preview th, .md-preview td { border: 1px solid var(--border); padding: 0.25rem 0.5rem; text-align: left; }
+.md-preview th { background: color-mix(in srgb, var(--fg) 4%, transparent); }
+.md-preview img { max-width: 100%; }
+.md-preview blockquote {
+  margin: 0 0 0.75rem;
+  padding: 0.125rem 0.75rem;
+  border-left: 2px solid var(--accent);
+  color: var(--fg-muted);
+}
+.md-preview hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+.md-preview a { color: var(--accent); }
 
 /* ① notebook preview */
 
@@ -688,6 +774,48 @@ kbd {
   gap: 0.75rem;
   margin-bottom: 1rem;
 }
+
+/* the QC block is a disclosure button — click for the five checks */
+.qc-toggle {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  padding: 0.375rem 0.5rem;
+  margin: -0.375rem -0.5rem 0.625rem;
+  transition: background-color var(--ease);
+}
+
+.qc-toggle:hover { background: color-mix(in srgb, var(--fg) 5%, transparent); }
+
+.qc-chevron {
+  align-self: center;
+  margin-left: auto;
+  color: var(--fg-faint);
+  transition: transform var(--ease);
+}
+
+.qc-toggle.is-open .qc-chevron { transform: rotate(180deg); }
+
+.qc-checks {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--fg) 3%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4375rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.qc-checks li { display: flex; gap: 0.5rem; color: var(--fg-muted); }
+.qc-checks strong { color: var(--fg); font-weight: 550; }
+.qc-checks .qc-mark { flex: none; font-family: var(--font-mono); }
+.qc-pass .qc-mark { color: var(--ok); }
+.qc-fail .qc-mark { color: var(--warn); }
 
 .qc-score {
   font-family: var(--font-mono);

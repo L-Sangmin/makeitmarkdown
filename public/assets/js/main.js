@@ -8,7 +8,9 @@
 //   exists (progressive disclosure). Nothing persists across refresh.
 
 import { convertFile, UnsupportedFormatError } from "./router.js";
-import { renderResult, setMarkdown, refreshFidelity } from "./result-view.js";
+import { renderResult, setMarkdown, refreshFidelity, renderPreview } from "./result-view.js";
+import { ensureTokenizer } from "./loader.js";
+import { countTokensExact } from "./md-utils.js";
 import { buildResultZip, buildBatchZip } from "./zipper.js";
 import { PRESETS, formatWithPreset } from "./presets.js";
 import { loadHistory, saveToHistory, clearHistory } from "./history.js";
@@ -48,6 +50,7 @@ const els = {
   meta: document.getElementById("result-meta"),
   original: document.getElementById("original-body"),
   markdown: document.getElementById("markdown-body"),
+  preview: document.getElementById("markdown-preview"),
   mdSize: document.getElementById("md-size"),
   fidelity: document.getElementById("fidelity-body"),
   btnCopy: document.getElementById("btn-copy"),
@@ -87,7 +90,49 @@ function applyPreset(id) {
   if (!current) return;
   current.markdown = formatWithPreset(current.result, id);
   setMarkdown(els, current.markdown);
+  resetExactCount();
 }
+
+// --- markdown pane: raw/preview toggle + exact token count -----------------------
+
+const btnMdRaw = document.getElementById("md-view-raw");
+const btnMdPreview = document.getElementById("md-view-preview");
+const btnExact = document.getElementById("md-exact");
+
+function setMdView(mode) {
+  const preview = mode === "preview";
+  els.markdown.hidden = preview;
+  els.preview.hidden = !preview;
+  for (const [btn, active] of [[btnMdRaw, !preview], [btnMdPreview, preview]]) {
+    btn.classList.toggle("is-active", active);
+    btn.setAttribute("aria-pressed", String(active));
+  }
+  if (preview) renderPreview(els);
+}
+btnMdRaw.addEventListener("click", () => setMdView("raw"));
+btnMdPreview.addEventListener("click", () => setMdView("preview"));
+
+function resetExactCount() {
+  btnExact.disabled = false;
+  btnExact.hidden = false;
+  btnExact.textContent = "count exactly";
+}
+
+btnExact.addEventListener("click", async () => {
+  if (!current) return;
+  btnExact.disabled = true;
+  btnExact.textContent = "counting…";
+  try {
+    await ensureTokenizer();
+    const n = countTokensExact(current.markdown);
+    els.mdSize.textContent =
+      `${current.markdown.length.toLocaleString("en-US")} chars · ${n.toLocaleString("en-US")} tokens (o200k)`;
+    btnExact.hidden = true;
+  } catch {
+    // Most likely offline before the tokenizer was ever cached.
+    btnExact.textContent = "count unavailable";
+  }
+});
 
 // --- views ----------------------------------------------------------------------
 
@@ -160,6 +205,7 @@ async function handleFile(file) {
     els.meta.textContent = `${payload.filename} · converted in ${formatDuration(payload.ms)} · processed locally — refresh clears it`;
 
     renderResult(payload, els);
+    resetExactCount();
     showResult();
     saveToHistory(payload, activePreset);
     renderHistoryList();
@@ -227,6 +273,7 @@ async function handleFiles(files) {
   const failNote = failures.length ? ` · ${failures.length} failed` : "";
   els.meta.textContent = `${payloads.length} files converted${failNote} · showing ${current.filename} · Download .zip bundles all`;
   renderResult(current, els);
+  resetExactCount();
   showResult();
 }
 
@@ -323,6 +370,7 @@ function restoreFromHistory(entry) {
   syncPresetSeg();
   els.meta.textContent = `${entry.filename} · restored from local history (${timeAgo(entry.ts)}) — stored only in this browser`;
   renderResult(current, els);
+  resetExactCount();
   showResult();
 }
 

@@ -27,11 +27,12 @@ Libraries covered (Phase 1):
   7. marked                     MIT License
 
   8. SheetJS (xlsx)             Apache License 2.0
+  9. gpt-tokenizer              MIT License
 
 Fonts (self-hosted in /public/assets/fonts, latin subsets):
 
-  9. Inter                      SIL Open Font License 1.1
- 10. JetBrains Mono             SIL Open Font License 1.1
+ 10. Inter                      SIL Open Font License 1.1
+ 11. JetBrains Mono             SIL Open Font License 1.1
 
 --------------------------------------------------------------------------------
 1. pdf.js (pdfjs-dist)
@@ -238,7 +239,7 @@ License:   MIT License
   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
-8. Inter (font)
+10. Inter (font)
 --------------------------------------------------------------------------------
 Purpose:   Interface typeface (sans)
 Homepage:  https://github.com/rsms/inter
@@ -247,7 +248,7 @@ License:   SIL Open Font License 1.1 (full text in Appendix B)
   Copyright (c) 2016 The Inter Project Authors (https://github.com/rsms/inter)
 
 --------------------------------------------------------------------------------
-9. JetBrains Mono (font)
+11. JetBrains Mono (font)
 --------------------------------------------------------------------------------
 Purpose:   Interface typeface (monospace accent)
 Homepage:  https://github.com/JetBrains/JetBrainsMono
@@ -272,11 +273,39 @@ License:   Apache License 2.0 (full text in Appendix A)
 
       http://www.apache.org/licenses/LICENSE-2.0
 
+--------------------------------------------------------------------------------
+9. gpt-tokenizer
+--------------------------------------------------------------------------------
+Purpose:   Exact token counting (o200k_base BPE), loaded on demand only
+Homepage:  https://github.com/niieani/gpt-tokenizer
+Version:   3.4.0 (self-hosted: /public/assets/vendor/gpt-tokenizer-o200k_base-3.4.0.min.js)
+License:   MIT License
+
+  Copyright (c) 2023-2024 Bazyli Brzoska
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  THE SOFTWARE.
+
 ================================================================================
 Appendix A — Apache License, Version 2.0
 ================================================================================
 
-Applies to: pdf.js, Readability.js, DOMPurify (as elected above).
+Applies to: pdf.js, Readability.js, DOMPurify (as elected above), SheetJS.
 
                                  Apache License
                            Version 2.0, January 2004
