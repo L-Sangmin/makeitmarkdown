@@ -166,6 +166,39 @@ btnExact.addEventListener("click", async () => {
   }
 });
 
+// --- landing strips: gentle first-view reveal + stat count-up --------------------
+
+if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) {
+  const animateStat = (el) => {
+    const m = /^(\d+)(.*)$/.exec(el.textContent.trim());
+    if (!m) return;
+    const target = Number(m[1]);
+    const suffix = m[2];
+    const start = performance.now();
+    const tick = (now) => {
+      const p = Math.min(1, (now - start) / 700);
+      el.textContent = `${Math.round(target * (1 - Math.pow(1 - p, 3)))}${suffix}`;
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add("is-revealed");
+        entry.target.querySelectorAll(".stat-num").forEach(animateStat);
+        io.unobserve(entry.target);
+      }
+    },
+    { threshold: 0.2 }
+  );
+  document.querySelectorAll(".strip").forEach((el) => {
+    el.classList.add("reveal");
+    io.observe(el);
+  });
+}
+
 // --- OCR offer for scanned PDFs ---------------------------------------------------
 // Appears under the fidelity report only when the pdf parser flagged a scan.
 // Everything runs locally; the engine (~8 MB) downloads once, on click.

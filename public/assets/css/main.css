@@ -83,6 +83,10 @@
 /* author display rules must not defeat the hidden attribute */
 [hidden] { display: none !important; }
 
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
 html, body { height: 100%; }
 
 body {
@@ -196,6 +200,14 @@ kbd {
 .scroll-cue:hover { color: var(--fg); }
 
 /* --- landing strips (below the fold) ---------------------------------------- */
+
+/* first-view reveal — class added by main.js only when motion is allowed */
+.strip.reveal { opacity: 0; transform: translateY(18px); }
+.strip.reveal.is-revealed {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
 
 .strip { border-top: 1px solid var(--border); }
 
