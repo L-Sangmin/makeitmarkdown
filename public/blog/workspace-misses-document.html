@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>When your AI workspace keeps missing half a document — MakeItMarkdown</title>
+  <meta name="description" content="The answer cites one section and ignores the rest; follow-ups reveal the assistant never saw page 12. Three retrieval failure modes in Projects/Spaces and how document structure fixes them." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Fixes · 08</p>
+    <article>
+      <h1>When your AI workspace keeps missing half a document</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 5 min read</p>
+
+      <p>The file is uploaded. The assistant reads it — sometimes. It
+      answers from section 2 and acts like section 5 doesn't exist; it
+      finds the topic when you use the document's exact words and misses
+      it when you paraphrase. This isn't the model forgetting. It's
+      retrieval returning the wrong chunks, and it has three usual
+      causes.</p>
+
+      <h2>Cause 1: chunks that don't align with topics</h2>
+      <p>Workspaces split each file into chunks and search those, not the
+      whole document. When the text arrives structureless (a PDF
+      extraction, a headingless wall of prose), the splitter cuts by
+      length — mid-topic, mid-table — and your question's best match is a
+      fragment that starts halfway through the relevant idea. The model
+      answers from the fragment; the rest of the topic sits in a
+      neighboring chunk that didn't score high enough to be fetched.</p>
+      <p><strong>Fix:</strong> give the splitter boundaries. Converted
+      Markdown carries the document's own headings, and heading-aligned
+      chunks are whole topics with searchable names. (Full mechanics: <a
+      href="/blog/rag-ready-markdown.html">RAG-ready Markdown</a> — the
+      same logic applies inside hosted workspaces.)</p>
+
+      <h2>Cause 2: the duplicate-copy trap</h2>
+      <p>You uploaded the PDF, later added a cleaner version, and never
+      deleted the original. Now retrieval draws from both — and the
+      glyph-soup copy sometimes outranks the clean one for exactly the
+      queries you care about. Symptoms look random because they are.</p>
+      <p><strong>Fix:</strong> one canonical version per document. If you
+      convert, <em>replace</em> — upload the .md, remove the source file
+      from the workspace (keep it in your own archive, of course).</p>
+
+      <h2>Cause 3: ambiguous file identity</h2>
+      <p>Ten files named <code>notes.pdf</code>, <code>notes(1).pdf</code>,
+      <code>final_v2.pdf</code> give retrieval no way to respect "in the
+      week-5 notes…" instructions, and citations come back
+      unintelligible.</p>
+      <p><strong>Fix:</strong> descriptive, stable filenames
+      (<code>week-05-convergence.md</code>). Batch-converting with
+      MakeItMarkdown keeps each output named after its source, so a
+      disciplined source folder produces a disciplined workspace.</p>
+
+      <h2>The five-minute overhaul</h2>
+      <ol>
+        <li>Batch-drop the workspace's documents into
+        <a href="/">the converter</a> (multiple files at once; all
+        local).</li>
+        <li>Check each fidelity report — <em>sections detected ≥ 3</em>
+        is the number that predicts good chunking; the QC breakdown shows
+        it explicitly.</li>
+        <li>Upload the .md files; delete the originals from the
+        workspace.</li>
+        <li>Re-ask the question that failed, paraphrased. Watch whether
+        the citation lands in the right section.</li>
+      </ol>
+
+      <p>This overhaul is exactly what turned a struggling small model
+      into a precise one in <a
+      href="/blog/lecture-notes-case-study.html">our lecture-notes case
+      study</a> — retrieval quality was the whole story.</p>
+
+      <div class="article-cta">
+        <p>Rebuild your workspace's files in one batch drop — fidelity
+        report per file.</p>
+        <a href="/">Open MakeItMarkdown →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/blog/ai-workspaces-markdown.html">Markdown for AI workspaces</a> ·
+      <a href="/blog/claude-projects-pdf-fix.html">Claude Projects PDF fix</a> ·
+      <a href="/blog/">Context Lab</a></p>
+    </article>
+  </div>
+</body>
+</html>

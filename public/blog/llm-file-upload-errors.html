@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>"I can't access this file" — what chat models actually do with uploads — MakeItMarkdown</title>
+  <meta name="description" content="ChatGPT, Claude or Gemini says it can't read your upload. The four real causes — unsupported extension, image-only PDF, oversized file, container junk — and the one format that always works." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Fixes · 02</p>
+    <article>
+      <h1>"I can't access this file" — what chat models actually do with uploads</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 5 min read</p>
+
+      <p>You attach a file. The assistant replies that it can't open it,
+      can't access it, or — sneakier — answers as if it read it while
+      clearly having read almost nothing. The error message never says
+      why. There are only four real causes, and they're easy to tell
+      apart.</p>
+
+      <h2>What happens to an upload</h2>
+      <p>No chat model reads your file directly. The platform runs an
+      extractor first — a converter you can't see, configure, or get a
+      quality report from — and pastes its output into the model's
+      context. Every "can't read" error is that hidden extractor failing.
+      The four failure modes:</p>
+
+      <h2>1. The extension isn't supported at all</h2>
+      <p>Every platform supports a different list, and the lists change.
+      Subtitle files, JSONL logs, notebook exports and odd spreadsheet
+      variants are common casualties: the upload is simply rejected, or
+      accepted and silently treated as an unreadable blob.</p>
+      <p><strong>Fix:</strong> convert to Markdown — plain text is the one
+      format every assistant accepts everywhere, pasted or attached.
+      MakeItMarkdown handles <code>.ipynb .docx .xlsx .csv .json .jsonl
+      .html .pdf .srt .vtt .md .txt</code> in the browser.</p>
+
+      <h2>2. The PDF has no text layer</h2>
+      <p>Scanned pages are photographs of text. The extractor finds
+      nothing, and the assistant either says so or answers from the few
+      fragments it got (page numbers, a header). Self-test: try selecting
+      text in your PDF viewer — if you can't, it's a scan. Details and
+      options: <a href="/blog/scanned-pdf-cant-convert.html">Scanned
+      PDFs</a>.</p>
+
+      <h2>3. The file is too big for the context window</h2>
+      <p>A file can be perfectly readable and still fail: extracted, it
+      exceeds the model's input limit, so the platform truncates it
+      (usually silently) or refuses. Notebooks are the classic case — our
+      stress-test <code>.ipynb</code> is 3.5&nbsp;MB of JSON that no chat
+      accepts, but converts to ~64,000 tokens of Markdown that fits. The
+      breakdown: <a href="/blog/notebook-too-big-for-llm.html">Your
+      notebook is too big to paste</a>.</p>
+
+      <h2>4. The container drowned the content</h2>
+      <p>Office formats are ZIP archives of XML, media and themes. A
+      mediocre extractor surfaces style junk, drops tables, or loses
+      heading structure — the assistant "reads" the file and still answers
+      badly. This is the silent version of the error, and the fidelity
+      report exists precisely because you can't diagnose what you can't
+      see: our converter <a href="/blog/not-a-file-converter.html">counts
+      what it detected and warns about what's shaky</a> instead of
+      pretending.</p>
+
+      <h2>The general fix</h2>
+      <ol>
+        <li>Convert the file to Markdown locally — <a href="/">drop it
+        here</a>; nothing uploads.</li>
+        <li>Read the fidelity report: it tells you <em>which</em> of the
+        four problems you actually had (unsupported? scanned? huge?
+        structure loss?).</li>
+        <li>Paste or attach the <code>.md</code> — or use the
+        <em>Chat</em> preset, which truncates long outputs and adds a
+        token estimate so you know it fits before you paste.</li>
+      </ol>
+
+      <div class="article-cta">
+        <p>Convert the file that just failed — and read the report that
+        explains why it failed.</p>
+        <a href="/">Open MakeItMarkdown →</a>
+      </div>
+
+      <p class="article-footer">Related fixes:
+      <a href="/blog/claude-projects-pdf-fix.html">Claude Projects PDF fix</a> ·
+      <a href="/blog/pasted-table-garbage.html">pasted tables turn to garbage</a> ·
+      <a href="/blog/">Context Lab</a></p>
+    </article>
+  </div>
+</body>
+</html>

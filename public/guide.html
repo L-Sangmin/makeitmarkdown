@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Markdown for LLMs — the field manual — MakeItMarkdown</title>
+  <meta name="description" content="Ten rules for writing or converting Markdown that language models read well: heading discipline, typed tables, figure placeholders, honest truncation, stable anchors, and token hygiene." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Reference</p>
+    <article>
+      <h1>Markdown for LLMs — the field manual</h1>
+      <p class="article-byline">MakeItMarkdown · updated July 2026 · the rules our converter follows, usable by hand too</p>
+
+      <p>Whether a converter produced it or you typed it, Markdown headed
+      for a model's context window has one job: make the document's
+      structure explicit in as few tokens as possible, without lying about
+      what's missing. These are the ten rules we converged on building
+      MakeItMarkdown — each one exists because we watched its absence break
+      an answer.</p>
+
+      <h2>The ten rules</h2>
+
+      <ol>
+        <li><strong>One H1, then a real hierarchy.</strong> The title is
+        <code>#</code>, sections are <code>##</code>, subsections
+        <code>###</code> — never skip levels, never fake a heading with
+        bold text. Retrieval systems chunk on headings and models build
+        their mental outline from them; a bolded paragraph is invisible to
+        both.</li>
+
+        <li><strong>Tables are GFM pipes with a header row — always.</strong>
+        A table without column names is a grid of orphaned numbers.
+        Annotate types when they're ambiguous
+        (<code>revenue (float)</code>, <code>signup_date (date)</code>) so
+        "1,204" and "45922" can't be misread as strings or serials.</li>
+
+        <li><strong>State truncation in the text itself.</strong>
+        <code>Showing the first 50 of 10,000 rows.</code> A model told
+        it has a sample summarizes a sample; a model not told invents the
+        rest with full confidence. This single sentence prevents more
+        hallucination than any prompt trick we know.</li>
+
+        <li><strong>Figures become named placeholders.</strong>
+        <code>[Figure: cell_12_figure_1.png]</code> — one line that says a
+        figure exists, where it sits, and what to call it. Never leave
+        base64 in text meant for a model: one embedded screenshot can cost
+        ~130,000 junk tokens.</li>
+
+        <li><strong>Fence all code, label the language, label outputs.</strong>
+        <code>```python</code> opens the model's code prior;
+        <code>**Output:**</code> before result blocks keeps cause and
+        effect apart. Truncate long outputs and say so (rule 3 applies to
+        logs too).</li>
+
+        <li><strong>Give sections stable addresses when machines will
+        point at them.</strong> For RAG or agent pipelines, add
+        <code>&lt;a id="slug"&gt;&lt;/a&gt;</code> anchors and
+        <code>&lt;!-- chunk: slug --&gt;</code> boundaries. Citations that
+        survive re-indexing beat "page ~14".</li>
+
+        <li><strong>Front matter only when the destination reads it.</strong>
+        Obsidian and archives want YAML (title, source, date); a chat paste
+        wastes its first 15 tokens on it. Format for the destination, not
+        from habit.</li>
+
+        <li><strong>Keep provenance one line long.</strong>
+        <code>Source: report-2026-q1.docx · converted 2026-07</code> near
+        the top lets both humans and models answer "where is this
+        from?" without a metadata block.</li>
+
+        <li><strong>Delete boilerplate, keep meaning.</strong> Navigation,
+        cookie banners, repeated page headers, "12 of 96" — pure token
+        tax. But never "compress" the actual prose: models quote what
+        exists, and a paraphrased source is a corrupted source.</li>
+
+        <li><strong>Say what's missing.</strong> Scanned pages, dropped
+        equations, unparsed sheets — one explicit line each. An honest gap
+        gets worked around; a silent gap gets papered over with invented
+        content. This is the converter's fidelity report in prose
+        form.</li>
+      </ol>
+
+      <h2>Syntax at a glance</h2>
+
+      <pre><code># Document title
+Source: original-file.docx · converted 2026-07
+
+## Section heading
+&lt;a id="section-heading"&gt;&lt;/a&gt;          &lt;!-- pipelines only --&gt;
+
+| name (str) | units (int) | revenue (float) |
+| --- | --- | --- |
+| North | 1204 | 96432.10 |
+Showing the first 50 of 10,000 rows.
+
+[Figure: chart_1.png]
+
+```python
+compute()
+```
+**Output:**
+```
+(120, 4)
+```
+
+&gt; Note: pages 4–6 are scans with no text layer — not included.</code></pre>
+
+      <h2>Per-destination adjustments</h2>
+
+      <table>
+        <tr><th>Destination</th><th>What changes</th></tr>
+        <tr><td>Chat paste</td><td>Token-lean: outputs truncated hard, token estimate up top, no front matter</td></tr>
+        <tr><td>RAG / pipelines</td><td>Chunk comments + stable anchors; keep tables whole inside sections</td></tr>
+        <tr><td>Obsidian vault</td><td>YAML front matter, callouts, <code>![[wikilink]]</code> figures</td></tr>
+        <tr><td>Archive / citation</td><td>Full front matter (authors, year, identifiers), faithful body, nothing truncated harder than the source forced</td></tr>
+      </table>
+
+      <p>These four are exactly the converter's output presets — same
+      detected structure, different discipline per destination.</p>
+
+      <div class="article-cta">
+        <p>Or skip the hand-work: drop a file and get all ten rules applied,
+        with a fidelity report of what was detected.</p>
+        <a href="/">Open MakeItMarkdown →</a>
+      </div>
+
+      <p class="article-footer">Deeper dives:
+      <a href="/blog/llms-write-markdown.html">why Markdown is the native register</a> ·
+      <a href="/blog/tables-llms-can-read.html">tables</a> ·
+      <a href="/blog/rag-ready-markdown.html">RAG anchors</a> ·
+      <a href="/blog/">Context Lab</a></p>
+    </article>
+  </div>
+</body>
+</html>

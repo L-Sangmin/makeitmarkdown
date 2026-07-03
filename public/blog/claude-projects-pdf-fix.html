@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Claude Projects can't read your PDF? The two-minute fix — MakeItMarkdown</title>
+  <meta name="description" content="Your AI workspace refuses to read a PDF, quotes it wrong, or can't find the right file. Why PDF retrieval fails, how to diagnose it, and the two-minute Markdown fix." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Fixes · 01</p>
+    <article>
+      <h1>Claude Projects can't read your PDF? The two-minute fix</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 4 min read</p>
+
+      <p>You uploaded PDFs to a Claude Project (the same applies to
+      Perplexity Spaces and other AI workspaces), asked a question, and got
+      one of these:</p>
+
+      <ul>
+        <li>"I don't see that information in the files" — for a topic
+        that's definitely in there;</li>
+        <li>an answer that misquotes a table or mangles a definition;</li>
+        <li>several turns of the assistant hunting for which file holds
+        the topic;</li>
+        <li>or, with smaller/faster models especially, a flat "I can't
+        read this file."</li>
+      </ul>
+
+      <p>The instinct is to blame the model. Usually it's the format.</p>
+
+      <h2>What's actually happening</h2>
+      <p>A workspace doesn't hand the model your PDF. It extracts text,
+      splits it into chunks, and at question time retrieves the
+      best-matching chunks into the model's context. PDFs sabotage every
+      step: the extracted text has broken reading order and no headings
+      (a PDF stores positioned glyphs, <a
+      href="/blog/why-llms-choke-on-pdfs.html">not structure</a>), so
+      chunks split mid-sentence and mid-table, and the search has no
+      section titles to match your question against. The model then
+      answers from two half-thoughts — or declines. Slide-exported PDFs,
+      the classic lecture-notes case, are the worst offenders because
+      their visual layout carries most of the meaning.</p>
+
+      <h2>The fix</h2>
+      <ol>
+        <li>Drag your PDFs into <a href="/">MakeItMarkdown</a> — several
+        at once works. Conversion runs in your browser; nothing is
+        uploaded to us.</li>
+        <li>Skim each fidelity report. Warnings tell you if a file has
+        deeper problems (see the caveat below).</li>
+        <li>Download the .zip and upload the <code>.md</code> files to
+        your Project.</li>
+        <li><strong>Remove the original PDFs from the Project.</strong>
+        If both versions stay, retrieval sometimes surfaces the bad
+        one.</li>
+      </ol>
+      <p>Then re-ask the exact question that failed. You should see the
+      assistant name the right file immediately and quote it precisely —
+      Markdown headings give the search real handles, and the chunks
+      arrive as coherent topics. We measured this shift in <a
+      href="/blog/lecture-notes-case-study.html">a first-person case
+      study</a>: same workspace, same model, same questions; only the
+      format changed.</p>
+
+      <h2>The one case this won't fix</h2>
+      <p>If the fidelity report says the PDF looks <strong>scanned</strong>
+      (image-only, no text layer), there is no text for any converter to
+      extract — that's a different problem with different options, covered
+      in <a href="/blog/scanned-pdf-cant-convert.html">Scanned PDFs: why
+      no text converter can read them</a>. A quick self-test: if you can't
+      select text in the PDF viewer, it's a scan.</p>
+
+      <h2>Why this also makes the workspace cheaper to run</h2>
+      <p>The Markdown versions are typically a fraction of the size (our
+      measured samples: a 26.6&nbsp;KB PDF became 0.9&nbsp;KB), so the
+      storage cap stops being a constraint, and each retrieved chunk
+      carries content instead of layout debris. The full argument, with
+      numbers: <a href="/blog/ai-workspaces-markdown.html">Markdown is the
+      best upload format for AI workspaces</a>.</p>
+
+      <div class="article-cta">
+        <p>Convert the PDF that's failing right now — batch drop, fidelity
+        report per file, nothing uploaded.</p>
+        <a href="/">Open MakeItMarkdown →</a>
+      </div>
+
+      <p class="article-footer">Related fixes:
+      <a href="/blog/workspace-misses-document.html">workspace keeps missing half a document</a> ·
+      <a href="/blog/llm-file-upload-errors.html">"I can't access this file"</a> ·
+      <a href="/blog/">Context Lab</a></p>
+    </article>
+  </div>
+</body>
+</html>
