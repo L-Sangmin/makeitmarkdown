@@ -79,7 +79,7 @@ License:   Apache License 2.0 (full text in Appendix A)
 --------------------------------------------------------------------------------
 Purpose:   HTML sanitization (XSS prevention)
 Homepage:  https://github.com/cure53/DOMPurify
-Version:   TBD (pinned at integration time)
+Version:   3.4.11 (self-hosted: /public/assets/vendor/purify-3.4.11.min.js)
 License:   Dual-licensed under Apache License 2.0 or Mozilla Public License
            2.0. MakeItMarkdown elects to use DOMPurify under the
            Apache License 2.0 (full text in Appendix A).
@@ -161,7 +161,7 @@ License:   MIT License
 --------------------------------------------------------------------------------
 Purpose:   ZIP creation/extraction in the browser
 Homepage:  https://github.com/Stuk/jszip
-Version:   TBD (pinned at integration time)
+Version:   3.10.1 (self-hosted: /public/assets/vendor/jszip-3.10.1.min.js)
 License:   Dual-licensed under MIT or GPL-3.0. MakeItMarkdown elects to use
            JSZip under the MIT License.
 
@@ -193,7 +193,7 @@ License:   Dual-licensed under MIT or GPL-3.0. MakeItMarkdown elects to use
 --------------------------------------------------------------------------------
 Purpose:   Markdown rendering (result preview)
 Homepage:  https://github.com/markedjs/marked
-Version:   TBD (pinned at integration time)
+Version:   18.0.5 (self-hosted: /public/assets/vendor/marked-18.0.5.min.js)
 License:   MIT License
 
   MIT License

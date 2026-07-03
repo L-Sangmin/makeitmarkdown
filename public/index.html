@@ -29,7 +29,7 @@
     </button>
   </header>
 
-  <main class="landing">
+  <main id="view-landing" class="landing">
     <div class="hero">
       <h1>Feed your LLM better.</h1>
       <p class="subhead">
@@ -37,8 +37,8 @@
         what was preserved.
       </p>
 
-      <!-- Single input target (HANDOFF §1.5.2). Static placeholder — wired up later. -->
-      <button type="button" class="drop-target" aria-label="Add a document: drop a file, paste, or click to browse">
+      <!-- Single input target (HANDOFF §1.5.2) -->
+      <button type="button" id="drop-target" class="drop-target" aria-label="Add a document: drop a file, paste, or click to browse">
         <svg class="drop-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 3v12" />
           <path d="m7 11 5 5 5-5" />
@@ -48,6 +48,8 @@
         <span class="drop-formats">.ipynb &middot; .docx &middot; .csv &middot; .html &middot; PDF</span>
       </button>
 
+      <p id="drop-error" class="drop-error" role="alert" hidden></p>
+
       <p class="privacy">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="4" y="11" width="16" height="10" rx="2" />
@@ -56,12 +58,49 @@
         Your files never leave your browser.
       </p>
 
-      <button type="button" class="sample">
+      <button type="button" id="btn-sample" class="sample">
         No file handy? <span class="sample-action">Try a sample &rarr;</span>
       </button>
     </div>
   </main>
 
+  <!-- Result: 3-panel trust view (HANDOFF §1.5.3) -->
+  <section id="view-result" class="result" hidden aria-label="Conversion result">
+    <div class="result-bar">
+      <button type="button" id="btn-new" class="btn btn-ghost">&larr; New</button>
+      <span id="result-meta" class="result-meta"></span>
+      <span class="bar-spacer"></span>
+      <div class="seg" role="group" aria-label="Output format">
+        <button type="button" class="seg-item is-active" aria-pressed="true">Standard</button>
+        <button type="button" class="seg-item" disabled aria-disabled="true" title="Obsidian output ships in a later phase">
+          Obsidian <span class="seg-soon">soon</span>
+        </button>
+      </div>
+      <button type="button" id="btn-copy" class="btn btn-ghost">Copy</button>
+      <button type="button" id="btn-zip" class="btn btn-solid">Download .zip</button>
+    </div>
+
+    <div class="panes">
+      <section class="pane" aria-label="Original preview">
+        <h2 class="pane-title">Original</h2>
+        <div class="pane-body" id="original-body"></div>
+      </section>
+      <section class="pane" aria-label="Converted Markdown">
+        <h2 class="pane-title">Markdown <span id="md-size" class="pane-title-note"></span></h2>
+        <pre class="pane-body md-raw" id="markdown-body"></pre>
+      </section>
+      <section class="pane" aria-label="Fidelity report">
+        <h2 class="pane-title">Fidelity report</h2>
+        <div class="pane-body" id="fidelity-body"></div>
+      </section>
+    </div>
+  </section>
+
+  <input type="file" id="file-input" accept=".ipynb,.docx,.csv,.tsv,.html,.htm,.pdf" hidden />
+
+  <script defer src="/assets/vendor/purify-3.4.11.min.js"></script>
+  <script defer src="/assets/vendor/marked-18.0.5.min.js"></script>
+  <script defer src="/assets/vendor/jszip-3.10.1.min.js"></script>
   <script type="module" src="/assets/js/main.js"></script>
 </body>
 </html>
