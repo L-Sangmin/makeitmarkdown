@@ -45,6 +45,15 @@ function renderOriginal(container, payload) {
   }
   const format = payload.result.meta?.sourceFormat;
 
+  if (!payload.fileBuffer) {
+    const note = document.createElement("p");
+    note.className = "original-note";
+    note.textContent =
+      "Restored from this browser's local history — the original file itself was not kept.";
+    container.appendChild(note);
+    return;
+  }
+
   if (format === "ipynb") {
     try {
       const raw = new TextDecoder("utf-8").decode(payload.fileBuffer);

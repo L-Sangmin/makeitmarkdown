@@ -11,6 +11,7 @@ import { convertFile, UnsupportedFormatError } from "./router.js";
 import { renderResult, setMarkdown, refreshFidelity } from "./result-view.js";
 import { buildResultZip } from "./zipper.js";
 import { PRESETS, formatWithPreset } from "./presets.js";
+import { loadHistory, saveToHistory, clearHistory } from "./history.js";
 
 // --- theme -------------------------------------------------------------------
 
@@ -160,6 +161,8 @@ async function handleFile(file) {
 
     renderResult(payload, els);
     showResult();
+    saveToHistory(payload, activePreset);
+    renderHistoryList();
   } catch (err) {
     if (err instanceof UnsupportedFormatError) {
       showError(
@@ -230,6 +233,61 @@ async function loadSample(name = "sales-analysis") {
 }
 
 document.getElementById("btn-sample")?.addEventListener("click", () => loadSample());
+
+// --- recent conversions (localStorage, this browser only) ------------------------
+
+const historyBox = document.getElementById("history");
+const historyList = document.getElementById("history-list");
+
+function timeAgo(ts) {
+  const mins = Math.round((Date.now() - ts) / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.round(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.round(hours / 24)}d ago`;
+}
+
+function renderHistoryList() {
+  const entries = loadHistory();
+  historyBox.hidden = entries.length === 0;
+  historyList.textContent = "";
+  for (const entry of entries) {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "history-item";
+    btn.innerHTML =
+      `<span class="history-name"></span>` +
+      `<span class="history-meta">${timeAgo(entry.ts)} · ~${Math.round(entry.markdown.length / 4).toLocaleString("en-US")} tokens</span>`;
+    btn.querySelector(".history-name").textContent = entry.filename;
+    btn.addEventListener("click", () => restoreFromHistory(entry));
+    li.appendChild(btn);
+    historyList.appendChild(li);
+  }
+}
+
+function restoreFromHistory(entry) {
+  current = {
+    result: entry.result,
+    markdown: entry.markdown,
+    filename: entry.filename,
+    fileBuffer: null,
+    ms: 0,
+  };
+  activePreset = entry.preset ?? "standard";
+  syncPresetSeg();
+  els.meta.textContent = `${entry.filename} · restored from local history (${timeAgo(entry.ts)}) — stored only in this browser`;
+  renderResult(current, els);
+  showResult();
+}
+
+document.getElementById("btn-clear-history")?.addEventListener("click", () => {
+  clearHistory();
+  renderHistoryList();
+});
+
+renderHistoryList();
 
 // Deep links for demos/tests: ?sample=<name> and ?preset=<id>
 const params = new URLSearchParams(location.search);
