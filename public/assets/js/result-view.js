@@ -183,17 +183,20 @@ function renderFidelity(container, result) {
     counts.map(([label, n]) => `${n} ${label} detected`).join(", ") +
     `. ${warnings.length} warning${warnings.length === 1 ? "" : "s"}.`;
 
+  const tone = score >= 90 ? "" : " qc--warn";
+
   container.innerHTML = `
     <p class="sr-only">${escapeHtml(srSummary)}</p>
-    <div class="qc" aria-hidden="true">
+    <div class="qc${tone}" aria-hidden="true">
       <div class="qc-score"><span class="count-num" data-n="${score}">0</span><span class="qc-pct">%</span></div>
       <div class="qc-label">QC score<span>5-point structural check</span></div>
     </div>
+    <div class="qc-bar${tone}" aria-hidden="true"><span style="transform: scaleX(${score / 100})"></span></div>
     <div class="counts" aria-hidden="true">
       ${counts
         .map(
           ([label, n]) => `
-        <div class="count">
+        <div class="count${n === 0 ? " is-zero" : ""}">
           <span class="count-num" data-n="${n}">0</span>
           <span class="count-label">${label} detected</span>
         </div>`
