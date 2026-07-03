@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Making Jupyter notebooks LLM-addressable — MakeItMarkdown</title>
+  <meta name="description" content="Cell numbers, execution order, dependency hints — and the 515KB base64 image hiding in one markdown cell. A case study in converting .ipynb for LLM context." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Writing</a>
+  </header>
+
+  <div class="article-wrap">
+    <div class="article-hero" aria-hidden="true">
+      <svg viewBox="0 0 680 180" xmlns="http://www.w3.org/2000/svg">
+        <rect width="680" height="180" fill="var(--bg-raised)"/>
+        <g font-family="ui-monospace,monospace" font-size="12">
+          <rect x="70"  y="100" width="64" height="28" rx="6" fill="none" stroke="var(--border-strong)"/>
+          <text x="102" y="118" text-anchor="middle" fill="var(--fg)">In[2]</text>
+          <rect x="230" y="100" width="64" height="28" rx="6" fill="none" stroke="var(--border-strong)"/>
+          <text x="262" y="118" text-anchor="middle" fill="var(--fg)">In[3]</text>
+          <rect x="390" y="100" width="64" height="28" rx="6" fill="none" stroke="var(--warn)"/>
+          <text x="422" y="118" text-anchor="middle" fill="var(--fg)">In[1]</text>
+          <text x="422" y="92" text-anchor="middle" fill="var(--warn)" font-size="11">⚠</text>
+          <rect x="550" y="100" width="64" height="28" rx="6" fill="none" stroke="var(--border-strong)"/>
+          <text x="582" y="118" text-anchor="middle" fill="var(--fg)">In[5]</text>
+          <path d="M102 98 C 102 58, 262 58, 262 98" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+          <path d="M258 92 l4 8 8 -4z" fill="var(--accent)"/>
+          <text x="182" y="60" text-anchor="middle" font-size="11" fill="var(--accent)">df</text>
+          <path d="M262 98 C 262 38, 582 38, 582 98" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+          <path d="M578 92 l4 8 8 -4z" fill="var(--accent)"/>
+          <text x="422" y="44" text-anchor="middle" font-size="11" fill="var(--accent)">model</text>
+          <text x="640" y="166" text-anchor="end" font-size="10" fill="var(--fg-faint)">approximate dependency hints</text>
+        </g>
+      </svg>
+    </div>
+
+    <p class="article-kicker">Format deep-dive · 02</p>
+    <article>
+      <h1>Making Jupyter notebooks LLM-addressable</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 8 min read</p>
+
+      <p>"Fix the error in cell 5" is how people actually talk about
+      notebooks. Yet almost every notebook-to-text converter throws the
+      cell structure away, flattening 60 cells into one scroll of code the
+      model can neither address nor navigate. This article is a build log:
+      what a notebook really contains, what LLMs need from it, and two
+      things we got wrong before measuring.</p>
+
+      <h2>What a .ipynb actually is</h2>
+      <p>A notebook is JSON: a list of cells, each with a type (code,
+      markdown), a source, outputs, and — critically — an
+      <code>execution_count</code>, the <code>In[n]</code> number you see
+      in Jupyter. That number is the notebook's honest confession: it
+      records the order cells <em>actually ran</em>, which after a normal
+      working session is not the order they appear. A cell reading
+      <code>In[2]</code> sitting below <code>In[5]</code> means the state
+      your outputs reflect never existed top-to-bottom.</p>
+
+      <p>Our converter emits every cell under an addressable header and
+      keeps those confessions visible:</p>
+
+      <pre><code>## Cell [5] · type:code · id:d4e5f6
+
+&gt; ⚠️ depends on: `df` (defined in Cell [3])
+
+```python
+summary = df.describe()
+```</code></pre>
+
+      <p>The dependency line comes from static analysis of assignments and
+      imports — deliberately labeled an <em>approximate hint</em>, because
+      regexes cannot see through re-assignment in branches or dynamically
+      built code. Honesty about the method matters more than the method:
+      an LLM told "hints, not dataflow" treats them accordingly.</p>
+
+      <h2>Two things measurement changed</h2>
+      <p><strong>1. Imports are ambient, not dataflow.</strong> Our first
+      pass drew a dependency edge for every name — which meant the import
+      cell pointed at nearly every other cell. A real 110-cell notebook
+      produced 341 edges and 227 warnings, mostly <code>np</code> and
+      <code>torch</code>. Treating imported names as ambient (listed once,
+      excluded from edges) dropped it to 169 edges and 13 warnings — every
+      survivor a genuine "this value came from a previous run"
+      signal.</p>
+
+      <p><strong>2. The token wall was hiding in a markdown cell.</strong>
+      The same notebook converted to 771,000 characters — about 196K
+      tokens, too large for most contexts. Profiling the output found a
+      single markdown cell containing a pasted image as a base64 data URI:
+      515KB of <code>iVBORw0KGgo…</code> masquerading as documentation.
+      Extracting embedded images into real files with
+      <code>[Figure: …]</code> placeholders cut the output to 256K
+      characters — a 67% reduction from one fix. If your notebook "doesn't
+      fit," check for pasted screenshots before blaming the code.</p>
+
+      <table>
+        <thead><tr><th>Stage</th><th>Output size</th><th>≈ tokens</th></tr></thead>
+        <tbody>
+          <tr><td>Naive conversion</td><td>771K chars</td><td>~196K</td></tr>
+          <tr><td>+ import-aware hints</td><td>771K chars</td><td>~196K (but 94% fewer false warnings)</td></tr>
+          <tr><td>+ embedded-image extraction</td><td>256K chars</td><td>~64K</td></tr>
+        </tbody>
+      </table>
+
+      <h2>The dependency mini-map</h2>
+      <p>Cell dependencies also render as a small SVG arc diagram — nodes
+      are cells in notebook order labeled with their execution counts, arcs
+      carry the variable names, and out-of-order cells get an amber mark.
+      Dense notebooks cap the view at the busiest 16 cells and say so.
+      It exists because "your notebook ran out of order" lands harder as a
+      picture than as a warning list.</p>
+
+      <div class="shot-note">📸 Note for the author: capture the dependency
+      mini-map for a notebook with one out-of-order cell (the
+      <code>?sample=out-of-order</code> demo works) — light and dark. Crop
+      to the fidelity panel. This is the shareable image for this
+      post.</div>
+
+      <h2>Checklist for feeding notebooks to a model</h2>
+      <ul>
+        <li>Keep cell addresses (<code>Cell [n]</code>) so instructions and
+        answers can point somewhere.</li>
+        <li>Surface execution-order anomalies — they explain "why doesn't
+        this reproduce" more often than the code does.</li>
+        <li>Extract pasted images; they are token walls with no
+        information for a text model.</li>
+        <li>Truncate long outputs, never source. The model needs the code;
+        it rarely needs 400 rows of a printed dataframe.</li>
+        <li>State your analysis limits in the document itself.</li>
+      </ul>
+
+      <div class="article-cta">
+        <p>Drop a notebook and read its fidelity report — cell map,
+        dependency hints and all, locally in your browser.</p>
+        <a href="/?sample=sales-analysis">Try it on a sample notebook →</a>
+      </div>
+
+      <p class="article-footer">Numbers in this post come from converting a
+      real 3.5MB, 110-cell course-project notebook during development.
+      <a href="/blog/">More writing</a>.</p>
+    </article>
+  </div>
+</body>
+</html>

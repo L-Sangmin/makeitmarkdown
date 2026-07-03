@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Tables LLMs can actually read: CSV and Excel without hallucinated columns — MakeItMarkdown</title>
+  <meta name="description" content="Column-type annotations, explicit truncation, cached formula values: how to hand spreadsheets to a language model without it inventing data." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Writing</a>
+  </header>
+
+  <div class="article-wrap">
+    <div class="article-hero" aria-hidden="true">
+      <svg viewBox="0 0 680 180" xmlns="http://www.w3.org/2000/svg">
+        <rect width="680" height="180" fill="var(--bg-raised)"/>
+        <g font-family="ui-monospace,monospace" font-size="11" fill="var(--fg)">
+          <text x="60" y="60">| order_id | date       | revenue |</text>
+          <text x="60" y="80" fill="var(--fg-faint)">| ---      | ---        | ---     |</text>
+          <text x="60" y="100">| 1001     | 2026-01-05 | 1188.00 |</text>
+          <text x="60" y="120">| 1002     | 2026-01-07 |  904.93 |</text>
+          <text x="60" y="152" fill="var(--accent)">`order_id` — int · `date` — date · `revenue` — float</text>
+        </g>
+      </svg>
+    </div>
+
+    <p class="article-kicker">Format deep-dive · 03</p>
+    <article>
+      <h1>Tables LLMs can actually read</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 6 min read</p>
+
+      <p>Spreadsheets look like the easy case — they're already structured.
+      Yet "summarize this CSV" produces some of the most confident
+      hallucinations a model can make: invented columns, averaged text,
+      totals of truncated data presented as totals of everything. Each of
+      those failures traces to information the file had but the paste
+      lost.</p>
+
+      <h2>Failure 1: the model never saw your schema</h2>
+      <p>Raw CSV carries no types. <code>1188.00</code> might be revenue,
+      a zip code, or an ID; <code>2026-01-05</code> might be a date or a
+      version string. Humans infer from headers; models do too — and infer
+      wrongly. The fix costs a few lines: annotate every column with its
+      observed type before the data appears.</p>
+
+      <pre><code>## Columns
+- `order_id` — int
+- `date` — date
+- `region` — str
+- `revenue` — float (2 empty)</code></pre>
+
+      <p>Now "average revenue by region" has an anchor. The annotation also
+      surfaces dirty data honestly: mixed-type columns come out as
+      <code>mostly int</code>, and empty-cell counts stop the model from
+      averaging blanks as zeros.</p>
+
+      <h2>Failure 2: silent truncation</h2>
+      <p>Every chat interface truncates long pastes somewhere — the model
+      then totals what survived and calls it the total. If you must cut
+      (and for large sheets you must), cut <em>explicitly</em>:</p>
+
+      <pre><code>| 1049 | 2026-03-30 | South | 897.75 |
+
+… 250 more rows omitted (kept the first 50).</code></pre>
+
+      <p>A model that reads "250 more rows omitted" answers "based on the
+      first 50 rows…" — which is the correct answer. The information about
+      what's missing is as valuable as the data that's present.</p>
+
+      <h2>Failure 3: Excel is not CSV with extra steps</h2>
+      <p>Workbooks add three traps of their own:</p>
+      <ul>
+        <li><strong>Dates are serial numbers.</strong> Naive extraction
+        yields <code>46027</code> where you saw <code>2026-01-05</code>.
+        Convert to ISO strings or the model will treat your dates as
+        quantities.</li>
+        <li><strong>Formulas vs. values.</strong> <code>=SUM(B2:B40)</code>
+        means nothing without the sheet. Emit the cached calculated value,
+        and say once, up front, that formulas appear as their last
+        computed results.</li>
+        <li><strong>Multi-sheet blindness.</strong> A workbook's meaning is
+        often split across sheets. One section per sheet — including an
+        explicit "(empty sheet)" note — keeps the model from conflating
+        Orders with Summary.</li>
+      </ul>
+
+      <h2>Markdown pipes, the boring detail that breaks everything</h2>
+      <p>GFM tables delimit cells with <code>|</code>. Any cell containing
+      a literal pipe — <code>pipe|in|note</code> happens constantly in log
+      exports — shears the row, shifting every subsequent cell one column
+      left. Escape pipes, flatten newlines inside cells, and your table
+      survives; skip it and the corruption is invisible until an answer is
+      wrong.</p>
+
+      <div class="shot-note">📸 Note for the author: side-by-side shot —
+      the same sales.xlsx pasted raw into a chat (dates as serials) vs.
+      the converted Markdown with the Columns section. One image, two
+      panes, light theme.</div>
+
+      <h2>The checklist</h2>
+      <ul>
+        <li>Types annotated per column, empties counted</li>
+        <li>Row counts stated; truncation explicit, never silent</li>
+        <li>Dates as ISO strings, formulas as cached values (and say so)</li>
+        <li>One section per sheet; empty sheets noted</li>
+        <li>Pipes escaped, in-cell newlines flattened</li>
+        <li>A fidelity line at the end: what was detected, what was cut</li>
+      </ul>
+
+      <div class="article-cta">
+        <p>Drop a .csv or .xlsx and get exactly this shape — typed columns,
+        honest truncation, per-sheet sections. Locally, in your browser.</p>
+        <a href="/?sample=sales-csv">See it on a sample CSV →</a>
+      </div>
+
+      <p class="article-footer">Part of a series on preparing documents for
+      LLM context. <a href="/blog/">More writing</a>.</p>
+    </article>
+  </div>
+</body>
+</html>

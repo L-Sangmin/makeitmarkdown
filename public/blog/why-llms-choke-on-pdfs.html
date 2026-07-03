@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Why PDFs are hostile input for LLMs — MakeItMarkdown</title>
+  <meta name="description" content="PDFs store painted glyphs, not structure. What actually gets lost when you paste a PDF into an LLM, measured — and what to feed it instead." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Writing</a>
+  </header>
+
+  <div class="article-wrap">
+    <div class="article-hero" aria-hidden="true">
+      <svg viewBox="0 0 680 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="">
+        <rect width="680" height="180" fill="var(--bg-raised)"/>
+        <g font-family="ui-monospace,monospace" font-size="11" fill="var(--fg-faint)">
+          <text x="40" y="52">T h e␣qu ick</text><text x="40" y="72">bro wn␣f ox and</text>
+          <text x="40" y="92">72.4 1 88.0(tbl?)</text><text x="40" y="112">colu mn2 colu mn1</text>
+          <text x="40" y="132">…glyph soup…</text>
+        </g>
+        <path d="M300 90 h60" stroke="var(--accent)" stroke-width="1.5" marker-end="none"/>
+        <path d="M352 84 l10 6 -10 6z" fill="var(--accent)"/>
+        <g font-family="ui-monospace,monospace" font-size="11" fill="var(--fg)">
+          <text x="420" y="52"># Title</text>
+          <text x="420" y="72">## Section</text>
+          <text x="420" y="92">| col1 | col2 |</text>
+          <text x="420" y="112">| 72.4 | 88.0 |</text>
+          <text x="420" y="132" fill="var(--accent)">✓ structure kept</text>
+        </g>
+      </svg>
+    </div>
+
+    <p class="article-kicker">Why clean documents matter · 01</p>
+    <article>
+      <h1>Why PDFs are hostile input for LLMs</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 6 min read</p>
+
+      <p>Paste a PDF into a chat model and it usually answers something. That
+      is the problem: it answers from a degraded copy of your document, and
+      neither of you can see what was lost. The failure isn't the model.
+      It's the format.</p>
+
+      <h2>A PDF is a painting of a document</h2>
+      <p>PDF was designed in 1993 to make documents print identically
+      everywhere. It succeeds by storing <em>drawing instructions</em>: put
+      this glyph at x=72.4, y=310.2; move right 4.1 points; draw a line
+      here. There is no paragraph object, no heading object, and in most
+      real-world files no table object. The visual structure your eye
+      reconstructs — columns, headers, captions under figures — exists only
+      as coordinates.</p>
+
+      <p>Text extraction therefore has to guess. Which glyph runs form a
+      line? Which lines form a paragraph? Does that vertical gap mean a new
+      column or a new section? Every extractor answers these questions with
+      heuristics, and every heuristic fails somewhere:</p>
+
+      <ul>
+        <li><strong>Multi-column interleaving.</strong> Two-column layouts
+        read across instead of down, splicing unrelated sentences
+        together mid-thought.</li>
+        <li><strong>Table collapse.</strong> Cell boundaries are just
+        whitespace. A revenue table becomes a run-on line of numbers, and
+        the model confidently reattaches them to the wrong labels.</li>
+        <li><strong>Header/footer noise.</strong> Page numbers and running
+        titles repeat every ~500 tokens, polluting retrieval and
+        summaries.</li>
+        <li><strong>Ligatures and hyphenation.</strong> "efficient" arrives
+        as "efficient" or "effi-cient" depending on the font — small
+        errors that break exact-match search downstream.</li>
+        <li><strong>Scanned pages.</strong> No text layer at all. The model
+        receives nothing, or worse, OCR noise presented as fact.</li>
+      </ul>
+
+      <h2>What this does to model output</h2>
+      <p>The damage is quiet. A model given interleaved columns rarely says
+      "this text is garbled" — it produces fluent summaries of sentences
+      that never existed. A collapsed table doesn't yield "I can't read
+      this table"; it yields plausible numbers attached to the wrong rows.
+      In retrieval pipelines the effect compounds: chunk boundaries fall
+      mid-table, embeddings encode noise, and the retriever surfaces the
+      page-number footer as the "most relevant passage."</p>
+
+      <blockquote>The most expensive failure mode in LLM document work is
+      not refusal. It is confident output built on silently corrupted
+      input.</blockquote>
+
+      <h2>Measure it yourself</h2>
+      <p>Take any two-column paper or a financial report. Extract its text
+      with any tool, then check three things: does any sentence splice into
+      an unrelated one; does any table row survive with its header
+      attached; how many times does the page header repeat. In our test
+      corpus a typical 40-page report produced usable prose but zero fully
+      intact tables — every one had to be reconstructed by eye.</p>
+
+      <div class="shot-note">📸 Note for the author: record a 20–30s clip
+      here — drop a two-column PDF into a chat model, ask "what was column
+      2 of table 1?", show the wrong answer; then paste the Markdown
+      version and show the right one. Screen-record at 1440×900, light
+      theme, and keep the cursor slow.</div>
+
+      <h2>What to feed the model instead</h2>
+      <p>The practical fix is to move the document into a format where
+      structure is explicit — Markdown is the current lingua franca because
+      headings, lists, tables and code fences survive tokenization and are
+      abundantly represented in training data. The order of preference we
+      use:</p>
+
+      <ol>
+        <li><strong>The source, not the print.</strong> If an HTML, DOCX or
+        notebook version exists, convert that. It still knows what a
+        heading is. The PDF is the worst copy of your document that
+        exists.</li>
+        <li><strong>Deterministic conversion with a fidelity report.</strong>
+        Whatever converts your file should tell you what it detected —
+        tables, figures, equations — so silent loss becomes visible loss.</li>
+        <li><strong>PDF as a last resort, with disclaimers attached.</strong>
+        When only a PDF exists, extract per page, keep the layout-lossy
+        warning attached to the output, and treat scanned pages as a hard
+        stop rather than pretending.</li>
+      </ol>
+
+      <p>That's the design behind our converter: it prefers structured
+      sources, reports what it detected instead of promising preservation,
+      and refuses to hallucinate text for scanned pages — it tells you to
+      find the HTML instead.</p>
+
+      <div class="article-cta">
+        <p>Convert a document and see its fidelity report — everything runs
+        in your browser, nothing is uploaded.</p>
+        <a href="/">Open MakeItMarkdown →</a>
+      </div>
+
+      <p class="article-footer">MakeItMarkdown converts .ipynb, .docx,
+      .xlsx, .csv, .json, .html, .pdf, .srt and .md into LLM-ready Markdown,
+      locally in your browser. <a href="/blog/">More writing</a>.</p>
+    </article>
+  </div>
+</body>
+</html>

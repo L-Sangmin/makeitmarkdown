@@ -1,0 +1,152 @@
+/* Article pages — same token system as the app, tuned for long-form reading. */
+
+.article-wrap {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 5rem;
+}
+
+.article-hero { margin: 1.5rem 0 0.5rem; }
+.article-hero svg { display: block; width: 100%; height: auto; border-radius: var(--radius-lg); }
+
+.article-kicker {
+  margin: 2rem 0 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+article h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.75rem, 3vw + 0.5rem, 2.375rem);
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.article-byline {
+  margin: 0 0 2rem;
+  font-size: 0.8125rem;
+  color: var(--fg-faint);
+}
+
+article h2 {
+  margin: 2.25rem 0 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+article p, article li {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--fg);
+}
+
+article p { margin: 0 0 1.1rem; }
+article ul, article ol { padding-left: 1.4rem; margin: 0 0 1.1rem; }
+article li { margin-bottom: 0.35rem; }
+
+article code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+
+article pre {
+  padding: 0.875rem 1rem;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: 0 0 1.1rem;
+}
+
+article pre code { background: none; padding: 0; font-size: 0.8125rem; line-height: 1.6; }
+
+article table {
+  border-collapse: collapse;
+  margin: 0 0 1.1rem;
+  font-size: 0.875rem;
+  width: 100%;
+}
+
+article th, article td {
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.65rem;
+  text-align: left;
+}
+
+article th { background: color-mix(in srgb, var(--fg) 4%, transparent); font-weight: 600; }
+
+article blockquote {
+  margin: 0 0 1.1rem;
+  padding: 0.25rem 1rem;
+  border-left: 2px solid var(--accent);
+  color: var(--fg-muted);
+}
+
+.shot-note {
+  margin: 0 0 1.1rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--warn);
+  background: color-mix(in srgb, var(--warn) 7%, var(--bg-raised));
+  border: 1px dashed color-mix(in srgb, var(--warn) 35%, transparent);
+  border-radius: var(--radius-md);
+}
+
+.article-cta {
+  margin: 2.5rem 0 0;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+}
+
+.article-cta p { margin: 0 0 0.75rem; font-size: 0.9375rem; }
+
+.article-cta a {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #fff;
+  background: var(--accent);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+}
+
+.article-footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8125rem;
+  color: var(--fg-faint);
+}
+
+article a { color: var(--accent); text-decoration: none; }
+article a:hover { text-decoration: underline; }
+
+/* blog index */
+.post-list { list-style: none; margin: 2rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 1rem; }
+.post-card {
+  display: block;
+  padding: 1.125rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color var(--ease);
+}
+.post-card:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+.post-card h2 { margin: 0 0 0.375rem; font-size: 1.0625rem; letter-spacing: -0.01em; }
+.post-card p { margin: 0; font-size: 0.875rem; color: var(--fg-muted); line-height: 1.6; }
+.post-card .post-date { display: block; margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.71875rem; color: var(--fg-faint); }

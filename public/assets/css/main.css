@@ -147,6 +147,18 @@ kbd {
   text-decoration: none;
 }
 
+.site-header .bar-spacer { flex: 1; }
+
+.header-link {
+  margin-right: 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+
+.header-link:hover { color: var(--fg); }
+
 .theme-toggle {
   display: grid;
   place-items: center;

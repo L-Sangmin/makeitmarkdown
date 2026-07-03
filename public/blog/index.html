@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Writing — MakeItMarkdown</title>
+  <meta name="description" content="Field notes on feeding documents to LLMs: formats, fidelity, and what actually gets lost in conversion." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/">← Tool</a>
+  </header>
+
+  <div class="article-wrap">
+    <article>
+      <h1>Writing</h1>
+      <p class="article-byline">Field notes on feeding documents to LLMs —
+      formats, fidelity, and what actually gets lost in conversion.</p>
+
+      <ul class="post-list">
+        <li><a class="post-card" href="/blog/notebook-cell-dependencies.html">
+          <h2>Making Jupyter notebooks LLM-addressable</h2>
+          <p>Cell addresses, execution-order confessions, dependency hints —
+          and the 515KB base64 image hiding in one markdown cell. A build
+          log with numbers.</p>
+          <span class="post-date">2026-07 · format deep-dive</span>
+        </a></li>
+        <li><a class="post-card" href="/blog/why-llms-choke-on-pdfs.html">
+          <h2>Why PDFs are hostile input for LLMs</h2>
+          <p>PDFs store painted glyphs, not structure. What silently breaks
+          when you paste one into a model, and the order of formats to
+          reach for instead.</p>
+          <span class="post-date">2026-07 · why clean documents matter</span>
+        </a></li>
+        <li><a class="post-card" href="/blog/tables-llms-can-read.html">
+          <h2>Tables LLMs can actually read</h2>
+          <p>Column-type annotations, explicit truncation, serial dates and
+          cached formulas — handing spreadsheets to a model without it
+          inventing data.</p>
+          <span class="post-date">2026-07 · format deep-dive</span>
+        </a></li>
+      </ul>
+
+      <p class="article-footer">All conversion happens in your browser —
+      nothing is uploaded. <a href="/">Open the tool</a>.</p>
+    </article>
+  </div>
+</body>
+</html>
