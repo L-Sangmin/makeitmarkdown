@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>MakeItMarkdown — Feed your LLM better</title>
+  <meta name="description" content="Convert notebooks and documents into LLM-ready Markdown, entirely in your browser. See exactly what was preserved." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234f46e5'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='16' font-weight='700' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
+  <script>
+    /* Apply stored theme before first paint to avoid a flash.
+       ?theme=light|dark overrides for testing/deep links. */
+    try {
+      var t = new URLSearchParams(location.search).get("theme")
+        || localStorage.getItem("mim-theme");
+      if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle color theme">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none" />
+      </svg>
+    </button>
+  </header>
+
+  <main class="landing">
+    <div class="hero">
+      <h1>Feed your LLM better.</h1>
+      <p class="subhead">
+        Turn technical documents into LLM-ready Markdown &mdash; and see exactly
+        what was preserved.
+      </p>
+
+      <!-- Single input target (HANDOFF §1.5.2). Static placeholder — wired up later. -->
+      <button type="button" class="drop-target" aria-label="Add a document: drop a file, paste, or click to browse">
+        <svg class="drop-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v12" />
+          <path d="m7 11 5 5 5-5" />
+          <path d="M4 19h16" />
+        </svg>
+        <span class="drop-cta">Drop a file or paste <kbd>&#8984;V</kbd></span>
+        <span class="drop-formats">.ipynb &middot; .docx &middot; .csv &middot; .html &middot; PDF</span>
+      </button>
+
+      <p class="privacy">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="4" y="11" width="16" height="10" rx="2" />
+          <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+        </svg>
+        Your files never leave your browser.
+      </p>
+
+      <button type="button" class="sample">
+        No file handy? <span class="sample-action">Try a sample &rarr;</span>
+      </button>
+    </div>
+  </main>
+
+  <script type="module" src="/assets/js/main.js"></script>
+</body>
+</html>
