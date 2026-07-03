@@ -21,6 +21,11 @@ export function setMarkdown(els, markdown) {
   els.mdSize.textContent = sizeNote(markdown);
 }
 
+// The DAG bakes theme colors into its SVG — re-render it when the theme flips.
+export function refreshFidelity(els, result) {
+  renderFidelity(els.fidelity, result);
+}
+
 function sizeNote(md) {
   const chars = md.length;
   const tokens = Math.round(chars / 4);
@@ -162,12 +167,20 @@ function renderFidelity(container, result) {
         .join("")}</ul>`
     : `<p class="warn-none">✓ No warnings.</p>`;
 
+  // Screen readers get the numbers directly; the animated counters are
+  // decorative from their point of view.
+  const srSummary =
+    `QC score ${score} percent. ` +
+    counts.map(([label, n]) => `${n} ${label} detected`).join(", ") +
+    `. ${warnings.length} warning${warnings.length === 1 ? "" : "s"}.`;
+
   container.innerHTML = `
-    <div class="qc">
+    <p class="sr-only">${escapeHtml(srSummary)}</p>
+    <div class="qc" aria-hidden="true">
       <div class="qc-score"><span class="count-num" data-n="${score}">0</span><span class="qc-pct">%</span></div>
       <div class="qc-label">QC score<span>5-point structural check</span></div>
     </div>
-    <div class="counts">
+    <div class="counts" aria-hidden="true">
       ${counts
         .map(
           ([label, n]) => `

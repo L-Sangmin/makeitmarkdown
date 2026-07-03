@@ -6,6 +6,11 @@
   <meta name="color-scheme" content="light dark" />
   <title>MakeItMarkdown — Feed your LLM better</title>
   <meta name="description" content="Convert notebooks and documents into LLM-ready Markdown, entirely in your browser. See exactly what was preserved." />
+  <meta property="og:title" content="MakeItMarkdown — Feed your LLM better" />
+  <meta property="og:description" content="Notebooks and documents in, LLM-ready Markdown out — converted locally in your browser, with a fidelity report of what was detected." />
+  <meta property="og:type" content="website" />
+  <link rel="preload" href="/assets/fonts/inter-var-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/assets/fonts/jetbrains-mono-var-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234f46e5'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='16' font-weight='700' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
   <script>
     /* Apply stored theme before first paint to avoid a flash.
@@ -44,7 +49,9 @@
           <path d="m7 11 5 5 5-5" />
           <path d="M4 19h16" />
         </svg>
+        <span class="drop-spinner" aria-hidden="true"></span>
         <span class="drop-cta">Drop a file or paste <kbd>&#8984;V</kbd></span>
+        <span class="drop-busy-label" aria-hidden="true"></span>
         <span class="drop-formats">.ipynb &middot; .docx &middot; .csv &middot; .html &middot; PDF</span>
       </button>
 
@@ -67,8 +74,8 @@
   <!-- Result: 3-panel trust view (HANDOFF §1.5.3) -->
   <section id="view-result" class="result" hidden aria-label="Conversion result">
     <div class="result-bar">
-      <button type="button" id="btn-new" class="btn btn-ghost">&larr; New</button>
-      <span id="result-meta" class="result-meta"></span>
+      <button type="button" id="btn-new" class="btn btn-ghost" title="Start over (Esc)">&larr; New</button>
+      <span id="result-meta" class="result-meta" role="status"></span>
       <span class="bar-spacer"></span>
       <!-- populated from PRESETS (presets.js) -->
       <div class="seg" id="preset-seg" role="group" aria-label="Output preset"></div>
@@ -90,6 +97,14 @@
         <div class="pane-body" id="fidelity-body"></div>
       </section>
     </div>
+
+    <p class="result-privacy">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="4" y="11" width="16" height="10" rx="2" />
+        <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+      </svg>
+      Nothing was uploaded. This result lives only in this tab &mdash; refresh clears everything.
+    </p>
   </section>
 
   <input type="file" id="file-input" accept=".ipynb,.docx,.csv,.tsv,.html,.htm,.pdf" hidden />

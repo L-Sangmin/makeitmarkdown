@@ -8,7 +8,7 @@
 //   exists (progressive disclosure). Nothing persists across refresh.
 
 import { convertFile, UnsupportedFormatError } from "./router.js";
-import { renderResult, setMarkdown } from "./result-view.js";
+import { renderResult, setMarkdown, refreshFidelity } from "./result-view.js";
 import { buildResultZip } from "./zipper.js";
 import { PRESETS, formatWithPreset } from "./presets.js";
 
@@ -32,6 +32,8 @@ document.getElementById("theme-toggle")?.addEventListener("click", () => {
   } catch {
     /* private mode — theme just won't persist */
   }
+  // the dependency DAG bakes theme colors into its SVG
+  if (current && !els.result.hidden) refreshFidelity(els, current.result);
 });
 
 // --- elements ------------------------------------------------------------------
@@ -91,6 +93,9 @@ function applyPreset(id) {
 function showResult() {
   els.landing.hidden = true;
   els.result.hidden = false;
+  // move keyboard/SR context into the new view without a visible ring
+  els.result.setAttribute("tabindex", "-1");
+  els.result.focus({ preventScroll: true });
 }
 
 function showLanding() {
@@ -99,6 +104,7 @@ function showLanding() {
   current = null;
   els.fileInput.value = "";
   hideError();
+  els.dropTarget.focus({ preventScroll: true });
 }
 
 function showError(html) {
@@ -114,16 +120,38 @@ function hideError() {
 
 const NOT_READY = /not implemented yet/;
 
+// "Converted in 0.2s" — the speed is a feature; keep raw ms only when it's
+// genuinely instant.
+function formatDuration(ms) {
+  if (ms < 100) return `${ms}ms`;
+  return `${(ms / 1000).toFixed(ms < 9500 ? 1 : 0)}s`;
+}
+
+// Busy state appears only when conversion takes >150ms (first heavy library
+// load) — fast paths never flash.
+function setBusy(filename) {
+  const timer = setTimeout(() => {
+    els.dropTarget.classList.add("is-busy");
+    els.dropTarget.setAttribute("aria-busy", "true");
+    els.dropTarget.querySelector(".drop-busy-label").textContent = `Converting ${filename}…`;
+  }, 150);
+  return () => {
+    clearTimeout(timer);
+    els.dropTarget.classList.remove("is-busy");
+    els.dropTarget.removeAttribute("aria-busy");
+  };
+}
+
 async function handleFile(file) {
   hideError();
+  const clearBusy = setBusy(file.name);
   try {
     const payload = await convertFile(file);
     payload.markdown = formatWithPreset(payload.result, activePreset);
     current = payload;
     syncPresetSeg();
 
-    const time = payload.ms < 1000 ? `${payload.ms}ms` : `${(payload.ms / 1000).toFixed(1)}s`;
-    els.meta.textContent = `${payload.filename} · converted in ${time} · processed locally — refresh clears it`;
+    els.meta.textContent = `${payload.filename} · converted in ${formatDuration(payload.ms)} · processed locally — refresh clears it`;
 
     renderResult(payload, els);
     showResult();
@@ -139,6 +167,8 @@ async function handleFile(file) {
     } else {
       showError(`Couldn't read that file: ${escapeText(err.message ?? "unknown error")}`);
     }
+  } finally {
+    clearBusy();
   }
 }
 
@@ -210,12 +240,33 @@ if (sampleParam) loadSample(sampleParam === "1" ? "sales-analysis" : sampleParam
 
 document.getElementById("btn-new")?.addEventListener("click", showLanding);
 
+function flashCopied() {
+  els.btnCopy.textContent = "Copied ✓";
+  els.btnCopy.classList.add("is-done");
+  setTimeout(() => {
+    els.btnCopy.textContent = "Copy";
+    els.btnCopy.classList.remove("is-done");
+  }, 1200);
+}
+
 els.btnCopy?.addEventListener("click", async () => {
   if (!current) return;
   await navigator.clipboard.writeText(current.markdown);
-  const old = els.btnCopy.textContent;
-  els.btnCopy.textContent = "Copied ✓";
-  setTimeout(() => (els.btnCopy.textContent = old), 1200);
+  flashCopied();
+});
+
+// ⌘C / Ctrl+C with nothing selected copies the whole result.
+document.addEventListener("copy", (e) => {
+  if (!current || els.result.hidden) return;
+  if (!window.getSelection()?.isCollapsed) return; // real selection wins
+  e.preventDefault();
+  e.clipboardData.setData("text/plain", current.markdown);
+  flashCopied();
+});
+
+// Esc backs out to the input screen.
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !els.result.hidden) showLanding();
 });
 
 els.btnZip?.addEventListener("click", async () => {
