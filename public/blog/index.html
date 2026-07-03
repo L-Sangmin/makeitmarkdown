@@ -14,7 +14,11 @@
 <body>
   <header class="site-header">
     <a class="wordmark" href="/">MakeItMarkdown</a>
+    <span class="bar-spacer"></span>
     <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/">← Tool</a>
+        <button class="theme-toggle" type="button" aria-label="Toggle color theme" onclick="(function(){var r=document.documentElement,c=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=c==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('mim-theme',n)}catch(e){}})()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+    </button>
   </header>
 
   <div class="article-wrap wide">
@@ -30,6 +34,25 @@
         your document — and why the input format decides the answer
         quality.</p>
         <ul class="gallery-grid">
+          <li><a class="gallery-card" href="/blog/llms-write-markdown.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+                <path d="M96 40 h128 a10 10 0 0 1 10 10 v46 a10 10 0 0 1 -10 10 h-88 l-18 16 v-16 h-22 a10 10 0 0 1 -10 -10 v-46 a10 10 0 0 1 10 -10 z" fill="none" stroke="var(--accent)" stroke-width="1.75"/>
+                <g font-family="ui-monospace,monospace" font-size="15" fill="var(--fg)">
+                  <text x="112" y="68">## heading</text>
+                  <text x="112" y="90">- **bold** list</text>
+                </g>
+              </svg>
+            </div>
+            <div class="card-body">
+              <span class="card-order">01</span>
+              <h3>LLMs don't just read Markdown — they speak it</h3>
+              <p class="card-desc">Ask a model anything: it answers in
+              headings and code fences. Feeding its native register back
+              matters.</p>
+              <p class="card-meta">.md · 7 min</p>
+            </div>
+          </a></li>
           <li><a class="gallery-card" href="/blog/why-llms-choke-on-pdfs.html">
             <div class="card-thumb" aria-hidden="true">
               <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
@@ -46,32 +69,14 @@
               </svg>
             </div>
             <div class="card-body">
-              <span class="card-order">01</span>
+              <span class="card-order">02</span>
               <h3>Why PDFs are hostile input for LLMs</h3>
               <p class="card-desc">PDFs store painted glyphs, not structure.
               What silently breaks when you paste one into a model.</p>
               <p class="card-meta">.pdf · 6 min</p>
             </div>
           </a></li>
-          <li><a class="gallery-card" href="/blog/llms-write-markdown.html">
-            <div class="card-thumb" aria-hidden="true">
-              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
-                <path d="M96 40 h128 a10 10 0 0 1 10 10 v46 a10 10 0 0 1 -10 10 h-88 l-18 16 v-16 h-22 a10 10 0 0 1 -10 -10 v-46 a10 10 0 0 1 10 -10 z" fill="none" stroke="var(--accent)" stroke-width="1.75"/>
-                <g font-family="ui-monospace,monospace" font-size="15" fill="var(--fg)">
-                  <text x="112" y="68">## heading</text>
-                  <text x="112" y="90">- **bold** list</text>
-                </g>
-              </svg>
-            </div>
-            <div class="card-body">
-              <span class="card-order">02</span>
-              <h3>LLMs don't just read Markdown — they speak it</h3>
-              <p class="card-desc">Ask a model anything: it answers in
-              headings and code fences. Feeding its native register back
-              matters.</p>
-              <p class="card-meta">.md · 7 min</p>
-            </div>
-          </a></li>
+          
         </ul>
       </section>
 
@@ -153,6 +158,25 @@
         </ul>
       </section>
 
+      <!-- Format guides strip -->
+      <section class="gallery-group" aria-labelledby="gf">
+        <p class="gallery-kicker" id="gf">Format guides</p>
+        <p class="gallery-blurb">The reference shelf — what's really inside
+        each file type and the exact element mapping applied.
+        <a href="/formats/">All nine guides →</a></p>
+        <p class="format-chips">
+          <a href="/formats/ipynb.html">.ipynb</a>
+          <a href="/formats/docx.html">.docx</a>
+          <a href="/formats/xlsx.html">.xlsx</a>
+          <a href="/formats/csv.html">.csv</a>
+          <a href="/formats/pdf.html">.pdf</a>
+          <a href="/formats/html.html">.html</a>
+          <a href="/formats/json.html">.json</a>
+          <a href="/formats/subtitles.html">.srt</a>
+          <a href="/formats/markdown.html">.md</a>
+        </p>
+      </section>
+
       <!-- Theme: real-world workflows -->
       <section class="gallery-group" aria-labelledby="g3">
         <p class="gallery-kicker" id="g3">Real-world workflows</p>
@@ -211,6 +235,9 @@
         error, understand the mechanism, apply the two-minute fix.</p>
         <ul class="gallery-grid">
           <li><a class="gallery-card" href="/blog/claude-projects-pdf-fix.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><rect x="86" y="44" width="62" height="80" rx="6" fill="none" stroke="var(--warn)" stroke-width="1.5"/><text x="117" y="88" text-anchor="middle" font-family="ui-monospace,monospace" font-size="12" fill="var(--warn)">PDF</text><path d="M162 84 h30" stroke="var(--fg-faint)" stroke-width="1.5"/><path d="M186 78 l10 6 -10 6z" fill="var(--fg-faint)"/><path d="M206 62 h44 l12 12 v40 a6 6 0 0 1 -6 6 h-50 a6 6 0 0 1 -6 -6 v-46 a6 6 0 0 1 6 -6 z" fill="none" stroke="var(--ok)" stroke-width="1.5"/><path d="M216 98 l7 8 13 -16" fill="none" stroke="var(--ok)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
             <div class="card-body">
               <span class="card-order">01</span>
               <h3>Claude Projects can't read your PDF?</h3>
@@ -220,6 +247,9 @@
             </div>
           </a></li>
           <li><a class="gallery-card" href="/blog/llm-file-upload-errors.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><path d="M126 96 l34 -34 a16 16 0 0 1 23 23 l-40 40 a10 10 0 0 1 -15 -15 l36 -36" fill="none" stroke="var(--fg-muted)" stroke-width="2" stroke-linecap="round"/><circle cx="206" cy="60" r="17" fill="none" stroke="var(--warn)" stroke-width="1.75"/><path d="M199 53 l14 14 M213 53 l-14 14" stroke="var(--warn)" stroke-width="1.75" stroke-linecap="round"/></svg>
+            </div>
             <div class="card-body">
               <span class="card-order">02</span>
               <h3>"I can't access this file"</h3>
@@ -229,6 +259,9 @@
             </div>
           </a></li>
           <li><a class="gallery-card" href="/blog/notebook-too-big-for-llm.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><rect x="84" y="30" width="96" height="100" rx="8" fill="none" stroke="var(--fg-faint)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="132" y="85" text-anchor="middle" font-family="ui-monospace,monospace" font-size="10" fill="var(--fg-faint)">3.5 MB</text><path d="M190 80 h26" stroke="var(--fg-faint)" stroke-width="1.5"/><path d="M210 74 l10 6 -10 6z" fill="var(--fg-faint)"/><rect x="228" y="56" width="46" height="48" rx="6" fill="none" stroke="var(--ok)" stroke-width="1.5"/><text x="251" y="84" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--ok)">64K tok</text></svg>
+            </div>
             <div class="card-body">
               <span class="card-order">03</span>
               <h3>Your notebook is too big to paste</h3>
@@ -238,6 +271,9 @@
             </div>
           </a></li>
           <li><a class="gallery-card" href="/blog/pasted-table-garbage.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><rect x="88" y="42" width="90" height="66" rx="4" fill="none" stroke="var(--fg-faint)" stroke-width="1.25"/><path d="M88 64 h90 M88 86 h90 M118 42 v66 M148 42 v66" stroke="var(--fg-faint)" stroke-width="0.9"/><g fill="var(--warn)"><circle cx="204" cy="58" r="2.2"/><circle cx="216" cy="72" r="2.2"/><circle cx="200" cy="88" r="2.2"/><circle cx="224" cy="100" r="2.2"/><circle cx="210" cy="112" r="2.2"/></g><text x="204" y="40" font-family="ui-monospace,monospace" font-size="9" fill="var(--warn)">paste…</text></svg>
+            </div>
             <div class="card-body">
               <span class="card-order">04</span>
               <h3>Pasted a spreadsheet, got garbage</h3>
@@ -247,6 +283,9 @@
             </div>
           </a></li>
           <li><a class="gallery-card" href="/blog/llm-invents-numbers.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><text x="122" y="78" font-family="ui-monospace,monospace" font-size="22" fill="var(--fg)">1,204</text><text x="196" y="78" font-family="ui-monospace,monospace" font-size="22" fill="var(--warn)">?</text><path d="M118 94 q14 10 28 0 t28 0 t28 0" fill="none" stroke="var(--warn)" stroke-width="1.75" stroke-linecap="round"/><text x="122" y="122" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">not in your data</text></svg>
+            </div>
             <div class="card-body">
               <span class="card-order">05</span>
               <h3>The model invents numbers from your data</h3>
@@ -256,6 +295,9 @@
             </div>
           </a></li>
           <li><a class="gallery-card" href="/blog/scanned-pdf-cant-convert.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><rect x="96" y="34" width="80" height="96" rx="6" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/><path d="M108 106 l16 -20 12 12 14 -22 14 30 z" fill="none" stroke="var(--fg-muted)" stroke-width="1.5" stroke-linejoin="round"/><circle cx="120" cy="58" r="7" fill="none" stroke="var(--fg-muted)" stroke-width="1.5"/><circle cx="196" cy="98" r="16" fill="none" stroke="var(--accent)" stroke-width="1.75"/><path d="M208 110 l14 14" stroke="var(--accent)" stroke-width="1.75" stroke-linecap="round"/><text x="196" y="103" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" fill="var(--accent)">?</text></svg>
+            </div>
             <div class="card-body">
               <span class="card-order">06</span>
               <h3>Scanned PDFs: why nothing can read them (yet)</h3>
@@ -265,6 +307,9 @@
             </div>
           </a></li>
           <li><a class="gallery-card" href="/blog/webpage-paste-junk.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><rect x="90" y="36" width="140" height="92" rx="7" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/><path d="M90 54 h140" stroke="var(--fg-faint)" stroke-width="1"/><rect x="100" y="64" width="76" height="54" rx="3" fill="none" stroke="var(--ok)" stroke-width="1.5"/><g stroke="var(--warn)" stroke-width="1.25"><rect x="186" y="64" width="34" height="14" rx="2" fill="none"/><rect x="186" y="84" width="34" height="14" rx="2" fill="none"/><path d="M188 66 l30 10 M218 66 l-30 10 M188 86 l30 10 M218 86 l-30 10"/></g></svg>
+            </div>
             <div class="card-body">
               <span class="card-order">07</span>
               <h3>Copying from a webpage floods the chat with junk</h3>
@@ -274,6 +319,9 @@
             </div>
           </a></li>
           <li><a class="gallery-card" href="/blog/workspace-misses-document.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><rect x="112" y="30" width="96" height="100" rx="7" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/><g fill="var(--ok)" opacity="0.9"><rect x="126" y="46" width="68" height="6" rx="2"/><rect x="126" y="60" width="60" height="6" rx="2"/><rect x="126" y="74" width="66" height="6" rx="2"/></g><g fill="var(--fg-faint)" opacity="0.35"><rect x="126" y="92" width="64" height="6" rx="2"/><rect x="126" y="106" width="56" height="6" rx="2"/></g><text x="218" y="104" font-family="ui-monospace,monospace" font-size="10" fill="var(--warn)">unseen</text></svg>
+            </div>
             <div class="card-body">
               <span class="card-order">08</span>
               <h3>Your workspace keeps missing half a document</h3>
@@ -292,6 +340,9 @@
         where the other tool wins.</p>
         <ul class="gallery-grid">
           <li><a class="gallery-card" href="/blog/vs-pandoc.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><rect x="84" y="48" width="70" height="64" rx="7" fill="none" stroke="var(--fg-muted)" stroke-width="1.5"/><text x="98" y="86" font-family="ui-monospace,monospace" font-size="14" fill="var(--fg)">$_</text><text x="160" y="86" font-family="ui-monospace,monospace" font-size="12" fill="var(--fg-faint)">vs</text><rect x="182" y="48" width="70" height="64" rx="7" fill="none" stroke="var(--accent)" stroke-width="1.5"/><text x="217" y="88" text-anchor="middle" font-family="ui-monospace,monospace" font-size="13" fill="var(--accent)">M↓</text></svg>
+            </div>
             <div class="card-body">
               <span class="card-order">01</span>
               <h3>vs pandoc</h3>
@@ -301,6 +352,9 @@
             </div>
           </a></li>
           <li><a class="gallery-card" href="/blog/vs-online-converters.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><path d="M112 76 a18 18 0 0 1 35 -6 a14 14 0 0 1 5 27 h-38 a14 14 0 0 1 -2 -21z" fill="none" stroke="var(--warn)" stroke-width="1.5"/><path d="M130 104 v-20 m0 0 l-7 7 m7 -7 l7 7" stroke="var(--warn)" stroke-width="1.5" stroke-linecap="round"/><text x="160" y="86" font-family="ui-monospace,monospace" font-size="12" fill="var(--fg-faint)">vs</text><rect x="184" y="58" width="60" height="40" rx="5" fill="none" stroke="var(--ok)" stroke-width="1.5"/><path d="M196 108 h36" stroke="var(--ok)" stroke-width="1.5"/><text x="214" y="82" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--ok)">local</text></svg>
+            </div>
             <div class="card-body">
               <span class="card-order">02</span>
               <h3>vs online converter sites</h3>
@@ -310,6 +364,9 @@
             </div>
           </a></li>
           <li><a class="gallery-card" href="/blog/vs-just-pasting.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><rect x="96" y="46" width="56" height="70" rx="6" fill="none" stroke="var(--fg-muted)" stroke-width="1.5"/><rect x="112" y="40" width="24" height="12" rx="4" fill="none" stroke="var(--fg-muted)" stroke-width="1.5"/><text x="124" y="90" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" fill="var(--fg-faint)">???</text><text x="160" y="86" font-family="ui-monospace,monospace" font-size="12" fill="var(--fg-faint)">vs</text><rect x="184" y="46" width="56" height="70" rx="6" fill="none" stroke="var(--accent)" stroke-width="1.5"/><text x="212" y="88" text-anchor="middle" font-family="ui-monospace,monospace" font-size="12" fill="var(--accent)">.md</text></svg>
+            </div>
             <div class="card-body">
               <span class="card-order">03</span>
               <h3>vs just attaching the file</h3>
@@ -319,6 +376,9 @@
             </div>
           </a></li>
           <li><a class="gallery-card" href="/blog/vs-cloud-parsing-apis.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><rect x="92" y="52" width="64" height="16" rx="4" fill="none" stroke="var(--fg-muted)" stroke-width="1.5"/><rect x="92" y="74" width="64" height="16" rx="4" fill="none" stroke="var(--fg-muted)" stroke-width="1.5"/><rect x="92" y="96" width="64" height="16" rx="4" fill="none" stroke="var(--fg-muted)" stroke-width="1.5"/><circle cx="102" cy="60" r="2" fill="var(--fg-muted)"/><circle cx="102" cy="82" r="2" fill="var(--fg-muted)"/><circle cx="102" cy="104" r="2" fill="var(--fg-muted)"/><text x="168" y="86" font-family="ui-monospace,monospace" font-size="12" fill="var(--fg-faint)">vs</text><rect x="190" y="58" width="56" height="36" rx="5" fill="none" stroke="var(--accent)" stroke-width="1.5"/><path d="M200 102 h36" stroke="var(--accent)" stroke-width="1.5"/><text x="218" y="80" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--accent)">$0</text></svg>
+            </div>
             <div class="card-body">
               <span class="card-order">04</span>
               <h3>vs cloud parsing APIs</h3>
@@ -359,6 +419,9 @@
             </div>
           </a></li>
           <li><a class="gallery-card" href="/blog/agent-context.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><rect x="88" y="44" width="84" height="72" rx="7" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/><text x="100" y="70" font-family="ui-monospace,monospace" font-size="11" fill="var(--accent)">&gt;_</text><text x="100" y="92" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-muted)">grep -n</text><rect x="192" y="44" width="42" height="52" rx="5" fill="none" stroke="var(--ok)" stroke-width="1.5"/><text x="213" y="66" text-anchor="middle" font-family="ui-monospace,monospace" font-size="8" fill="var(--fg-muted)">#anchor</text><text x="213" y="82" text-anchor="middle" font-family="ui-monospace,monospace" font-size="8" fill="var(--fg-muted)">Cell[12]</text><path d="M172 76 h16" stroke="var(--fg-faint)" stroke-width="1.5"/><path d="M184 70 l8 6 -8 6z" fill="var(--fg-faint)"/></svg>
+            </div>
             <div class="card-body">
               <span class="card-order">02</span>
               <h3>Giving a coding agent readable context</h3>
@@ -368,6 +431,9 @@
             </div>
           </a></li>
           <li><a class="gallery-card" href="/blog/obsidian-llm-vault.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><path d="M160 34 l34 26 -12 56 -44 0 -12 -56 z" fill="none" stroke="var(--accent)" stroke-width="1.75" stroke-linejoin="round"/><path d="M160 34 l-8 40 8 42 22 -30 z" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.6"/><text x="160" y="140" text-anchor="middle" font-family="ui-monospace,monospace" font-size="10" fill="var(--fg-muted)">[[wikilinks]]</text></svg>
+            </div>
             <div class="card-body">
               <span class="card-order">03</span>
               <h3>Obsidian as an LLM knowledge base</h3>
@@ -377,6 +443,9 @@
             </div>
           </a></li>
           <li><a class="gallery-card" href="/blog/token-budgeting.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><path d="M110 108 a52 52 0 0 1 100 0" fill="none" stroke="var(--fg-faint)" stroke-width="6" stroke-linecap="round"/><path d="M110 108 a52 52 0 0 1 62 -50" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round"/><path d="M160 108 l26 -30" stroke="var(--fg)" stroke-width="2" stroke-linecap="round"/><circle cx="160" cy="108" r="4" fill="var(--fg)"/><text x="160" y="132" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">≈438 → 542 exact</text></svg>
+            </div>
             <div class="card-body">
               <span class="card-order">04</span>
               <h3>Token budgeting 101</h3>
@@ -386,6 +455,9 @@
             </div>
           </a></li>
           <li><a class="gallery-card" href="/blog/llm-wiki-archive.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><circle cx="112" cy="52" r="6" fill="none" stroke="var(--accent)" stroke-width="1.75"/><circle cx="112" cy="108" r="6" fill="none" stroke="var(--accent)" stroke-width="1.75"/><circle cx="152" cy="80" r="6" fill="none" stroke="var(--accent)" stroke-width="1.75"/><path d="M112 58 v44 M117 55 q20 5 30 20 M117 105 q20 -5 30 -20" fill="none" stroke="var(--accent)" stroke-width="1.5"/><g font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-muted)"><text x="176" y="56">notes-01.md</text><text x="176" y="84">report.md</text><text x="176" y="112">index.md</text></g></svg>
+            </div>
             <div class="card-body">
               <span class="card-order">05</span>
               <h3>Build an LLM-readable wiki</h3>

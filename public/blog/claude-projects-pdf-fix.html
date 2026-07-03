@@ -14,7 +14,11 @@
 <body>
   <header class="site-header">
     <a class="wordmark" href="/">MakeItMarkdown</a>
+    <span class="bar-spacer"></span>
     <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+        <button class="theme-toggle" type="button" aria-label="Toggle color theme" onclick="(function(){var r=document.documentElement,c=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=c==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('mim-theme',n)}catch(e){}})()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+    </button>
   </header>
 
   <div class="article-wrap">
@@ -51,6 +55,12 @@
       answers from two half-thoughts — or declines. Slide-exported PDFs,
       the classic lecture-notes case, are the worst offenders because
       their visual layout carries most of the meaning.</p>
+
+      <div class="shot-note">📸 <strong>Media slot</strong> — save as
+      <code>/assets/media/blog/fixes/01-project-pdf-fail.png</code> ·
+      screenshot of a real workspace failing on a PDF (refusal or vague
+      answer). May reuse the case study's "before" capture. This box is
+      replaced by the image once the file lands.</div>
 
       <h2>The fix</h2>
       <ol>

@@ -14,7 +14,11 @@
 <body>
   <header class="site-header">
     <a class="wordmark" href="/">MakeItMarkdown</a>
+    <span class="bar-spacer"></span>
     <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+        <button class="theme-toggle" type="button" aria-label="Toggle color theme" onclick="(function(){var r=document.documentElement,c=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=c==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('mim-theme',n)}catch(e){}})()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+    </button>
   </header>
 
   <div class="article-wrap">
@@ -48,6 +52,12 @@
       internet, convert — it works, because no server was ever part of
       the loop. Your browser's network tab shows the same story during
       any conversion. (Full policy: <a href="/privacy.html">privacy</a>.)</p>
+
+      <div class="shot-note">🎬 <strong>Media slot</strong> — save as
+      <code>/assets/media/blog/fixes/03-offline-proof.mp4</code> ·
+      10 s clip: DevTools network tab open → toggle Wi-Fi off → convert a
+      file successfully. The single most persuasive privacy asset on the
+      site. Muted, loopable.</div>
 
       <h2>What kind of Markdown comes back</h2>
       <p>Generic converters aim at "a valid .md file". Feeding a model

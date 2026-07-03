@@ -14,7 +14,11 @@
 <body>
   <header class="site-header">
     <a class="wordmark" href="/">MakeItMarkdown</a>
+    <span class="bar-spacer"></span>
     <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+        <button class="theme-toggle" type="button" aria-label="Toggle color theme" onclick="(function(){var r=document.documentElement,c=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=c==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('mim-theme',n)}catch(e){}})()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+    </button>
   </header>
 
   <div class="article-wrap">
@@ -23,74 +27,9 @@
       <h1>Markdown for LLMs — the field manual</h1>
       <p class="article-byline">MakeItMarkdown · updated July 2026 · the rules our converter follows, usable by hand too</p>
 
-      <p>Whether a converter produced it or you typed it, Markdown headed
-      for a model's context window has one job: make the document's
-      structure explicit in as few tokens as possible, without lying about
-      what's missing. These are the ten rules we converged on building
-      MakeItMarkdown — each one exists because we watched its absence break
-      an answer.</p>
-
-      <h2>The ten rules</h2>
-
-      <ol>
-        <li><strong>One H1, then a real hierarchy.</strong> The title is
-        <code>#</code>, sections are <code>##</code>, subsections
-        <code>###</code> — never skip levels, never fake a heading with
-        bold text. Retrieval systems chunk on headings and models build
-        their mental outline from them; a bolded paragraph is invisible to
-        both.</li>
-
-        <li><strong>Tables are GFM pipes with a header row — always.</strong>
-        A table without column names is a grid of orphaned numbers.
-        Annotate types when they're ambiguous
-        (<code>revenue (float)</code>, <code>signup_date (date)</code>) so
-        "1,204" and "45922" can't be misread as strings or serials.</li>
-
-        <li><strong>State truncation in the text itself.</strong>
-        <code>Showing the first 50 of 10,000 rows.</code> A model told
-        it has a sample summarizes a sample; a model not told invents the
-        rest with full confidence. This single sentence prevents more
-        hallucination than any prompt trick we know.</li>
-
-        <li><strong>Figures become named placeholders.</strong>
-        <code>[Figure: cell_12_figure_1.png]</code> — one line that says a
-        figure exists, where it sits, and what to call it. Never leave
-        base64 in text meant for a model: one embedded screenshot can cost
-        ~130,000 junk tokens.</li>
-
-        <li><strong>Fence all code, label the language, label outputs.</strong>
-        <code>```python</code> opens the model's code prior;
-        <code>**Output:**</code> before result blocks keeps cause and
-        effect apart. Truncate long outputs and say so (rule 3 applies to
-        logs too).</li>
-
-        <li><strong>Give sections stable addresses when machines will
-        point at them.</strong> For RAG or agent pipelines, add
-        <code>&lt;a id="slug"&gt;&lt;/a&gt;</code> anchors and
-        <code>&lt;!-- chunk: slug --&gt;</code> boundaries. Citations that
-        survive re-indexing beat "page ~14".</li>
-
-        <li><strong>Front matter only when the destination reads it.</strong>
-        Obsidian and archives want YAML (title, source, date); a chat paste
-        wastes its first 15 tokens on it. Format for the destination, not
-        from habit.</li>
-
-        <li><strong>Keep provenance one line long.</strong>
-        <code>Source: report-2026-q1.docx · converted 2026-07</code> near
-        the top lets both humans and models answer "where is this
-        from?" without a metadata block.</li>
-
-        <li><strong>Delete boilerplate, keep meaning.</strong> Navigation,
-        cookie banners, repeated page headers, "12 of 96" — pure token
-        tax. But never "compress" the actual prose: models quote what
-        exists, and a paraphrased source is a corrupted source.</li>
-
-        <li><strong>Say what's missing.</strong> Scanned pages, dropped
-        equations, unparsed sheets — one explicit line each. An honest gap
-        gets worked around; a silent gap gets papered over with invented
-        content. This is the converter's fidelity report in prose
-        form.</li>
-      </ol>
+      <p>Markdown headed for a model's context window has one job: make the
+      document's structure explicit in as few tokens as possible, without
+      lying about what's missing. Everything below serves that sentence.</p>
 
       <h2>Syntax at a glance</h2>
 
@@ -117,14 +56,60 @@ compute()
 
 &gt; Note: pages 4–6 are scans with no text layer — not included.</code></pre>
 
+      <h2>The ten rules</h2>
+
+      <ol>
+        <li><strong>One H1, then a real hierarchy.</strong> Never skip
+        levels, never fake a heading with bold text — retrieval chunks on
+        headings, and bold paragraphs are invisible to it.</li>
+
+        <li><strong>Tables are GFM pipes with a header row.</strong>
+        Annotate ambiguous types (<code>revenue (float)</code>,
+        <code>signup_date (date)</code>) so serials and codes can't be
+        misread.</li>
+
+        <li><strong>State truncation in the text.</strong>
+        <code>Showing the first 50 of 10,000 rows.</code> — a model told
+        it has a sample answers like it has a sample; one not told
+        invents the rest.</li>
+
+        <li><strong>Figures become named placeholders.</strong>
+        <code>[Figure: chart_1.png]</code>. Never base64 — one embedded
+        screenshot ≈ 130,000 junk tokens.</li>
+
+        <li><strong>Fence code, label the language, label outputs.</strong>
+        <code>```python</code> + <code>**Output:**</code> keep cause and
+        effect apart; truncate long logs and say so.</li>
+
+        <li><strong>Stable addresses for machine readers.</strong>
+        <code>&lt;a id="slug"&gt;&lt;/a&gt;</code> anchors and
+        <code>&lt;!-- chunk: slug --&gt;</code> boundaries — citations
+        that survive re-indexing.</li>
+
+        <li><strong>Front matter only if the destination reads it.</strong>
+        Obsidian and archives: yes. Chat paste: 15 wasted tokens.</li>
+
+        <li><strong>Provenance in one line.</strong>
+        <code>Source: report-q1.docx · converted 2026-07</code> — enough
+        for "where is this from?", no metadata block.</li>
+
+        <li><strong>Delete boilerplate, never compress prose.</strong>
+        Navigation, cookie banners, "12 of 96": token tax. The actual
+        text: byte-faithful — models quote what exists.</li>
+
+        <li><strong>Say what's missing.</strong> Scanned pages, dropped
+        sheets, lost equations — one explicit line each. Honest gaps get
+        worked around; silent gaps get papered over with inventions.</li>
+      </ol>
+
       <h2>Per-destination adjustments</h2>
 
       <table>
         <tr><th>Destination</th><th>What changes</th></tr>
         <tr><td>Chat paste</td><td>Token-lean: outputs truncated hard, token estimate up top, no front matter</td></tr>
-        <tr><td>RAG / pipelines</td><td>Chunk comments + stable anchors; keep tables whole inside sections</td></tr>
+        <tr><td>RAG / pipelines</td><td>Chunk comments + stable anchors; tables whole inside sections</td></tr>
         <tr><td>Obsidian vault</td><td>YAML front matter, callouts, <code>![[wikilink]]</code> figures</td></tr>
-        <tr><td>Archive / citation</td><td>Full front matter (authors, year, identifiers), faithful body, nothing truncated harder than the source forced</td></tr>
+        <tr><td>Archive / citation</td><td>Full front matter, faithful body, nothing extra truncated</td></tr>
       </table>
 
       <p>These four are exactly the converter's output presets — same

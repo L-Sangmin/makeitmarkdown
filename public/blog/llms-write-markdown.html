@@ -14,7 +14,11 @@
 <body>
   <header class="site-header">
     <a class="wordmark" href="/">MakeItMarkdown</a>
+    <span class="bar-spacer"></span>
     <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+        <button class="theme-toggle" type="button" aria-label="Toggle color theme" onclick="(function(){var r=document.documentElement,c=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=c==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('mim-theme',n)}catch(e){}})()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+    </button>
   </header>
 
   <div class="article-wrap">
@@ -38,7 +42,7 @@
       </svg>
     </div>
 
-    <p class="article-kicker">Why clean documents matter · 02</p>
+    <p class="article-kicker">Why clean documents matter · 01</p>
     <article>
       <h1>LLMs don't just read Markdown — they speak it</h1>
       <p class="article-byline">MakeItMarkdown · July 2026 · 7 min read</p>
@@ -197,9 +201,7 @@
         <a href="/">Open MakeItMarkdown →</a>
       </div>
 
-      <p class="article-footer">MakeItMarkdown converts .ipynb, .docx,
-      .xlsx, .csv, .json, .html, .pdf, .srt and .md into LLM-ready Markdown,
-      locally in your browser. <a href="/blog/">More from the Context Lab</a>.</p>
+      <p class="article-footer">Act on it: <a href="/blog/claude-projects-pdf-fix.html">fix a workspace that can't read PDFs</a> · <a href="/blog/lecture-notes-case-study.html">the measured case study</a> · <a href="/guide.html">the field manual</a> · <a href="/blog/">Context Lab</a></p>
     </article>
   </div>
 </body>
