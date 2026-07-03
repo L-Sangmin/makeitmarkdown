@@ -42,7 +42,7 @@ test("registry routes each extension to the right parser", () => {
   assert.equal(findParser(null, null, "a.html"), html);
   assert.equal(findParser(null, null, "a.htm"), html);
   assert.equal(findParser(null, null, "a.pdf"), pdf);
-  assert.equal(findParser(null, null, "a.txt"), null);
+  assert.equal(findParser(null, null, "a.exe"), null);
 });
 
 // ---------------------------------------------------------------------------

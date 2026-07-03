@@ -1,0 +1,5 @@
+{"ts":"2026-03-01T10:00:00Z","route":"/convert","ms":231,"ok":true}
+{"ts":"2026-03-01T10:00:04Z","route":"/convert","ms":187,"ok":true}
+not json at all — a stray log line
+{"ts":"2026-03-01T10:00:09Z","route":"/health","ms":3,"ok":true,"extra":{"cache":"hit"}}
+{"ts":"2026-03-01T10:00:12Z","route":"/convert","ms":1204,"ok":false,"error":"timeout"}

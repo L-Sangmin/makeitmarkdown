@@ -28,11 +28,15 @@
 import ipynb from './ipynb.js';
 import docx from './docx.js';
 import csv from './csv.js';
+import xlsx from './xlsx.js';
+import json from './json.js';
+import subtitles from './subtitles.js';
+import text from './text.js';
 import html from './html.js';
 import pdf from './pdf.js';
 
 // Order matters: first canHandle() match wins.
-const parsers = [ipynb, docx, csv, html, pdf];
+const parsers = [ipynb, docx, csv, xlsx, json, subtitles, text, html, pdf];
 
 export function findParser(url, doc, filename) {
   return parsers.find((p) => p.canHandle(url, doc, filename)) ?? null;

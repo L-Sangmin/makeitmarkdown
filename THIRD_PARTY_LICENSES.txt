@@ -26,10 +26,12 @@ Libraries covered (Phase 1):
      (dual-licensed MIT OR GPL-3.0; used under MIT)
   7. marked                     MIT License
 
+  8. SheetJS (xlsx)             Apache License 2.0
+
 Fonts (self-hosted in /public/assets/fonts, latin subsets):
 
-  8. Inter                      SIL Open Font License 1.1
-  9. JetBrains Mono             SIL Open Font License 1.1
+  9. Inter                      SIL Open Font License 1.1
+ 10. JetBrains Mono             SIL Open Font License 1.1
 
 --------------------------------------------------------------------------------
 1. pdf.js (pdfjs-dist)
@@ -253,6 +255,22 @@ License:   SIL Open Font License 1.1 (full text in Appendix B)
 
   Copyright 2020 The JetBrains Mono Project Authors
   (https://github.com/JetBrains/JetBrainsMono)
+
+--------------------------------------------------------------------------------
+8. SheetJS Community Edition (xlsx)
+--------------------------------------------------------------------------------
+Purpose:   Excel workbook (.xlsx/.xls) parsing
+Homepage:  https://sheetjs.com / https://git.sheetjs.com/sheetjs/sheetjs
+Version:   0.20.3 (self-hosted: /public/assets/vendor/xlsx-0.20.3.full.min.js)
+License:   Apache License 2.0 (full text in Appendix A)
+
+  Copyright (C) 2012-present   SheetJS LLC
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
 
 ================================================================================
 Appendix A — Apache License, Version 2.0

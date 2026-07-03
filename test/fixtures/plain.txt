@@ -1,0 +1,4 @@
+line one
+line two with trailing spaces   
+
+line four after a blank

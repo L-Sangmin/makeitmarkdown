@@ -1,0 +1,16 @@
+1
+00:00:01,000 --> 00:00:04,200
+Welcome back. Today we cover the planning
+cadence for small teams.
+
+2
+00:00:04,400 --> 00:00:09,150
+The whole cycle fits in five working days
+and <i>three</i> meetings.
+
+garbage block without timestamps
+should be skipped
+
+3
+00:00:09,400 --> 00:00:13,000
+Every commitment gets exactly one owner.
