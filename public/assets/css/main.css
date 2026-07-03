@@ -136,10 +136,14 @@ kbd {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
   padding: 1.25rem 1.5rem;
 }
 
 .wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
   font-size: 0.9375rem;
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -147,10 +151,11 @@ kbd {
   text-decoration: none;
 }
 
+.wordmark-badge { display: block; flex: none; }
+
 .site-header .bar-spacer { flex: 1; }
 
 .header-link {
-  margin-right: 0.75rem;
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--fg-muted);

@@ -6,17 +6,20 @@
   <meta name="color-scheme" content="light dark" />
   <title>Conversion examples — MakeItMarkdown examples</title>
   <meta name="description" content="Before/after conversions for every supported format — notebooks, Word, CSV, HTML articles and PDFs into LLM-ready Markdown." />
-  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script>try{var t=new URLSearchParams(location.search).get("theme")||localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234f46e5'/%3E%3Cpath d='M8 21V11l4 5 4-5v10' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M23 12v7m0 0-3-3m3 3 3-3' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="/assets/css/main.css" />
   <link rel="stylesheet" href="/assets/css/article.css" />
 </head>
 <body>
   <header class="site-header">
-    <a class="wordmark" href="/">MakeItMarkdown</a>
-    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/examples/">Examples</a>
+    <a class="wordmark" href="/"><svg class="wordmark-badge" width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#4f46e5"/><path d="M8 21V11l4 5 4-5v10" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M23 12v7m0 0-3-3m3 3 3-3" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>MakeItMarkdown</a>
+    <span class="bar-spacer"></span>
+    <a class="header-link" href="/examples/">Examples</a>
+    <a class="header-link" href="/blog/">Writing</a>
   </header>
   <div class="article-wrap">
-  <article><h1>Examples</h1><p class="article-byline">Real conversions of the built-in samples — what goes in, what comes out, and what the fidelity report says.</p><ul class="post-list"><li><a class="post-card" href="/examples/ipynb-to-markdown.html"><h2>Jupyter notebook → LLM-ready Markdown</h2><p>Cell addresses, dependency hints and figure placeholders from a pandas + matplotlib notebook.</p><span class="post-date">sales-analysis.ipynb · QC 100%</span></a></li>
+  <article><h1><span class="h1-hash" aria-hidden="true">#</span> Examples</h1><p class="article-byline">Real conversions of the built-in samples — what goes in, what comes out, and what the fidelity report says.</p><ul class="post-list"><li><a class="post-card" href="/examples/ipynb-to-markdown.html"><h2>Jupyter notebook → LLM-ready Markdown</h2><p>Cell addresses, dependency hints and figure placeholders from a pandas + matplotlib notebook.</p><span class="post-date">sales-analysis.ipynb · QC 100%</span></a></li>
 <li><a class="post-card" href="/examples/notebook-execution-order.html"><h2>Out-of-order notebook, caught and flagged</h2><p>Execution-order warnings and stale-state detection on a messy notebook.</p><span class="post-date">out-of-order.ipynb · QC 100%</span></a></li>
 <li><a class="post-card" href="/examples/docx-to-markdown.html"><h2>Word document → Markdown with heading semantics</h2><p>Styles map to real headings; the table survives as GFM.</p><span class="post-date">q1-operations-review.docx · QC 100%</span></a></li>
 <li><a class="post-card" href="/examples/csv-for-llm.html"><h2>CSV → typed table for LLM context</h2><p>Column types annotated, truncation explicit, pipes escaped.</p><span class="post-date">sales.csv · QC 100%</span></a></li>
