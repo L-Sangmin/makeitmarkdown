@@ -230,6 +230,67 @@ test("caps forward-use warnings at 10 with an aggregate line", async () => {
   assert.ok(r.fidelity.warnings.some((w) => /\+2 more/.test(w)));
 });
 
+// --- embedded images in markdown cells -----------------------------------------
+
+const TINY_PNG =
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
+
+test("markdown-cell base64 images become figures with placeholders", async () => {
+  const doc = inlineNb([
+    {
+      cell_type: "markdown",
+      id: "mimg1",
+      metadata: {},
+      source: `Correlation overview:\n\n![metrics_correlation.png](data:image/png;base64,${TINY_PNG})\n\nDone.\n`,
+    },
+  ]);
+  const r = await ipynb.parse({ doc, filename: "t.ipynb" });
+  const s = r.sections.find((x) => x.heading.includes("type:markdown"));
+  assert.match(s.content, /\[Figure: cell_p1_figure_1\.png\]/);
+  assert.ok(!s.content.includes("base64,"), "no base64 blob left in the body");
+  assert.match(s.content, /Correlation overview:/);
+  assert.match(s.content, /Done\./);
+  assert.equal(r.figures.length, 1);
+  assert.equal(r.figures[0].id, "cell_p1_figure_1");
+  assert.equal(r.figures[0].caption, "metrics_correlation.png");
+  assert.ok(r.figures[0].url.startsWith("data:image/png;base64,"));
+  assert.equal(r.fidelity.detected.figures, 1);
+  assert.equal(r.fidelity.recovered.figures, 1);
+});
+
+test("attachment: images in markdown cells resolve via cell.attachments", async () => {
+  const doc = inlineNb([
+    {
+      cell_type: "markdown",
+      id: "matt1",
+      metadata: {},
+      source: "See chart:\n\n![chart](attachment:chart.png)\n",
+      attachments: { "chart.png": { "image/png": TINY_PNG } },
+    },
+  ]);
+  const r = await ipynb.parse({ doc, filename: "t.ipynb" });
+  const s = r.sections.find((x) => x.heading.includes("type:markdown"));
+  assert.match(s.content, /\[Figure: cell_p1_figure_1\.png\]/);
+  assert.ok(!s.content.includes("attachment:"), "attachment ref replaced");
+  assert.equal(r.figures.length, 1);
+  assert.ok(r.figures[0].url.startsWith("data:image/png;base64,"));
+});
+
+test("obsidian formatter wikilinks markdown-cell figures too", async () => {
+  const { formatObsidian } = await import("../public/assets/js/obsidian-formatter.js");
+  const doc = inlineNb([
+    {
+      cell_type: "markdown",
+      id: "mimg2",
+      metadata: {},
+      source: `![x](data:image/png;base64,${TINY_PNG})\n`,
+    },
+  ]);
+  const r = await ipynb.parse({ doc, filename: "t.ipynb" });
+  const md = formatObsidian(r);
+  assert.ok(md.includes("![[figures/cell_p1_figure_1.png]]"));
+});
+
 // --- DAG SVG ---------------------------------------------------------------------
 
 test("renders dependency chain as inline SVG", async () => {
@@ -325,7 +386,7 @@ test("parses a 3.5MB 110-cell real notebook", { skip: !existsSync(REAL) }, async
   const r = await ipynb.parse({ fileBuffer: buf, filename: "team31_notebook.ipynb" });
   assert.equal(r.sections.length, 111); // overview + 110 cells
   assert.equal(r.fidelity.detected.codeCells, 67);
-  assert.equal(r.fidelity.detected.figures, 7);
+  assert.equal(r.fidelity.detected.figures, 8); // 7 outputs + 1 embedded in a markdown cell
   assert.ok(r.fidelity.qcScore > 0);
   const svg = renderDependencyDag(r.notebook);
   assert.ok(svg.startsWith("<svg"));

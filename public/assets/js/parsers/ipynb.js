@@ -72,8 +72,46 @@ function normalizeCells(nb) {
       label: execCount != null ? String(execCount) : `p${position}`,
       source: joinText(c.source),
       outputs: Array.isArray(c.outputs) ? c.outputs : [],
+      attachments: c.attachments ?? null,
     };
   });
+}
+
+// Markdown cells often embed figures as huge base64 data URIs (or nbformat
+// attachment: refs). Both bloat the Markdown into unreadable token walls —
+// extract them into figures[] and leave a [Figure: …] placeholder that the
+// ZIP layout and the Obsidian wikilink pass both understand.
+function extractMarkdownImages(cell, body, figures, fidelity) {
+  let count = 0;
+
+  const makeFigure = (alt, mime, b64) => {
+    count += 1;
+    const ext = mime === "image/jpeg" ? "jpg" : mime.split("/")[1];
+    const id = `cell_${cell.label}_figure_${count}`;
+    figures.push({
+      id,
+      caption: alt || `Figure from Cell [${cell.label}]`,
+      url: `data:${mime};base64,${b64}`,
+      alt: alt ?? "",
+    });
+    fidelity.detected.figures += 1;
+    fidelity.recovered.figures += 1;
+    return `[Figure: ${id}.${ext}]`;
+  };
+
+  body = body.replace(
+    /!\[([^\]]*)\]\(\s*data:(image\/(?:png|jpeg|gif|webp));base64,([A-Za-z0-9+/=\s]+?)\s*\)/g,
+    (_, alt, mime, b64) => makeFigure(alt, mime, b64.replace(/\s+/g, ""))
+  );
+
+  body = body.replace(/!\[([^\]]*)\]\(attachment:([^)\s]+)\)/g, (match, alt, name) => {
+    const attachment = cell.attachments?.[decodeURIComponent(name)];
+    const mime = attachment && Object.keys(attachment).find((k) => k.startsWith("image/"));
+    if (!mime) return match; // unknown attachment — leave the reference alone
+    return makeFigure(alt || name, mime, joinText(attachment[mime]).replace(/\s+/g, ""));
+  });
+
+  return body;
 }
 
 // ---------------------------------------------------------------------------
@@ -406,7 +444,7 @@ export default {
       }
 
       if (cell.type === "markdown") {
-        const body = cell.source.trimEnd();
+        const body = extractMarkdownImages(cell, cell.source.trimEnd(), figures, fidelity);
         parts.push(body);
         // detected-only counts from markdown content
         fidelity.detected.equations += (body.match(/\$\$[\s\S]+?\$\$|(?<!\$)\$[^$\n]+\$(?!\$)/g) ?? []).length;

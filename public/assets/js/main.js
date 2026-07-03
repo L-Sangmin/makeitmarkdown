@@ -158,11 +158,11 @@ async function handleFile(file) {
   } catch (err) {
     if (err instanceof UnsupportedFormatError) {
       showError(
-        `That file type isn't supported. Today: <code>.ipynb</code> — coming: <code>.docx</code> · <code>.csv</code> · <code>.html</code> · <code>.pdf</code>.`
+        `That file type isn't supported yet. Works today: <code>.ipynb</code> · <code>.docx</code> · <code>.csv</code> · <code>.html</code> · <code>.pdf</code>.`
       );
     } else if (NOT_READY.test(err.message ?? "")) {
       showError(
-        `That format's parser lands in a later phase. <code>.ipynb</code> works today — try a notebook.`
+        `That format's parser isn't wired up yet — try one of: <code>.ipynb</code> · <code>.docx</code> · <code>.csv</code> · <code>.html</code> · <code>.pdf</code>.`
       );
     } else {
       showError(`Couldn't read that file: ${escapeText(err.message ?? "unknown error")}`);
