@@ -25,9 +25,17 @@ function sizeNote(md) {
 
 // --- ① original preview ------------------------------------------------------
 
+let lastObjectUrl = null;
+
 function renderOriginal(container, payload) {
   container.textContent = "";
-  if (payload.result.meta?.sourceFormat === "ipynb") {
+  if (lastObjectUrl) {
+    URL.revokeObjectURL(lastObjectUrl);
+    lastObjectUrl = null;
+  }
+  const format = payload.result.meta?.sourceFormat;
+
+  if (format === "ipynb") {
     try {
       const raw = new TextDecoder("utf-8").decode(payload.fileBuffer);
       container.appendChild(renderNotebook(JSON.parse(raw)));
@@ -36,6 +44,28 @@ function renderOriginal(container, payload) {
       /* fall through to plain text */
     }
   }
+
+  if (format === "pdf") {
+    const blob = new Blob([payload.fileBuffer], { type: "application/pdf" });
+    lastObjectUrl = URL.createObjectURL(blob);
+    const embed = document.createElement("embed");
+    embed.type = "application/pdf";
+    embed.src = lastObjectUrl;
+    embed.className = "pdf-embed";
+    container.appendChild(embed);
+    return;
+  }
+
+  if (format === "docx") {
+    const note = document.createElement("p");
+    note.className = "original-note";
+    note.textContent =
+      "Binary Word document — no inline preview for .docx yet. " +
+      "The Markdown panel holds the converted content.";
+    container.appendChild(note);
+    return;
+  }
+
   const pre = document.createElement("pre");
   pre.className = "nb-src";
   pre.textContent = new TextDecoder("utf-8").decode(payload.fileBuffer).slice(0, 20000);

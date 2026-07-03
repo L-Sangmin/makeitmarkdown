@@ -21,6 +21,7 @@ Libraries covered (Phase 1):
      (dual-licensed Apache-2.0 OR MPL-2.0; used under Apache-2.0)
   4. mammoth.js                 BSD 2-Clause License
   5. Turndown                   MIT License
+     (and turndown-plugin-gfm, also MIT, same copyright holder)
   6. JSZip                      MIT License
      (dual-licensed MIT OR GPL-3.0; used under MIT)
   7. marked                     MIT License
@@ -35,7 +36,8 @@ Fonts (self-hosted in /public/assets/fonts, latin subsets):
 --------------------------------------------------------------------------------
 Purpose:   Client-side PDF parsing
 Homepage:  https://github.com/mozilla/pdf.js
-Version:   TBD (pinned at integration time)
+Version:   6.1.200 (self-hosted: /public/assets/vendor/pdfjs-6.1.200.min.mjs
+           + pdfjs-worker-6.1.200.min.mjs)
 License:   Apache License 2.0 (full text in Appendix A)
 
   Copyright 2012 Mozilla Foundation
@@ -57,7 +59,7 @@ License:   Apache License 2.0 (full text in Appendix A)
 --------------------------------------------------------------------------------
 Purpose:   Main-content extraction from general HTML
 Homepage:  https://github.com/mozilla/readability
-Version:   TBD (pinned at integration time)
+Version:   0.6.0 (self-hosted: /public/assets/vendor/readability-0.6.0.js)
 License:   Apache License 2.0 (full text in Appendix A)
 
   Copyright (c) 2010 Arc90 Inc
@@ -98,7 +100,7 @@ License:   Dual-licensed under Apache License 2.0 or Mozilla Public License
 --------------------------------------------------------------------------------
 Purpose:   DOCX to HTML conversion
 Homepage:  https://github.com/mwilliamson/mammoth.js
-Version:   TBD (pinned at integration time)
+Version:   1.12.0 (self-hosted: /public/assets/vendor/mammoth-1.12.0.browser.min.js)
 License:   BSD 2-Clause License
 
   Copyright (c) 2013, Michael Williamson
@@ -131,7 +133,7 @@ License:   BSD 2-Clause License
 --------------------------------------------------------------------------------
 Purpose:   HTML to Markdown conversion
 Homepage:  https://github.com/mixmark-io/turndown
-Version:   TBD (pinned at integration time)
+Version:   7.2.4 (self-hosted: /public/assets/vendor/turndown-7.2.4.js)
 License:   MIT License
 
   MIT License
@@ -155,6 +157,20 @@ License:   MIT License
   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+--------------------------------------------------------------------------------
+5b. turndown-plugin-gfm
+--------------------------------------------------------------------------------
+Purpose:   GFM tables/strikethrough support for Turndown
+Homepage:  https://github.com/mixmark-io/turndown-plugin-gfm
+Version:   1.0.2 (self-hosted: /public/assets/vendor/turndown-plugin-gfm-1.0.2.js)
+License:   MIT License
+
+  MIT License
+
+  Copyright (c) 2017 Dom Christie
+
+  (Same MIT license text as Turndown above.)
 
 --------------------------------------------------------------------------------
 6. JSZip

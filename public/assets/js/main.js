@@ -142,13 +142,22 @@ document.addEventListener("paste", (e) => {
 
 // --- sample ---------------------------------------------------------------------------
 
-const SAMPLES = ["sales-analysis", "out-of-order"];
+const SAMPLES = {
+  "sales-analysis": "sales-analysis.ipynb",
+  "out-of-order": "out-of-order.ipynb",
+  "sales-csv": "sales.csv",
+  article: "article.html",
+  docx: "q1-operations-review.docx",
+  pdf: "vendor-report.pdf",
+  "scanned-pdf": "scanned.pdf",
+};
 
 async function loadSample(name = "sales-analysis") {
-  if (!SAMPLES.includes(name)) return;
-  const res = await fetch(`/assets/samples/${name}.ipynb`);
+  const filename = SAMPLES[name];
+  if (!filename) return;
+  const res = await fetch(`/assets/samples/${filename}`);
   const blob = await res.blob();
-  handleFile(new File([blob], `${name}.ipynb`, { type: "application/x-ipynb+json" }));
+  handleFile(new File([blob], filename));
 }
 
 document.getElementById("btn-sample")?.addEventListener("click", () => loadSample());

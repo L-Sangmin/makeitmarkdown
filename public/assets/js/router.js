@@ -5,6 +5,7 @@
 // API-key inputs arrive in later phases — do not add them here yet.
 
 import { findParser } from "./parsers/index.js";
+import { ensureLibsFor } from "./loader.js";
 
 export class UnsupportedFormatError extends Error {
   constructor(filename) {
@@ -18,6 +19,7 @@ export async function convertFile(file) {
   const parser = findParser(null, null, file.name);
   if (!parser) throw new UnsupportedFormatError(file.name);
 
+  await ensureLibsFor(file.name);
   const fileBuffer = await file.arrayBuffer();
   const t0 = performance.now();
   const result = await parser.parse({ fileBuffer, filename: file.name });
