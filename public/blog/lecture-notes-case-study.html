@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Case study: the lecture notes that made a smaller model smarter — MakeItMarkdown</title>
+  <meta name="description" content="A fast, small chat model kept failing to read PDF lecture notes in an AI workspace. Converting the same notes to Markdown changed its behavior — a first-person case study with numbers." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Writing</a>
+  </header>
+
+  <div class="article-wrap">
+    <div class="article-hero" aria-hidden="true">
+      <svg viewBox="0 0 680 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="">
+        <rect width="680" height="190" fill="var(--bg-raised)"/>
+        <!-- left: pdf stack, struggling -->
+        <g>
+          <rect x="60" y="46" width="86" height="104" rx="6" fill="none" stroke="var(--border)" stroke-width="1.25" transform="rotate(-4 103 98)"/>
+          <rect x="74" y="40" width="86" height="104" rx="6" fill="var(--bg-raised)" stroke="var(--border)" stroke-width="1.25" transform="rotate(2 117 92)"/>
+          <rect x="88" y="36" width="86" height="104" rx="6" fill="var(--bg-raised)" stroke="var(--warn)" stroke-width="1.5"/>
+          <text x="131" y="82" text-anchor="middle" font-family="ui-monospace,monospace" font-size="13" fill="var(--warn)">PDF</text>
+          <text x="131" y="102" text-anchor="middle" font-family="ui-monospace,monospace" font-size="10" fill="var(--fg-faint)">&#215;12</text>
+          <text x="118" y="168" font-family="ui-monospace,monospace" font-size="9" fill="var(--warn)">"I can't read this file…"</text>
+        </g>
+        <path d="M240 92 h56" stroke="var(--fg-faint)" stroke-width="1.25"/>
+        <path d="M290 86 l10 6 -10 6z" fill="var(--fg-faint)"/>
+        <text x="268" y="80" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--accent)">convert</text>
+        <!-- right: md files, answering -->
+        <g>
+          <rect x="330" y="36" width="86" height="104" rx="6" fill="var(--bg-raised)" stroke="var(--ok)" stroke-width="1.5"/>
+          <text x="373" y="82" text-anchor="middle" font-family="ui-monospace,monospace" font-size="13" fill="var(--ok)">.md</text>
+          <text x="373" y="102" text-anchor="middle" font-family="ui-monospace,monospace" font-size="10" fill="var(--fg-faint)">&#215;12</text>
+        </g>
+        <g font-family="ui-monospace,monospace" font-size="10" fill="var(--fg)">
+          <text x="452" y="58">"From week 5, section 3:</text>
+          <text x="452" y="78">the three conditions are…"</text>
+          <text x="452" y="106" fill="var(--fg-muted)">— same model,</text>
+          <text x="452" y="124" fill="var(--fg-muted)">same question,</text>
+          <text x="452" y="142" fill="var(--ok)">different input format</text>
+        </g>
+      </svg>
+    </div>
+
+    <p class="article-kicker">Real-world workflows · 01</p>
+    <article>
+      <h1>Case study: the lecture notes that made a smaller model smarter</h1>
+      <p class="article-byline">A first-person case study · July 2026 · 7 min read</p>
+
+      <p>This is the story that convinced me the input format matters more
+      than the model tier. Same workspace, same files, same questions —
+      the only change was converting PDFs to Markdown. The fast, small
+      model I'd written off went from fumbling to precise.</p>
+
+      <h2>The setup</h2>
+      <p>Like a lot of people, I keep course materials in an AI workspace —
+      the kind where you upload reference files once and the assistant
+      consults them in every chat (Claude calls these Projects; Perplexity
+      calls them Spaces). Mine held a semester of lecture notes as PDFs,
+      exported from slides: a dozen files, dense with definitions,
+      derivations and tables.</p>
+      <p>For quick revision questions I use the fast, inexpensive model
+      tier — for me that was Haiku-class. Speed matters when you're asking
+      twenty small questions in a row.</p>
+
+      <div class="shot-note">📸 <strong>Media slot</strong> — save as
+      <code>/assets/media/blog/lecture-notes/01-project-files-pdf.png</code> ·
+      screenshot of the workspace file list while it still contained the
+      PDF lecture notes (crop/blur any personal details). This box is
+      replaced by the image once the file lands.</div>
+
+      <h2>The failure mode</h2>
+      <p>The small model kept hitting a wall. Sometimes it said outright
+      that it couldn't read the PDF. Sometimes it did something subtler and
+      worse: it needed extra rounds of prompting to even locate which file
+      held the topic, then answered vaguely, clearly working from fragments
+      — the retrieval had surfaced glyph soup and it was doing its best to
+      improvise around it.</p>
+
+      <div class="shot-note">📸 <strong>Media slot</strong> — save as
+      <code>/assets/media/blog/lecture-notes/02-answer-before.png</code> ·
+      screenshot of a real "before" exchange: the model failing on, or
+      answering vaguely from, a PDF note. Pick one where the question is
+      specific and the answer visibly isn't.</div>
+
+      <p>The instinctive diagnosis is "the model is too small." That
+      diagnosis is expensive — it pushes you to a slower, pricier tier for
+      every trivial question. It also turned out to be wrong.</p>
+
+      <h2>The one-variable experiment</h2>
+      <p>I converted the same lecture notes to Markdown (drag the PDFs into
+      <a href="/">the converter</a>, download the .zip, upload the .md files
+      to the workspace), deleted the PDFs from the space, and asked the
+      same questions again. Nothing else changed — same model tier, same
+      phrasing.</p>
+
+      <table>
+        <tr><th>Measure</th><th>PDF notes</th><th>Markdown notes</th></tr>
+        <tr><td>Total upload size</td><td>[fill: e.g. 48 MB]</td><td>[fill: e.g. 1.1 MB]</td></tr>
+        <tr><td>Storage cap used</td><td>[fill: e.g. 46%]</td><td>[fill: e.g. ~1%]</td></tr>
+        <tr><td>"Can't read the file" replies</td><td>[fill]</td><td>[fill]</td></tr>
+        <tr><td>Found the right file first try</td><td>[fill]</td><td>[fill]</td></tr>
+      </table>
+
+      <div class="shot-note">📸 <strong>Media slot</strong> — save as
+      <code>/assets/media/blog/lecture-notes/03-size-compare.png</code> ·
+      screenshot comparing the folder sizes (Finder list view of the PDF
+      folder vs the converted .md folder, or the workspace storage meter
+      before/after). The table above will be filled with the real numbers
+      from your files.</div>
+
+      <h2>What changed</h2>
+      <p>The difference wasn't subtle. The same small model now:</p>
+      <ul>
+        <li><strong>Read the files, every time.</strong> No more refusals
+        or "I don't have access" hedging.</li>
+        <li><strong>Found the right note on the first try.</strong> Asking
+        about a topic pulled the correct week's file without me naming
+        it — the Markdown headings gave retrieval something to match
+        against.</li>
+        <li><strong>Answered specifically.</strong> Definitions came back
+        with their conditions attached; multi-part derivations came back
+        in order; when a topic spanned two notes it said so and used
+        both.</li>
+      </ul>
+
+      <div class="shot-note">📸 <strong>Media slot</strong> — save as
+      <code>/assets/media/blog/lecture-notes/04-answer-after.png</code> ·
+      screenshot of the "after" exchange: same question as slot 02, now
+      answered precisely from the .md note. If possible, capture the
+      citation/source popover showing it pulled the right file.</div>
+
+      <h2>Why a format change makes a model "smarter"</h2>
+      <p>Nothing about the model improved — its <em>input</em> did. Three
+      mechanisms, in order of impact:</p>
+      <ol>
+        <li><strong>The text became text.</strong> A slide-export PDF
+        stores positioned glyphs; whether an assistant can reconstruct
+        readable text from it varies file by file, page by page. Markdown
+        removes the reconstruction step entirely — the words are just
+        there. (The gory details: <a href="/blog/why-llms-choke-on-pdfs.html">Why
+        PDFs are hostile input for LLMs</a>.)</li>
+        <li><strong>Retrieval got handles.</strong> Workspaces search your
+        files and pull matching chunks into context. Markdown headings
+        chunk along topic boundaries and carry searchable titles; PDF
+        extraction chunks along arbitrary page breaks. Better chunks in,
+        better answers out.</li>
+        <li><strong>Tokens stopped being wasted.</strong> The Markdown
+        notes are a fraction of the size, so each retrieved chunk is dense
+        with content, and more distinct chunks fit into the answer
+        budget.</li>
+      </ol>
+      <p>Small models feel these effects most because they have the least
+      slack to spend on repairing bad input — which is exactly why the
+      upgrade looked like the model getting smarter.</p>
+
+      <h2>Honest caveats</h2>
+      <ul>
+        <li>Conversion is lossy for <em>layout</em>: multi-column slides
+        and heavily visual pages flatten. The fidelity report tells you
+        per file what was detected and what to double-check.</li>
+        <li>Scanned pages (no text layer) can't be converted yet — they're
+        flagged, not faked.</li>
+        <li>Equations survive as text approximations, not rendered math;
+        for equation-dense notes, spot-check the critical ones.</li>
+      </ul>
+
+      <h2>The recipe</h2>
+      <ol>
+        <li>Drag your PDFs (or .docx, or notebooks) into
+        <a href="/">MakeItMarkdown</a> — multiple files at once is fine.</li>
+        <li>Skim each fidelity report for warnings.</li>
+        <li>Download the .zip, upload the .md files to your workspace, and
+        remove the originals from it.</li>
+        <li>Keep the originals wherever they live — you're changing what
+        the <em>assistant</em> reads, not your archive.</li>
+      </ol>
+
+      <div class="article-cta">
+        <p>Try it on the file your assistant struggles with most. The
+        conversion runs in your browser — nothing is uploaded.</p>
+        <a href="/">Open MakeItMarkdown →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/blog/ai-workspaces-markdown.html">Markdown is the best
+      upload format for AI workspaces</a> ·
+      <a href="/blog/why-llms-choke-on-pdfs.html">Why PDFs are hostile
+      input for LLMs</a> · <a href="/blog/">More writing</a>.</p>
+    </article>
+  </div>
+</body>
+</html>

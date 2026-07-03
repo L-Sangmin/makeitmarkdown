@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>LLMs don't just read Markdown — they speak it — MakeItMarkdown</title>
+  <meta name="description" content="Ask a model anything and it answers in headings, lists and code fences. Why Markdown is an LLM's native register, and what that means for the documents you feed it." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Writing</a>
+  </header>
+
+  <div class="article-wrap">
+    <div class="article-hero" aria-hidden="true">
+      <svg viewBox="0 0 680 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="">
+        <rect width="680" height="190" fill="var(--bg-raised)"/>
+        <rect x="36" y="34" width="270" height="122" rx="10" fill="none" stroke="var(--border)" stroke-width="1.25"/>
+        <text x="52" y="60" font-family="var(--font-sans),sans-serif" font-size="12" fill="var(--fg-muted)">You: explain the tradeoffs</text>
+        <rect x="374" y="24" width="270" height="142" rx="10" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+        <g font-family="ui-monospace,monospace" font-size="10.5" fill="var(--fg)">
+          <text x="390" y="50">## Short answer</text>
+          <text x="390" y="70">**Speed** vs **memory**:</text>
+          <text x="390" y="90">- option A: fast, 2&#215; RAM</text>
+          <text x="390" y="110">- option B: slower, lean</text>
+          <text x="390" y="130">```python</text>
+          <text x="390" y="150">cache = {}</text>
+        </g>
+        <path d="M312 95 h48" stroke="var(--fg-faint)" stroke-width="1.25"/>
+        <path d="M354 89 l10 6 -10 6z" fill="var(--fg-faint)"/>
+        <text x="374" y="182" font-family="ui-monospace,monospace" font-size="9" fill="var(--accent)">nobody asked for Markdown. It chose it.</text>
+      </svg>
+    </div>
+
+    <p class="article-kicker">Why clean documents matter · 02</p>
+    <article>
+      <h1>LLMs don't just read Markdown — they speak it</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 7 min read</p>
+
+      <p>Try a small experiment. Ask any chat model to explain something —
+      a tradeoff, a recipe, an error message. Look at the shape of the
+      answer: a bold lead, a bulleted list, maybe a <code>##</code> heading
+      and a fenced code block. Nobody asked it to format anything. The
+      model reached for Markdown the way you reach for your native
+      language.</p>
+
+      <p>That's not a UI trick. It's a fact about how these models were
+      made, and it has a practical consequence most people miss: <em>the
+      format you paste in is not neutral.</em> Some formats land in the
+      model's native register. Others make it do translation work before it
+      can even start thinking.</p>
+
+      <h2>Why Markdown is the native register</h2>
+
+      <p>Three forces, all pointing the same direction:</p>
+
+      <ul>
+        <li><strong>The training corpus is soaked in it.</strong> README
+        files, documentation sites, wikis, developer forums, chat logs —
+        an enormous share of the technical text a model learns from is
+        Markdown or renders from it. The model has seen
+        <code># heading</code> mean "heading" literally billions of
+        times.</li>
+        <li><strong>Chat tuning rewards it.</strong> Assistant models are
+        fine-tuned on conversations where good answers are structured
+        answers — and the structure is written in Markdown. Producing
+        clean Markdown is, quite literally, what these models were graded
+        on.</li>
+        <li><strong>Every chat interface renders it.</strong> The bold
+        text and tidy lists you see in a chat window are Markdown being
+        rendered live. Output format and display format agree, so the
+        whole ecosystem keeps reinforcing it.</li>
+      </ul>
+
+      <p>So when your document arrives as Markdown, its structure is
+      expressed in the exact vocabulary the model uses to organize its own
+      thoughts. A <code>##</code> is not a hint to be decoded; it's a
+      first-class token pattern the model has an extremely strong prior
+      about.</p>
+
+      <h2>What other formats make the model do first</h2>
+
+      <p>Here is the same document arriving two ways, as a pipeline:</p>
+
+      <div class="article-hero" aria-hidden="true">
+        <svg viewBox="0 0 680 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="">
+          <rect width="680" height="240" fill="var(--bg-raised)"/>
+          <text x="36" y="40" font-family="ui-monospace,monospace" font-size="10" fill="var(--fg-faint)">PDF / raw extraction</text>
+          <g font-family="ui-monospace,monospace" font-size="10">
+            <rect x="36" y="52" width="100" height="40" rx="7" fill="none" stroke="var(--warn)" stroke-width="1.25"/>
+            <text x="86" y="70" text-anchor="middle" fill="var(--fg)">decode</text>
+            <text x="86" y="84" text-anchor="middle" fill="var(--fg)">layout</text>
+            <rect x="166" y="52" width="110" height="40" rx="7" fill="none" stroke="var(--warn)" stroke-width="1.25"/>
+            <text x="221" y="70" text-anchor="middle" fill="var(--fg)">reconstruct</text>
+            <text x="221" y="84" text-anchor="middle" fill="var(--fg)">reading order</text>
+            <rect x="306" y="52" width="110" height="40" rx="7" fill="none" stroke="var(--warn)" stroke-width="1.25"/>
+            <text x="361" y="70" text-anchor="middle" fill="var(--fg)">guess headings</text>
+            <text x="361" y="84" text-anchor="middle" fill="var(--fg)">&amp; tables</text>
+            <rect x="446" y="52" width="90" height="40" rx="7" fill="none" stroke="var(--warn)" stroke-width="1.25"/>
+            <text x="491" y="70" text-anchor="middle" fill="var(--fg)">repair</text>
+            <text x="491" y="84" text-anchor="middle" fill="var(--fg)">line breaks</text>
+            <rect x="566" y="52" width="78" height="40" rx="7" fill="none" stroke="var(--fg-faint)" stroke-width="1.25"/>
+            <text x="605" y="76" text-anchor="middle" fill="var(--fg)">answer</text>
+            <path d="M136 72 h24 M276 72 h24 M416 72 h24 M536 72 h24" stroke="var(--fg-faint)" stroke-width="1.25"/>
+          </g>
+          <text x="36" y="126" font-family="ui-monospace,monospace" font-size="9" fill="var(--warn)">four guessing steps — each one can silently go wrong, and it costs attention the model could spend on your question</text>
+
+          <text x="36" y="166" font-family="ui-monospace,monospace" font-size="10" fill="var(--fg-faint)">Markdown</text>
+          <g font-family="ui-monospace,monospace" font-size="10">
+            <rect x="36" y="178" width="120" height="40" rx="7" fill="none" stroke="var(--ok)" stroke-width="1.25"/>
+            <text x="96" y="196" text-anchor="middle" fill="var(--fg)">structure is</text>
+            <text x="96" y="210" text-anchor="middle" fill="var(--fg)">already explicit</text>
+            <rect x="186" y="178" width="78" height="40" rx="7" fill="none" stroke="var(--fg-faint)" stroke-width="1.25"/>
+            <text x="225" y="202" text-anchor="middle" fill="var(--fg)">answer</text>
+            <path d="M156 198 h24" stroke="var(--fg-faint)" stroke-width="1.25"/>
+          </g>
+        </svg>
+      </div>
+
+      <p>With a pasted PDF extraction, the model must first infer where
+      lines break into paragraphs, which fragments are headings, which
+      runs of numbers were once a table — all from typography that no
+      longer exists. Modern models are impressively good at this guessing.
+      But every guess consumes capacity, and a wrong guess doesn't
+      announce itself: the model just answers confidently from a slightly
+      wrong document. We measured what this does to tables and layout in
+      <a href="/blog/why-llms-choke-on-pdfs.html">Why PDFs are hostile
+      input for LLMs</a>.</p>
+
+      <p>With Markdown, that entire first stage disappears. Heading levels,
+      list nesting, table cells, code boundaries — all explicit, all in
+      the model's home notation. Reading comprehension starts at
+      sentence one.</p>
+
+      <h2>The token bill</h2>
+
+      <p>Structure has a price in tokens, and Markdown's price is close to
+      the minimum. The same three-row table, three ways:</p>
+
+      <pre><code>&lt;table&gt;&lt;tr&gt;&lt;th&gt;region&lt;/th&gt;&lt;th&gt;units&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;North&lt;/td&gt;&lt;td&gt;1204&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;South&lt;/td&gt;&lt;td&gt;980&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;   ← 123 characters
+
+{"rows":[{"region":"North","units":1204},
+{"region":"South","units":980}]}              ← 72 characters, keys repeat per row
+
+| region | units |
+| --- | --- |
+| North | 1204 |
+| South | 980 |                               ← 63 characters</code></pre>
+
+      <p>The gap widens with real documents, because office and notebook
+      formats are containers: fonts, themes, XML plumbing, embedded
+      previews. The text you care about is a minority of the bytes. Some
+      honest numbers from our own built-in samples and test files:</p>
+
+      <table>
+        <tr><th>Source</th><th>Original</th><th>As Markdown</th></tr>
+        <tr><td>2-page business PDF</td><td>26.6 KB</td><td>0.9 KB</td></tr>
+        <tr><td>Word report (.docx)</td><td>36.4 KB</td><td>0.9 KB</td></tr>
+        <tr><td>Data-analysis notebook, 100+ cells</td><td>3,465 KB</td><td>261 KB ≈ 64K tokens</td></tr>
+      </table>
+
+      <p>The notebook row is the dramatic one: as raw JSON it doesn't fit
+      in most context windows at all; as Markdown it fits with room to
+      spare. (Small office files exaggerate the ratio — their fixed
+      container overhead dominates — but the direction never flips:
+      Markdown is the text, minus the plumbing.)</p>
+
+      <h2>Where Markdown is <em>not</em> the answer</h2>
+
+      <p>Fairness requires one caveat. Deeply nested, machine-generated
+      data — API payloads, config trees — is often better left as JSON,
+      which models also read fluently; flattening it into prose can lose
+      precision. Markdown wins for <em>documents</em>: things with
+      headings, paragraphs, tables, figures and code, written for a reader.
+      That is exactly the shape of lecture notes, reports, articles and
+      notebooks — the things people actually paste into chat windows.</p>
+
+      <h2>The takeaway</h2>
+
+      <p>Models answer from what they can parse, in a register they were
+      trained to think in. Markdown is that register. Convert once, and
+      every downstream use — pasting into a chat, uploading to an AI
+      workspace, indexing for retrieval — starts from the model's native
+      language instead of a guessing game.</p>
+
+      <div class="article-cta">
+        <p>See what your document looks like in the model's native format —
+        converted locally, nothing uploaded.</p>
+        <a href="/">Open MakeItMarkdown →</a>
+      </div>
+
+      <p class="article-footer">MakeItMarkdown converts .ipynb, .docx,
+      .xlsx, .csv, .json, .html, .pdf, .srt and .md into LLM-ready Markdown,
+      locally in your browser. <a href="/blog/">More writing</a>.</p>
+    </article>
+  </div>
+</body>
+</html>

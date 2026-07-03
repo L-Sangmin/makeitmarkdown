@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light dark" />
   <title>Writing — MakeItMarkdown</title>
-  <meta name="description" content="Field notes on feeding documents to LLMs: formats, fidelity, and what actually gets lost in conversion." />
+  <meta name="description" content="Field notes on feeding documents to LLMs: why Markdown wins, how the converter works under the hood, real-world workspace workflows, and RAG pipelines." />
   <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="stylesheet" href="/assets/css/main.css" />
   <link rel="stylesheet" href="/assets/css/article.css" />
@@ -16,38 +16,228 @@
     <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/">← Tool</a>
   </header>
 
-  <div class="article-wrap">
+  <div class="article-wrap wide">
     <article>
       <h1>Writing</h1>
       <p class="article-byline">Field notes on feeding documents to LLMs —
-      formats, fidelity, and what actually gets lost in conversion.</p>
+      grouped by theme; the numbers suggest a reading order.</p>
 
-      <ul class="post-list">
-        <li><a class="post-card" href="/blog/notebook-cell-dependencies.html">
-          <h2>Making Jupyter notebooks LLM-addressable</h2>
-          <p>Cell addresses, execution-order confessions, dependency hints —
-          and the 515KB base64 image hiding in one markdown cell. A build
-          log with numbers.</p>
-          <span class="post-date">2026-07 · format deep-dive</span>
-        </a></li>
-        <li><a class="post-card" href="/blog/why-llms-choke-on-pdfs.html">
-          <h2>Why PDFs are hostile input for LLMs</h2>
-          <p>PDFs store painted glyphs, not structure. What silently breaks
-          when you paste one into a model, and the order of formats to
-          reach for instead.</p>
-          <span class="post-date">2026-07 · why clean documents matter</span>
-        </a></li>
-        <li><a class="post-card" href="/blog/tables-llms-can-read.html">
-          <h2>Tables LLMs can actually read</h2>
-          <p>Column-type annotations, explicit truncation, serial dates and
-          cached formulas — handing spreadsheets to a model without it
-          inventing data.</p>
-          <span class="post-date">2026-07 · format deep-dive</span>
-        </a></li>
-      </ul>
+      <!-- Theme: why Markdown wins -->
+      <section class="gallery-group" aria-labelledby="g1">
+        <p class="gallery-kicker" id="g1">Start here · Why Markdown wins</p>
+        <p class="gallery-blurb">What actually happens when a model reads
+        your document — and why the input format decides the answer
+        quality.</p>
+        <ul class="gallery-grid">
+          <li><a class="gallery-card" href="/blog/why-llms-choke-on-pdfs.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+                <rect x="112" y="26" width="76" height="102" rx="7" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/>
+                <g fill="var(--fg-faint)" opacity="0.75">
+                  <rect x="124" y="44" width="34" height="5" rx="2"/>
+                  <rect x="124" y="58" width="52" height="4" rx="2" transform="rotate(-1 150 60)"/>
+                  <rect x="124" y="70" width="46" height="4" rx="2" transform="rotate(1.5 147 72)"/>
+                  <rect x="124" y="82" width="52" height="4" rx="2" transform="rotate(-2 150 84)"/>
+                  <rect x="124" y="96" width="30" height="4" rx="2" transform="rotate(2 139 98)"/>
+                </g>
+                <path d="M196 100 l14 24 h-28 z" fill="none" stroke="var(--warn)" stroke-width="1.75" stroke-linejoin="round"/>
+                <path d="M196 109 v7 M196 120 v0.5" stroke="var(--warn)" stroke-width="1.75" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="card-body">
+              <span class="card-order">01</span>
+              <h3>Why PDFs are hostile input for LLMs</h3>
+              <p class="card-desc">PDFs store painted glyphs, not structure.
+              What silently breaks when you paste one into a model.</p>
+              <p class="card-meta">.pdf · 6 min</p>
+            </div>
+          </a></li>
+          <li><a class="gallery-card" href="/blog/llms-write-markdown.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+                <path d="M96 40 h128 a10 10 0 0 1 10 10 v46 a10 10 0 0 1 -10 10 h-88 l-18 16 v-16 h-22 a10 10 0 0 1 -10 -10 v-46 a10 10 0 0 1 10 -10 z" fill="none" stroke="var(--accent)" stroke-width="1.75"/>
+                <g font-family="ui-monospace,monospace" font-size="15" fill="var(--fg)">
+                  <text x="112" y="68">## heading</text>
+                  <text x="112" y="90">- **bold** list</text>
+                </g>
+              </svg>
+            </div>
+            <div class="card-body">
+              <span class="card-order">02</span>
+              <h3>LLMs don't just read Markdown — they speak it</h3>
+              <p class="card-desc">Ask a model anything: it answers in
+              headings and code fences. Feeding its native register back
+              matters.</p>
+              <p class="card-meta">.md · 7 min</p>
+            </div>
+          </a></li>
+        </ul>
+      </section>
+
+      <!-- Theme: under the hood -->
+      <section class="gallery-group" aria-labelledby="g2">
+        <p class="gallery-kicker" id="g2">Under the hood</p>
+        <p class="gallery-blurb">How the converter earns trust: structure
+        detection element by element, and a fidelity report that never says
+        "preserved".</p>
+        <ul class="gallery-grid">
+          <li><a class="gallery-card" href="/blog/not-a-file-converter.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+                <rect x="104" y="24" width="112" height="112" rx="8" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/>
+                <rect x="118" y="38" width="56" height="9" rx="3" fill="var(--accent)"/>
+                <rect x="118" y="56" width="84" height="4" rx="2" fill="var(--fg-faint)" opacity="0.5"/>
+                <rect x="118" y="65" width="76" height="4" rx="2" fill="var(--fg-faint)" opacity="0.5"/>
+                <rect x="118" y="78" width="84" height="26" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+                <path d="M118 87 h84 M146 78 v26 M174 78 v26" stroke="var(--accent)" stroke-width="0.9" opacity="0.7"/>
+                <rect x="118" y="112" width="38" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 3"/>
+              </svg>
+            </div>
+            <div class="card-body">
+              <span class="card-order">01</span>
+              <h3>What a converter built for LLMs does differently</h3>
+              <p class="card-desc">Headings from styles, typed tables,
+              figure placeholders — and a report of what was detected, not
+              promised.</p>
+              <p class="card-meta">philosophy · 8 min</p>
+            </div>
+          </a></li>
+          <li><a class="gallery-card" href="/blog/notebook-cell-dependencies.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+                <g font-family="ui-monospace,monospace" font-size="11" fill="var(--fg-muted)">
+                  <rect x="72" y="88" width="48" height="26" rx="5" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/>
+                  <text x="96" y="105" text-anchor="middle">In[1]</text>
+                  <rect x="136" y="88" width="48" height="26" rx="5" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/>
+                  <text x="160" y="105" text-anchor="middle">In[2]</text>
+                  <rect x="200" y="88" width="48" height="26" rx="5" fill="none" stroke="var(--warn)" stroke-width="1.5"/>
+                  <text x="224" y="105" text-anchor="middle" fill="var(--warn)">In[9]</text>
+                </g>
+                <path d="M96 86 Q128 44 158 86" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+                <path d="M160 86 Q192 52 222 86" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+                <path d="M98 86 Q160 20 220 86" fill="none" stroke="var(--fg-faint)" stroke-width="1.25" stroke-dasharray="4 3"/>
+              </svg>
+            </div>
+            <div class="card-body">
+              <span class="card-order">02</span>
+              <h3>Making Jupyter notebooks LLM-addressable</h3>
+              <p class="card-desc">Cell addresses, execution-order
+              confessions, dependency hints — a build log with real
+              numbers.</p>
+              <p class="card-meta">.ipynb · 9 min</p>
+            </div>
+          </a></li>
+          <li><a class="gallery-card" href="/blog/tables-llms-can-read.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+                <rect x="92" y="36" width="136" height="88" rx="6" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/>
+                <path d="M92 64 h136 M92 94 h136 M137 36 v88 M182 36 v88" stroke="var(--fg-faint)" stroke-width="1"/>
+                <rect x="92" y="36" width="136" height="28" rx="6" fill="color-mix(in srgb, var(--accent) 18%, transparent)"/>
+                <g font-family="ui-monospace,monospace" font-size="10" fill="var(--fg)">
+                  <text x="114" y="54" text-anchor="middle">str</text>
+                  <text x="159" y="54" text-anchor="middle">int</text>
+                  <text x="204" y="54" text-anchor="middle">float</text>
+                </g>
+              </svg>
+            </div>
+            <div class="card-body">
+              <span class="card-order">03</span>
+              <h3>Tables LLMs can actually read</h3>
+              <p class="card-desc">Column types, explicit truncation, serial
+              dates, cached formulas — spreadsheets without invented
+              data.</p>
+              <p class="card-meta">.xlsx .csv · 7 min</p>
+            </div>
+          </a></li>
+        </ul>
+      </section>
+
+      <!-- Theme: real-world workflows -->
+      <section class="gallery-group" aria-labelledby="g3">
+        <p class="gallery-kicker" id="g3">Real-world workflows</p>
+        <p class="gallery-blurb">Measured, story-driven guides: what changes
+        in Claude Projects, Perplexity Spaces and other AI workspaces when
+        the uploads are Markdown.</p>
+        <ul class="gallery-grid">
+          <li><a class="gallery-card" href="/blog/lecture-notes-case-study.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+                <rect x="84" y="40" width="58" height="76" rx="5" fill="none" stroke="var(--warn)" stroke-width="1.5" transform="rotate(-3 113 78)"/>
+                <text x="112" y="84" text-anchor="middle" font-family="ui-monospace,monospace" font-size="12" fill="var(--warn)">PDF</text>
+                <path d="M156 78 h28" stroke="var(--fg-faint)" stroke-width="1.5"/>
+                <path d="M178 72 l10 6 -10 6z" fill="var(--fg-faint)"/>
+                <rect x="196" y="40" width="58" height="76" rx="5" fill="none" stroke="var(--ok)" stroke-width="1.5"/>
+                <text x="225" y="84" text-anchor="middle" font-family="ui-monospace,monospace" font-size="12" fill="var(--ok)">.md</text>
+                <path d="M216 128 l6 8 12 -14" fill="none" stroke="var(--ok)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="card-body">
+              <span class="card-order">01</span>
+              <h3>Case study: lecture notes that made a smaller model smarter</h3>
+              <p class="card-desc">Same workspace, same questions — the only
+              change was PDF → Markdown. A first-person report with
+              numbers.</p>
+              <p class="card-meta">case study · 7 min</p>
+            </div>
+          </a></li>
+          <li><a class="gallery-card" href="/blog/ai-workspaces-markdown.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+                <path d="M84 56 h44 l12 12 h96 a8 8 0 0 1 8 8 v40 a8 8 0 0 1 -8 8 h-152 a8 8 0 0 1 -8 -8 v-52 a8 8 0 0 1 8 -8 z" fill="none" stroke="var(--accent)" stroke-width="1.75"/>
+                <g font-family="ui-monospace,monospace" font-size="10" fill="var(--fg-muted)">
+                  <text x="104" y="96">a.md</text>
+                  <text x="150" y="96">b.md</text>
+                  <text x="196" y="96">c.md</text>
+                </g>
+                <path d="M104 106 h112" stroke="var(--fg-faint)" stroke-width="1" stroke-dasharray="3 3"/>
+              </svg>
+            </div>
+            <div class="card-body">
+              <span class="card-order">02</span>
+              <h3>Markdown is the best upload format for AI workspaces</h3>
+              <p class="card-desc">Storage caps, token budgets, retrieval
+              accuracy — three bottlenecks, one format change, measured.</p>
+              <p class="card-meta">workflow · 8 min</p>
+            </div>
+          </a></li>
+        </ul>
+      </section>
+
+      <!-- Theme: advanced -->
+      <section class="gallery-group" aria-labelledby="g4">
+        <p class="gallery-kicker" id="g4">Advanced</p>
+        <p class="gallery-blurb">For people building pipelines: retrieval
+        systems, agent context, automation.</p>
+        <ul class="gallery-grid">
+          <li><a class="gallery-card" href="/blog/rag-ready-markdown.html">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+                <rect x="88" y="34" width="144" height="26" rx="5" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+                <rect x="88" y="67" width="144" height="26" rx="5" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+                <rect x="88" y="100" width="144" height="26" rx="5" fill="none" stroke="var(--border)" stroke-width="1.5"/>
+                <g font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-muted)">
+                  <text x="100" y="51">&lt;!-- chunk: intro --&gt;</text>
+                  <text x="100" y="84">&lt;!-- chunk: results --&gt;</text>
+                  <text x="100" y="117">…</text>
+                </g>
+                <path d="M244 74 a10 10 0 0 1 10 -10 h4 M258 88 a10 10 0 0 1 -10 10 h-4" stroke="var(--fg-faint)" stroke-width="1.75" fill="none" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="card-body">
+              <span class="card-order">01</span>
+              <h3>RAG-ready Markdown: chunks, anchors, honest citations</h3>
+              <p class="card-desc">Most RAG quality problems are chunking
+              problems. Fix retrieval at the source, before embedding.</p>
+              <p class="card-meta">pipelines · 8 min</p>
+            </div>
+          </a></li>
+        </ul>
+      </section>
 
       <p class="article-footer">All conversion happens in your browser —
-      nothing is uploaded. <a href="/">Open the tool</a>.</p>
+      nothing is uploaded. <a href="/">Open the tool</a> ·
+      <a href="/examples/">Examples</a> · <a href="/about.html">About</a> ·
+      <a href="/privacy.html">Privacy</a> · <a href="/contact.html">Contact</a></p>
     </article>
   </div>
 </body>

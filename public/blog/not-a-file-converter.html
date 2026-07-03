@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>What a converter built for LLMs does differently — MakeItMarkdown</title>
+  <meta name="description" content="Ordinary converters make output look right to humans. One built for LLMs makes structure explicit, extracts figures instead of base64 walls, and reports what it detected — honestly." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Writing</a>
+  </header>
+
+  <div class="article-wrap">
+    <div class="article-hero" aria-hidden="true">
+      <svg viewBox="0 0 680 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="">
+        <rect width="680" height="210" fill="var(--bg-raised)"/>
+        <!-- document x-ray: structural elements lit up -->
+        <rect x="60" y="26" width="230" height="160" rx="8" fill="none" stroke="var(--border)" stroke-width="1.25"/>
+        <rect x="76" y="42" width="120" height="10" rx="3" fill="var(--accent)" opacity="0.9"/>
+        <rect x="76" y="62" width="198" height="5" rx="2" fill="var(--fg-faint)" opacity="0.5"/>
+        <rect x="76" y="72" width="182" height="5" rx="2" fill="var(--fg-faint)" opacity="0.5"/>
+        <rect x="76" y="90" width="90" height="8" rx="3" fill="var(--accent)" opacity="0.75"/>
+        <rect x="76" y="106" width="198" height="34" rx="4" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+        <path d="M76 117 h198 M142 106 v34 M208 106 v34" stroke="var(--accent)" stroke-width="0.75" opacity="0.7"/>
+        <rect x="76" y="150" width="80" height="26" rx="4" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="86" y="167" font-family="ui-monospace,monospace" font-size="9" fill="var(--accent)">figure</text>
+        <text x="60" y="202" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">structure detected, element by element…</text>
+        <path d="M312 106 h48" stroke="var(--fg-faint)" stroke-width="1.25"/>
+        <path d="M354 100 l10 6 -10 6z" fill="var(--fg-faint)"/>
+        <g font-family="ui-monospace,monospace" font-size="10.5" fill="var(--fg)">
+          <text x="392" y="52"># Title</text>
+          <text x="392" y="74">## Section</text>
+          <text x="392" y="96">| col (str) | n (int) |</text>
+          <text x="392" y="118">[Figure: chart_1.png]</text>
+          <text x="392" y="140" fill="var(--fg-muted)">tables: 1 detected</text>
+          <text x="392" y="158" fill="var(--fg-muted)">figures: 1 detected</text>
+          <text x="392" y="180" fill="var(--warn)">⚠ 1 warning attached</text>
+        </g>
+        <text x="392" y="202" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">…and reported, not promised</text>
+      </svg>
+    </div>
+
+    <p class="article-kicker">Under the hood · 01</p>
+    <article>
+      <h1>What a converter built for LLMs does differently</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 8 min read</p>
+
+      <p>Search "convert docx to markdown" and you'll find dozens of tools.
+      Most share an unstated goal: make the output <em>look like</em> the
+      original, for a human eyeball. That goal is why their output quietly
+      fails when the reader is a language model. A model doesn't see how
+      the page looks. It sees a token stream — and it needs different
+      things from that stream than your eyes need from a page.</p>
+
+      <p>MakeItMarkdown is built around that difference. Here's what
+      changes, element by element.</p>
+
+      <h2>Headings: semantics from styles, not from font size</h2>
+      <p>In a .docx, "Heading 2" is a style object, and we map style names
+      directly to <code>##</code> levels. Converters that render the page
+      visually and then transcribe it tend to emit big bold paragraphs —
+      which a model reads as ordinary text. The document's outline, the
+      single most useful retrieval structure it has, evaporates. Style-aware
+      mapping keeps it: your section tree arrives as a real
+      <code>#/##/###</code> hierarchy.</p>
+
+      <h2>Tables: kept rectangular, typed, and honest about truncation</h2>
+      <p>Tables are where converted documents lie most. Merged cells,
+      header rows demoted to data, thousands of rows silently clipped. Our
+      table handling does three unusual things:</p>
+      <ul>
+        <li><strong>Column types are annotated</strong> — a model told
+        <code>revenue (float)</code> stops treating "1,204" as a string
+        with a comma in it. We wrote up the details in
+        <a href="/blog/tables-llms-can-read.html">Tables LLMs can actually
+        read</a>.</li>
+        <li><strong>Truncation is explicit.</strong> A 10,000-row CSV
+        becomes the first 50 rows <em>plus a line stating exactly that</em>,
+        so the model knows it is looking at a sample — instead of
+        confidently "summarizing" 0.5% of your data as if it were all of
+        it.</li>
+        <li><strong>Ragged rows are repaired and confessed</strong> —
+        padded to rectangular, with a warning in the fidelity report.</li>
+      </ul>
+
+      <h2>Figures: placeholders, never base64 walls</h2>
+      <p>Embedded images are the silent token bomb. One notebook we tested
+      carried a 515 KB base64 screenshot <em>inside a markdown cell</em> —
+      pasted into a chat window, that's roughly 130,000 tokens of pure
+      noise, a third of many context windows, spent on one image the model
+      can't even decode from text. We extract every embedded image to a
+      real file and leave an explicit, addressable marker in the text:</p>
+      <pre><code>[Figure: cell_12_figure_1.png]</code></pre>
+      <p>The model sees that a figure exists, where it sits in the
+      document, and can refer to it by name. Your token budget goes to
+      words.</p>
+
+      <h2>Notebooks: cells you can point at</h2>
+      <p>A .ipynb is JSON wrapping code, outputs, images and metadata. Our
+      notebook parser gives every cell a stable address
+      (<code>Cell [7]</code>), flags execution-order anomalies — the
+      classic "ran cell 40 before cell 12" state that makes results
+      unreproducible — and adds approximate dependency hints between cells,
+      so a model can trace where a variable came from without you pasting
+      the whole notebook twice. The full build log, with real numbers from
+      a 100-cell notebook, is in
+      <a href="/blog/notebook-cell-dependencies.html">Making Jupyter
+      notebooks LLM-addressable</a>.</p>
+
+      <h2>The fidelity report: "detected", never "preserved"</h2>
+      <p>This is the part we consider non-negotiable, and the part most
+      converters simply don't have. Every conversion here returns three
+      panels: the original, the Markdown, and a <strong>fidelity
+      report</strong> — counts of tables, figures, equations and code cells
+      the parser <em>detected</em>, every warning it accumulated, and a
+      five-point structural quality score.</p>
+      <p>The wording is deliberate. "Preserved" is a promise nobody
+      converting real-world files can keep; "detected" is a measurement.
+      If your document contains four tables and the report says two, you've
+      learned something vital <em>before</em> the model hallucinated around
+      the missing half. Silent loss becomes visible loss. That's the whole
+      trust model of the product — and it's why the report sits on equal
+      footing with the output itself.</p>
+
+      <div class="shot-note">🎬 <strong>Media slot</strong> — save as
+      <code>/assets/media/blog/not-a-converter/fidelity-zoom.mp4</code> ·
+      10–15&nbsp;s screen recording: drop the sample notebook, then zoom
+      (cursor-follow) onto the fidelity panel while the counters animate
+      up and a warning appears. Muted, looping. This box is replaced by
+      the clip once the file lands.</div>
+
+      <h2>What we refuse to do</h2>
+      <ul>
+        <li><strong>Invent text for scanned pages.</strong> A PDF with no
+        text layer gets a clear flag and a suggested next step — not
+        made-up sentences.</li>
+        <li><strong>Claim 100% anything.</strong> Layout, equations and
+        complex formatting degrade in measurable ways; the report exists
+        to measure them.</li>
+        <li><strong>Touch your files.</strong> Parsing runs entirely in
+        your browser — the site works offline, which is only possible
+        because nothing is uploaded. See <a href="/privacy.html">privacy</a>.</li>
+      </ul>
+
+      <h2>One structure, many targets</h2>
+      <p>Because every parser emits the same internal structure, the output
+      presets are cheap and consistent: token-lean <em>Chat paste</em>,
+      <em>RAG</em> with chunk boundaries and stable anchors, <em>Obsidian</em>
+      with callouts and wikilinks, and a faithful <em>Archive</em> with full
+      frontmatter. Same detected structure, four disciplines of output —
+      pick per destination, not per file.</p>
+
+      <div class="article-cta">
+        <p>Drop a file and read its fidelity report. If the report surprises
+        you, that's the point.</p>
+        <a href="/">Open MakeItMarkdown →</a>
+      </div>
+
+      <p class="article-footer">MakeItMarkdown converts .ipynb, .docx,
+      .xlsx, .csv, .json, .html, .pdf, .srt and .md into LLM-ready Markdown,
+      locally in your browser. <a href="/blog/">More writing</a>.</p>
+    </article>
+  </div>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>RAG-ready Markdown: chunk boundaries, stable anchors, honest citations — MakeItMarkdown</title>
+  <meta name="description" content="Most RAG quality problems are chunking problems, and most chunking problems are input problems. How structure-aligned Markdown with chunk comments and stable anchors fixes retrieval at the source." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Writing</a>
+  </header>
+
+  <div class="article-wrap">
+    <div class="article-hero" aria-hidden="true">
+      <svg viewBox="0 0 680 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="">
+        <rect width="680" height="210" fill="var(--bg-raised)"/>
+        <!-- naive chunking: fixed windows crossing a table -->
+        <text x="48" y="34" font-family="ui-monospace,monospace" font-size="10" fill="var(--fg-faint)">fixed-window chunking</text>
+        <g>
+          <rect x="48" y="46" width="250" height="120" rx="8" fill="none" stroke="var(--border)" stroke-width="1.25"/>
+          <rect x="62" y="60" width="150" height="7" rx="2" fill="var(--fg-faint)" opacity="0.6"/>
+          <rect x="62" y="76" width="222" height="5" rx="2" fill="var(--fg-faint)" opacity="0.4"/>
+          <rect x="62" y="88" width="210" height="5" rx="2" fill="var(--fg-faint)" opacity="0.4"/>
+          <!-- table -->
+          <rect x="62" y="104" width="222" height="44" rx="3" fill="none" stroke="var(--fg-faint)" stroke-width="0.9"/>
+          <path d="M62 118 h222 M136 104 v44 M210 104 v44" stroke="var(--fg-faint)" stroke-width="0.6"/>
+          <!-- chunk cut lines slicing through table -->
+          <path d="M40 126 h268" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <text x="52" y="140" font-family="ui-monospace,monospace" font-size="8.5" fill="var(--warn)">cut #2 — mid-table</text>
+          <path d="M40 82 h268" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <text x="52" y="96" font-family="ui-monospace,monospace" font-size="8.5" fill="var(--warn)">cut #1 — mid-sentence</text>
+        </g>
+        <!-- structural chunking -->
+        <text x="382" y="34" font-family="ui-monospace,monospace" font-size="10" fill="var(--fg-faint)">structure-aligned chunking</text>
+        <g>
+          <rect x="382" y="46" width="250" height="52" rx="8" fill="none" stroke="var(--ok)" stroke-width="1.25"/>
+          <text x="396" y="66" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg)">&lt;!-- chunk: methods --&gt;</text>
+          <text x="396" y="84" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-muted)">## Methods … whole section</text>
+          <rect x="382" y="110" width="250" height="56" rx="8" fill="none" stroke="var(--ok)" stroke-width="1.25"/>
+          <text x="396" y="130" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg)">&lt;!-- chunk: results --&gt;</text>
+          <text x="396" y="148" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-muted)">## Results … table intact</text>
+        </g>
+        <text x="382" y="192" font-family="ui-monospace,monospace" font-size="9" fill="var(--ok)">every chunk = one coherent topic with a name</text>
+      </svg>
+    </div>
+
+    <p class="article-kicker">Advanced · 01</p>
+    <article>
+      <h1>RAG-ready Markdown: chunk boundaries, stable anchors, honest citations</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 8 min read</p>
+
+      <p>Most RAG quality problems are chunking problems. And most chunking
+      problems are input problems: the chunker was handed a flat wall of
+      extracted text and told to find topic boundaries with a ruler. This
+      article is about fixing retrieval at the source — before the
+      embedding model ever runs.</p>
+
+      <h2>Thirty seconds of background</h2>
+      <p>A retrieval-augmented pipeline ingests documents by splitting them
+      into chunks, embedding each chunk as a vector, and — at question time
+      — pulling the closest chunks into the model's context. Everything
+      downstream (answer accuracy, citations, hallucination rate) inherits
+      from one early decision: <em>where the splits fall</em>.</p>
+
+      <h2>What a ruler does to a document</h2>
+      <p>The default strategy — fixed windows of N characters with overlap —
+      knows nothing about your document. On raw PDF extractions it
+      reliably produces the three classic failure chunks:</p>
+      <ul>
+        <li><strong>The half-definition</strong> — a split lands
+        mid-sentence, so the condition ends up in chunk 12 and its
+        exception in chunk 13; retrieval surfaces one without the
+        other.</li>
+        <li><strong>The beheaded table</strong> — header row in one chunk,
+        data rows in the next; the numbers arrive with no column
+        names.</li>
+        <li><strong>The orphan context</strong> — a chunk starting with
+        "as shown above, this fails when…" — referring to text the model
+        will never see.</li>
+      </ul>
+      <p>Overlap papers over some of this at the cost of duplicated tokens
+      and duplicated retrievals. The real fix is upstream: give the chunker
+      boundaries that mean something.</p>
+
+      <h2>Headings are free chunk boundaries</h2>
+      <p>A well-structured Markdown document already contains the splits a
+      chunker wishes it could infer: section headings are topic boundaries,
+      written by the one entity that knew the topics — the author. Chunk at
+      headings and each chunk becomes a coherent unit with a
+      self-describing label; tables stay whole because they live inside a
+      section; "as shown above" mostly refers to text within the same
+      chunk.</p>
+
+      <h2>What the RAG preset emits</h2>
+      <p>MakeItMarkdown's <em>RAG</em> preset makes those boundaries
+      machine-obvious instead of implicit. Two additions to the standard
+      output, both inert in any Markdown renderer:</p>
+
+      <pre><code>&lt;!-- chunk: quarterly-results --&gt;
+&lt;a id="quarterly-results"&gt;&lt;/a&gt;
+## Quarterly results
+
+| region (str) | units (int) | revenue (float) |
+| --- | --- | --- |
+| North | 1204 | 96432.10 |
+…
+
+&lt;!-- chunk: methodology --&gt;
+&lt;a id="methodology"&gt;&lt;/a&gt;
+## Methodology
+…</code></pre>
+
+      <ul>
+        <li><strong><code>&lt;!-- chunk: slug --&gt;</code> comments</strong>
+        mark every section boundary. Your ingestion script doesn't parse
+        heading levels or guess — it splits on a literal string. Any
+        language, three lines of code.</li>
+        <li><strong><code>&lt;a id="slug"&gt;&lt;/a&gt;</code> anchors</strong>
+        give each section a stable address. Slugs are deduplicated
+        deterministically (a second "Results" becomes
+        <code>results-2</code>), so the same document converts to the same
+        anchors every time.</li>
+      </ul>
+
+      <h2>Stable anchors are what make citations honest</h2>
+      <p>The quiet failure of RAG systems is the citation that can't be
+      followed — "source: document.pdf, page ~14" pointing into a file
+      whose extraction changed since indexing. Anchors fix the contract:
+      store <code>notes-05.md#convergence-conditions</code> alongside each
+      vector, and a citation resolves to an exact section — after
+      re-indexing, after edits elsewhere in the file, in any Markdown
+      viewer that renders HTML anchors, in your repo's rendered view.
+      Deduplicated slugs double as chunk IDs for deduping retrievals and
+      tracking chunk-level metrics.</p>
+
+      <h2>Keep the fidelity signals in the index</h2>
+      <p>Two more properties of the converted output matter specifically
+      for pipelines:</p>
+      <ul>
+        <li><strong>Figure placeholders are signal.</strong>
+        <code>[Figure: cell_12_figure_1.png]</code> embeds cheaply and
+        tells the model a figure exists at that point — far better than a
+        stripped image leaving no trace, and enormously better than a
+        base64 wall poisoning the embedding. (One notebook we tested hid
+        515 KB of base64 in a single cell — as an embedding input that's
+        pure noise.)</li>
+        <li><strong>Explicit truncation prevents confident nonsense.</strong>
+        A table cut at 50 rows says so in the text, so a retrieved chunk
+        can't masquerade as the whole dataset.</li>
+      </ul>
+      <p>Both come from the same design rule as the
+      <a href="/blog/not-a-file-converter.html">fidelity report</a>:
+      never let loss be silent.</p>
+
+      <h2>Recipe: files to chunks in three steps</h2>
+      <ol>
+        <li>Convert with the <strong>RAG</strong> preset (batch drop works;
+        everything runs in your browser).</li>
+        <li>In your ingestion script, split on
+        <code>&lt;!-- chunk:</code> and index each piece with its slug and
+        source filename as metadata. Oversized sections can still be
+        sub-split by paragraph — the slug keeps the lineage.</li>
+        <li>At answer time, return
+        <code>filename#slug</code> with every quote. Your citations now
+        survive re-indexing.</li>
+      </ol>
+
+      <h2>Where this is heading</h2>
+      <p>The same properties that help retrieval — addressable sections,
+      explicit structure, honest truncation — are what agentic workflows
+      need: an assistant that can be told "read <code>report.md</code>,
+      section <code>methodology</code>" navigates instead of re-reading.
+      Agent-oriented output is on our roadmap; if you're building in that
+      direction, <a href="/contact.html">tell us what your agents
+      choke on</a>.</p>
+
+      <div class="article-cta">
+        <p>Convert a document with the RAG preset and inspect the chunk
+        boundaries yourself — this link preloads a sample with the preset
+        switched on.</p>
+        <a href="/?sample=sales-analysis&amp;preset=rag">Try the RAG preset →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/blog/ai-workspaces-markdown.html">Markdown for AI
+      workspaces</a> ·
+      <a href="/blog/tables-llms-can-read.html">Tables LLMs can actually
+      read</a> · <a href="/blog/">More writing</a>.</p>
+    </article>
+  </div>
+</body>
+</html>

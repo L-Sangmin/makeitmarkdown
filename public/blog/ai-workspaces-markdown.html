@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Markdown is the best upload format for AI workspaces — MakeItMarkdown</title>
+  <meta name="description" content="Claude Projects, Perplexity Spaces, custom assistants: whatever you upload gets chunked, searched and quoted. Why Markdown beats PDF and Office files on storage, tokens and retrieval accuracy." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Writing</a>
+  </header>
+
+  <div class="article-wrap">
+    <div class="article-hero" aria-hidden="true">
+      <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="">
+        <rect width="680" height="200" fill="var(--bg-raised)"/>
+        <!-- workspace box -->
+        <rect x="48" y="34" width="180" height="132" rx="10" fill="none" stroke="var(--border)" stroke-width="1.25"/>
+        <text x="138" y="24" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">your workspace files</text>
+        <g font-family="ui-monospace,monospace" font-size="10" fill="var(--fg-muted)">
+          <text x="66" y="62">notes-01.md</text>
+          <text x="66" y="84">notes-02.md</text>
+          <text x="66" y="106">report.md</text>
+          <text x="66" y="128">data-summary.md</text>
+        </g>
+        <!-- chunking arrows -->
+        <path d="M228 100 h40" stroke="var(--fg-faint)" stroke-width="1.25"/>
+        <path d="M262 94 l10 6 -10 6z" fill="var(--fg-faint)"/>
+        <!-- chunks -->
+        <g>
+          <rect x="286" y="48" width="96" height="26" rx="5" fill="none" stroke="var(--accent)" stroke-width="1.25"/>
+          <rect x="286" y="86" width="96" height="26" rx="5" fill="none" stroke="var(--accent)" stroke-width="1.25"/>
+          <rect x="286" y="124" width="96" height="26" rx="5" fill="none" stroke="var(--border)" stroke-width="1.25"/>
+          <text x="334" y="65" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg)">## Week 5</text>
+          <text x="334" y="103" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg)">## Results</text>
+          <text x="334" y="141" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">…</text>
+        </g>
+        <text x="334" y="180" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">chunks follow headings</text>
+        <path d="M382 100 h40" stroke="var(--fg-faint)" stroke-width="1.25"/>
+        <path d="M416 94 l10 6 -10 6z" fill="var(--fg-faint)"/>
+        <!-- answer -->
+        <rect x="440" y="52" width="204" height="96" rx="10" fill="none" stroke="var(--ok)" stroke-width="1.5"/>
+        <g font-family="ui-monospace,monospace" font-size="10" fill="var(--fg)">
+          <text x="456" y="82">"Per **Week 5**, the</text>
+          <text x="456" y="102">three conditions are…"</text>
+          <text x="456" y="128" fill="var(--ok)">✓ right file, first try</text>
+        </g>
+      </svg>
+    </div>
+
+    <p class="article-kicker">Real-world workflows · 02</p>
+    <article>
+      <h1>Markdown is the best upload format for AI workspaces</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 8 min read</p>
+
+      <p>Claude Projects. Perplexity Spaces. Custom assistants with
+      knowledge files. Notebook-style research tools. Different products,
+      same architecture: you upload reference files, the tool splits them
+      into chunks, and when you ask a question it searches those chunks and
+      feeds the best matches to the model alongside your prompt.</p>
+
+      <p>That architecture has three bottlenecks — storage caps, token
+      budgets, and retrieval accuracy. The format you upload in touches all
+      three, and Markdown wins all three. Not by a little.</p>
+
+      <h2>Win 1: storage — same knowledge, a fraction of the cap</h2>
+      <p>Workspace storage is capped (per-file limits, per-project totals).
+      PDFs and Office files spend most of their bytes on things retrieval
+      can't use: embedded fonts, themes, XML plumbing, image previews.
+      Measured on our own built-in samples and test files:</p>
+
+      <table>
+        <tr><th>File</th><th>Original</th><th>As Markdown</th><th>Ratio</th></tr>
+        <tr><td>2-page report (.pdf)</td><td>26.6 KB</td><td>0.9 KB</td><td>~30&#215;</td></tr>
+        <tr><td>Operations review (.docx)</td><td>36.4 KB</td><td>0.9 KB</td><td>~40&#215;</td></tr>
+        <tr><td>Data-analysis notebook (.ipynb, 100+ cells)</td><td>3,465 KB</td><td>261 KB</td><td>~13&#215;</td></tr>
+      </table>
+
+      <p>Tiny office files exaggerate the ratio — container overhead is
+      fixed — but the direction holds at every size we've measured, because
+      Markdown is the text minus the plumbing. In practice a workspace that
+      was straining its cap with PDFs drops to a few percent after
+      conversion, with the identical textual content.</p>
+
+      <div class="shot-note">📸 <strong>Media slot</strong> — save as
+      <code>/assets/media/blog/workspaces/01-space-storage.png</code> ·
+      screenshot pair (or one combined image) of a real workspace's
+      storage/capacity indicator before and after replacing PDFs with the
+      converted .md files. This box is replaced by the image once the
+      file lands.</div>
+
+      <h2>Win 2: tokens — denser chunks, more of them</h2>
+      <p>When the workspace answers a question, it can only afford to stuff
+      a limited number of tokens of retrieved context into the prompt.
+      Every token spent on formatting debris — reconstructed line breaks,
+      page headers repeated forty times, "Page 12 of 96" — is a token of
+      your actual content that didn't make it in.</p>
+      <p>Markdown chunks are nearly all signal. The practical effects
+      stack: each retrieved chunk carries more content, more distinct
+      chunks fit per question, and long documents that flatly exceeded
+      per-file token limits start fitting at all. Our stress-test notebook
+      is the sharpest example: as raw .ipynb JSON it's roughly 3.5 MB and
+      simply can't be attached to most chats; as Markdown it's ~64,000
+      tokens — large but usable, with cell addresses intact.</p>
+
+      <h2>Win 3: retrieval — headings are search handles</h2>
+      <p>Chunk quality decides answer quality. Retrieval works best when
+      each chunk is a coherent topic with a descriptive label — and that is
+      precisely what Markdown headings produce. A chunk that begins
+      <code>## Week 5 · Convergence conditions</code> practically indexes
+      itself: the words your question will use are sitting in the chunk's
+      own header.</p>
+      <p>PDF-extracted text gives the chunker none of that. Splits happen
+      at arbitrary character counts, mid-table and mid-sentence; the chunk
+      that matches your question may begin halfway through a definition
+      whose first half lives in another chunk. The model receives two
+      half-thoughts and quotes neither correctly. Structure in, structure
+      out — we saw this shift a small model from vague to precise in
+      <a href="/blog/lecture-notes-case-study.html">the lecture-notes case
+      study</a>.</p>
+
+      <div class="shot-note">📸 <strong>Media slot</strong> — save as
+      <code>/assets/media/blog/workspaces/02-cited-answer.png</code> ·
+      screenshot of a workspace answer that cites/quotes a converted .md
+      file (source popover or inline citation visible), showing it pulled
+      the right section.</div>
+
+      <h2>The recipe</h2>
+      <ol>
+        <li><strong>Convert:</strong> drag your files — multiple at once —
+        into <a href="/">MakeItMarkdown</a>. Conversion runs in your
+        browser; nothing is uploaded to us.</li>
+        <li><strong>Check:</strong> skim each fidelity report. Warnings
+        (truncated tables, scanned pages, layout loss) tell you what to
+        double-check before you rely on a file.</li>
+        <li><strong>Upload:</strong> download the .zip and add the .md
+        files to your Project / Space / knowledge base. Keep filenames
+        stable so citations stay meaningful.</li>
+        <li><strong>Replace, don't duplicate:</strong> remove the original
+        PDFs from the workspace — if both versions stay, retrieval
+        sometimes surfaces the bad one.</li>
+      </ol>
+
+      <h2>When to leave a format alone</h2>
+      <p>Structured data your assistant should <em>compute</em> over —
+      spreadsheets it will run code on, JSON an integration consumes —
+      can stay native; convert a Markdown copy only for the
+      reading-and-citing use case. And truly visual documents (design
+      mockups, scanned forms) need their images, which text-first
+      conversion won't carry. For everything meant to be read, quoted and
+      searched, Markdown is the format your workspace wishes you'd
+      uploaded.</p>
+
+      <div class="article-cta">
+        <p>Convert your workspace files in one drop — batch conversion,
+        fidelity report per file, .zip out.</p>
+        <a href="/">Open MakeItMarkdown →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/blog/lecture-notes-case-study.html">the lecture-notes case
+      study</a> ·
+      <a href="/blog/rag-ready-markdown.html">RAG-ready Markdown</a> ·
+      <a href="/blog/">More writing</a>.</p>
+    </article>
+  </div>
+</body>
+</html>
