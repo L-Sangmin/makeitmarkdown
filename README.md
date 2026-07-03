@@ -48,10 +48,17 @@ Deployed on Cloudflare Pages (output directory: `public`, no build command).
 
 ## Architecture
 
-See [HANDOFF.md](HANDOFF.md) — single source of truth. Short version: every
-parser implements one common interface (`canHandle` / `parse` → shared schema
-including a `fidelity` block, HANDOFF §10); the two formatters and the
-trust-view UI consume that schema.
+One schema, two formatters, presets on top. Every parser implements a common
+interface — `canHandle(url, doc, filename)` and `parse(input)` returning a
+shared result schema that includes a `fidelity` block (detected/recovered
+element counts, warnings, QC score). The Standard and Obsidian formatters,
+the target presets, and the trust-view UI all consume that one schema, so a
+new format only ever means one new parser file in
+`public/assets/js/parsers/`.
+
+Tests run in Node against the same parser files the browser executes
+(`npm test`), with the vendored browser libraries mirrored by npm builds of
+identical versions.
 
 ## Licenses
 
