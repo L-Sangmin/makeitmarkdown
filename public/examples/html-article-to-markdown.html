@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Web article → clean Markdown — MakeItMarkdown examples</title>
+  <meta name="description" content="Navigation and ads stripped; the article, its table and figures kept." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/examples/">Examples</a>
+  </header>
+  <div class="article-wrap">
+  
+    <p class="article-kicker">Example · article.html</p>
+    <article>
+      <h1>Web article → clean Markdown</h1>
+      <p class="article-byline">Navigation and ads stripped; the article, its table and figures kept.</p>
+      <table>
+        <tr><th>QC score</th><th>Tables</th><th>Figures</th><th>Code cells</th><th>Output size</th></tr>
+        <tr><td>100%</td><td>1</td><td>2</td><td>0</td><td>1,990 chars ≈ 498 tokens</td></tr>
+      </table>
+      <h2>Fidelity warnings</h2><ul><li>1 local image reference(s) kept as relative links — they won't resolve outside the original site (ZIP upload for full recovery is a later phase)</li></ul>
+      <h2>Converted Markdown</h2>
+      <pre><code># Quarterly Planning for Small Teams — Fieldnotes
+
+## Article
+
+Most planning advice is written for companies with program managers, steering committees, and a budget for off-sites. Small teams need something lighter: a cadence that produces a short list of commitments without consuming a week of calendar time.
+
+This article describes the three-meeting structure we have used for two years across product and platform work. It optimizes for one thing: **every commitment has an owner and an explicit "stop doing" counterpart.**
+
+## The three meetings
+
+The whole cycle fits in five working days and three meetings, each with a fixed agenda and a hard stop.
+
+| Meeting | Length | Output |
+| --- | --- | --- |
+| Retrospective | 60 min | Three lessons, written |
+| Options review | 90 min | Ranked candidate list |
+| Commitment | 45 min | Final list with owners |
+
+## Writing the options memo
+
+Before the options review, one person writes a two-page memo listing every candidate project with a one-paragraph case. The discipline of the memo matters more than the meeting itself; half the candidates usually eliminate themselves on paper.
+
+![Planning cadence diagram](https://example.com/images/cadence-diagram.png)
+
+The five-day cadence at a glance.
+
+## Common failure modes
+
+Three patterns account for most failed quarters:
+
+-   **Carry-over creep.** Unfinished work re-enters the list without re-justification.
+-   **Owner inflation.** A commitment with two owners has no owner.
+-   **Silent scope growth.** The "stop doing" list is ignored after week two.
+
+The fix for all three is the same: the written memo is the source of truth, and anything not in it does not exist.
+
+![Printable planning checklist](figures/checklist.png)
+
+## What to measure
+
+Track only two numbers per quarter: the fraction of commitments delivered as written, and the number of unplanned projects that displaced planned ones. Both are countable in an afternoon and resist gaming better than velocity-style metrics.
+</code></pre>
+      <div class="article-cta">
+        <p>Run this conversion live — or drop your own file. Everything stays in your browser.</p>
+        <a href="/?sample=article">Open in the tool →</a>
+      </div>
+      <p class="article-footer">Keywords: html to markdown clean, readability to markdown · <a href="/examples/">All examples</a></p>
+    </article>
+  </div>
+</body>
+</html>

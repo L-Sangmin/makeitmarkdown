@@ -1,0 +1,27 @@
+name: Bug report
+description: A conversion failed or produced wrong output
+labels: ["bug"]
+body:
+  - type: input
+    id: file
+    attributes:
+      label: File type and rough size
+      placeholder: ".xlsx, 2MB, 4 sheets"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What happened vs. what you expected
+    validations:
+      required: true
+  - type: textarea
+    id: error
+    attributes:
+      label: Exact error text (if any)
+      description: Copy the error card text or the browser console line.
+  - type: textarea
+    id: sample
+    attributes:
+      label: Sample file that reproduces it
+      description: Nothing you upload to the tool ever leaves your browser — but a sample attached HERE is visible to maintainers. Strip anything confidential first.

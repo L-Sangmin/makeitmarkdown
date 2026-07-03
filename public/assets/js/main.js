@@ -9,7 +9,7 @@
 
 import { convertFile, UnsupportedFormatError } from "./router.js";
 import { renderResult, setMarkdown, refreshFidelity } from "./result-view.js";
-import { buildResultZip } from "./zipper.js";
+import { buildResultZip, buildBatchZip } from "./zipper.js";
 import { PRESETS, formatWithPreset } from "./presets.js";
 import { loadHistory, saveToHistory, clearHistory } from "./history.js";
 
@@ -183,13 +183,59 @@ async function handleFile(file) {
 const escapeText = (s) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
+// Multiple files: convert each, show the first result, keep the rest for a
+// single batch ZIP download.
+async function handleFiles(files) {
+  const list = [...files];
+  if (list.length <= 1) {
+    if (list[0]) await handleFile(list[0]);
+    return;
+  }
+
+  hideError();
+  const busyLabel = els.dropTarget.querySelector(".drop-busy-label");
+  const clearBusy = setBusy(list[0].name);
+  const payloads = [];
+  const failures = [];
+
+  try {
+    for (let i = 0; i < list.length; i++) {
+      const file = list[i];
+      busyLabel.textContent = `Converting ${i + 1}/${list.length}: ${file.name}`;
+      try {
+        const payload = await convertFile(file);
+        payload.markdown = formatWithPreset(payload.result, activePreset);
+        payloads.push(payload);
+        saveToHistory(payload, activePreset);
+      } catch (err) {
+        failures.push(`${file.name}: ${err.message ?? "failed"}`);
+      }
+    }
+  } finally {
+    clearBusy();
+  }
+  renderHistoryList();
+
+  if (!payloads.length) {
+    showError(`None of the ${list.length} files could be converted.<br>${escapeText(failures[0] ?? "")}`);
+    return;
+  }
+
+  current = payloads[0];
+  current.batch = payloads;
+  syncPresetSeg();
+  const failNote = failures.length ? ` · ${failures.length} failed` : "";
+  els.meta.textContent = `${payloads.length} files converted${failNote} · showing ${current.filename} · Download .zip bundles all`;
+  renderResult(current, els);
+  showResult();
+}
+
 // --- input wiring ------------------------------------------------------------------
 
 els.dropTarget.addEventListener("click", () => els.fileInput.click());
 
 els.fileInput.addEventListener("change", () => {
-  const file = els.fileInput.files?.[0];
-  if (file) handleFile(file);
+  if (els.fileInput.files?.length) handleFiles(els.fileInput.files);
 });
 
 // The whole window accepts drops — the card is the affordance, not the boundary.
@@ -203,13 +249,11 @@ window.addEventListener("dragleave", (e) => {
 window.addEventListener("drop", (e) => {
   e.preventDefault();
   els.dropTarget.classList.remove("is-dragover");
-  const file = e.dataTransfer?.files?.[0];
-  if (file) handleFile(file);
+  if (e.dataTransfer?.files?.length) handleFiles(e.dataTransfer.files);
 });
 
 document.addEventListener("paste", (e) => {
-  const file = e.clipboardData?.files?.[0];
-  if (file) handleFile(file);
+  if (e.clipboardData?.files?.length) handleFiles(e.clipboardData.files);
 });
 
 // --- sample ---------------------------------------------------------------------------
@@ -287,6 +331,12 @@ document.getElementById("btn-clear-history")?.addEventListener("click", () => {
   renderHistoryList();
 });
 
+// Offline support — after the first visit the whole tool works with no
+// network at all, which is also the privacy claim made verifiable.
+if ("serviceWorker" in navigator) {
+  addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
+}
+
 renderHistoryList();
 
 // Deep links for demos/tests: ?sample=<name> and ?preset=<id>
@@ -334,11 +384,14 @@ document.addEventListener("keydown", (e) => {
 
 els.btnZip?.addEventListener("click", async () => {
   if (!current) return;
-  const { blob, name } = await buildResultZip({
-    markdown: current.markdown,
-    filename: current.filename,
-    figures: current.result.figures,
-  });
+  const { blob, name } =
+    current.batch?.length > 1
+      ? await buildBatchZip(current.batch)
+      : await buildResultZip({
+          markdown: current.markdown,
+          filename: current.filename,
+          figures: current.result.figures,
+        });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;

@@ -1,0 +1,48 @@
+# Agent triage for format requests and bugs.
+#
+# Runs Claude Code on new issues: it reproduces bugs against the test suite,
+# drafts a parser plan for format requests (canHandle/parse/fidelity per the
+# shared schema), and replies on the issue.
+#
+# SETUP (one-time, by a maintainer):
+#   1. Install the Claude GitHub app:  https://github.com/apps/claude
+#   2. Add the ANTHROPIC_API_KEY repository secret.
+# Until both exist this workflow exits quietly.
+
+name: Issue triage
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Check key
+        id: gate
+        run: |
+          if [ -n "${{ secrets.ANTHROPIC_API_KEY }}" ]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ANTHROPIC_API_KEY not set — skipping agent triage."
+          fi
+      - uses: actions/checkout@v4
+        if: steps.gate.outputs.ok == 'true'
+      - uses: anthropics/claude-code-action@v1
+        if: steps.gate.outputs.ok == 'true'
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Triage GitHub issue #${{ github.event.issue.number }} in this repo.
+            - Bug: try to reproduce with `npm test` and the repo's fixtures;
+              reply with findings and, if reproducible, the failing case.
+            - Format request: assess browser-side feasibility (MIT/BSD/
+              Apache-2.0 libraries only, no server), then reply with a short
+              parser plan following public/assets/js/parsers/index.js's
+              shared schema (canHandle/parse/fidelity) and label it
+              `feasible` or `needs-discussion`.
+            Keep replies short and concrete. Never commit from this workflow.
+          claude_args: "--allowed-tools Bash(npm test),Read,Grep,Glob --max-turns 15"

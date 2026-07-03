@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Out-of-order notebook, caught and flagged — MakeItMarkdown examples</title>
+  <meta name="description" content="Execution-order warnings and stale-state detection on a messy notebook." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/examples/">Examples</a>
+  </header>
+  <div class="article-wrap">
+  
+    <p class="article-kicker">Example · out-of-order.ipynb</p>
+    <article>
+      <h1>Out-of-order notebook, caught and flagged</h1>
+      <p class="article-byline">Execution-order warnings and stale-state detection on a messy notebook.</p>
+      <table>
+        <tr><th>QC score</th><th>Tables</th><th>Figures</th><th>Code cells</th><th>Output size</th></tr>
+        <tr><td>100%</td><td>0</td><td>0</td><td>5</td><td>1,798 chars ≈ 450 tokens</td></tr>
+      </table>
+      <h2>Fidelity warnings</h2><ul><li>Cell [2]: execution order changed (In[2] appears after In[5]) — outputs may not reflect top-to-bottom state</li><li>`totals` used in Cell [2] but defined only in Cell [3] — value likely came from an earlier run</li><li>1 long output(s) truncated to 30 lines</li></ul>
+      <h2>Converted Markdown</h2>
+      <pre><code># out-of-order
+
+## Notebook overview
+
+- Source: `out-of-order.ipynb` · Python 3 (python)
+- Cells: 5 (5 code · 0 markdown · 1 not executed)
+- Execution: ⚠ 1 cell(s) executed out of notebook order
+- Imports: `pd` — imported names, excluded from dependency hints
+
+&gt; Dependency annotations ("depends on") are approximate cell dependency hints from static regex analysis of assignments and imports — not full dataflow analysis. Re-assignments inside branches, dynamic scope tricks and string-built code can fool them.
+
+## Cell [3] · type:code · id:f0f0f0f0
+
+```python
+import pandas as pd
+totals = pd.Series([1, 2, 3])
+```
+
+## Cell [5] · type:code · id:e1e1e1e1
+
+&gt; ⚠️ depends on: `totals` (defined in Cell [3])
+
+```python
+summary = totals.describe()
+print(summary)
+```
+
+**Output:**
+
+```
+row 0: value=0
+row 1: value=3
+row 2: value=6
+row 3: value=9
+row 4: value=12
+row 5: value=15
+row 6: value=18
+row 7: value=21
+row 8: value=24
+row 9: value=27
+row 10: value=30
+row 11: value=33
+row 12: value=36
+row 13: value=39
+row 14: value=42
+row 15: value=45
+row 16: value=48
+row 17: value=51
+row 18: value=54
+row 19: value=57
+row 20: value=60
+row 21: value=63
+row 22: value=66
+row 23: value=69
+row 24: value=72
+row 25: value=75
+row 26: value=78
+row 27: value=81
+row 28: value=84
+row 29: value=87
+… [output truncated: 170 more lines]
+```
+
+## Cell [2] · type:code · id:d2d2d2d2
+
+&gt; ⚠ execution order changed — In[2] appears after In[5] in notebook order
+
+```python
+print(len(totals))
+print("cleaned")
+```
+
+**Output:**
+
+````
+```
+not a real fence
+```
+````
+
+## Cell [8] · type:code · id:c3c3c3c3
+
+&gt; ⚠️ depends on: `summary` (defined in Cell [5])
+
+```python
+report = summary.to_string()
+print(report[:40])
+```
+
+**Output:**
+
+```
+count 3.0
+```
+
+## Cell [p5] · type:code (not executed) · id:b4b4b4b4
+
+```python
+scratch = 1
+```
+</code></pre>
+      <div class="article-cta">
+        <p>Run this conversion live — or drop your own file. Everything stays in your browser.</p>
+        <a href="/?sample=out-of-order">Open in the tool →</a>
+      </div>
+      <p class="article-footer">Keywords: jupyter execution order, notebook reproducibility llm · <a href="/examples/">All examples</a></p>
+    </article>
+  </div>
+</body>
+</html>

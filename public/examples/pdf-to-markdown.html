@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>PDF → Markdown, with honest limits — MakeItMarkdown examples</title>
+  <meta name="description" content="Per-page text extraction with the layout-lossy disclaimer attached." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/examples/">Examples</a>
+  </header>
+  <div class="article-wrap">
+  
+    <p class="article-kicker">Example · vendor-report.pdf</p>
+    <article>
+      <h1>PDF → Markdown, with honest limits</h1>
+      <p class="article-byline">Per-page text extraction with the layout-lossy disclaimer attached.</p>
+      <table>
+        <tr><th>QC score</th><th>Tables</th><th>Figures</th><th>Code cells</th><th>Output size</th></tr>
+        <tr><td>80%</td><td>0</td><td>0</td><td>0</td><td>873 chars ≈ 218 tokens</td></tr>
+      </table>
+      <h2>Fidelity warnings</h2><ul><li>PDF text extraction is layout-lossy: multi-column text and tables may interleave — prefer an HTML or source version when one exists</li><li>figures/images are not extracted from PDFs in this phase</li></ul>
+      <h2>Converted Markdown</h2>
+      <pre><code># report.html
+
+## Page 1
+
+Vendor Comparison Report
+This report compares three logistics vendors evaluated during the March procurement cycle. Scores reflect a
+weighted rubric across cost, reliability, and support responsiveness.
+Method
+Each vendor supplied reference customers and a 90-day pilot window. Reliability was measured as the fraction
+of shipments delivered within the promised window. Support responsiveness was measured as median first-
+response time on priority tickets.
+Findings
+Vendor B led on reliability at 97.1 percent, while Vendor A offered the lowest landed cost per unit. Vendor C
+trailed on both axes but provides the only same-day option in the West region.
+Recommendation
+Proceed to contract negotiation with Vendor B for core volume, retaining Vendor C for same-day West-region
+overflow. Revisit pricing with Vendor A at the six-month checkpoint.
+</code></pre>
+      <div class="article-cta">
+        <p>Run this conversion live — or drop your own file. Everything stays in your browser.</p>
+        <a href="/?sample=pdf">Open in the tool →</a>
+      </div>
+      <p class="article-footer">Keywords: pdf to markdown llm, clean pdf for rag · <a href="/examples/">All examples</a></p>
+    </article>
+  </div>
+</body>
+</html>

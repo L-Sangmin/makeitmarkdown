@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Jupyter notebook → LLM-ready Markdown — MakeItMarkdown examples</title>
+  <meta name="description" content="Cell addresses, dependency hints and figure placeholders from a pandas + matplotlib notebook." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/examples/">Examples</a>
+  </header>
+  <div class="article-wrap">
+  
+    <p class="article-kicker">Example · sales-analysis.ipynb</p>
+    <article>
+      <h1>Jupyter notebook → LLM-ready Markdown</h1>
+      <p class="article-byline">Cell addresses, dependency hints and figure placeholders from a pandas + matplotlib notebook.</p>
+      <table>
+        <tr><th>QC score</th><th>Tables</th><th>Figures</th><th>Code cells</th><th>Output size</th></tr>
+        <tr><td>100%</td><td>0</td><td>1</td><td>5</td><td>1,751 chars ≈ 438 tokens</td></tr>
+      </table>
+      
+      <h2>Converted Markdown</h2>
+      <pre><code># Sales Analysis
+
+## Notebook overview
+
+- Source: `sales-analysis.ipynb` · Python 3 (python)
+- Cells: 8 (5 code · 3 markdown)
+- Execution: execution counts are in notebook order
+- Imports: `pd`, `plt` — imported names, excluded from dependency hints
+
+&gt; Dependency annotations ("depends on") are approximate cell dependency hints from static regex analysis of assignments and imports — not full dataflow analysis. Re-assignments inside branches, dynamic scope tricks and string-built code can fool them.
+
+## Cell [p1] · type:markdown · id:md01aaaa
+
+# Sales Analysis
+
+Monthly revenue overview for the demo dataset.
+
+## Cell [1] · type:code · id:aa11bb22
+
+```python
+import pandas as pd
+```
+
+## Cell [2] · type:code · id:bb22cc33
+
+```python
+df = pd.read_csv("sales.csv")
+df.shape
+```
+
+**Output:**
+
+```
+(120, 4)
+```
+
+## Cell [p4] · type:markdown · id:md02bbbb
+
+## Peek at the data
+
+## Cell [3] · type:code · id:cc33dd44
+
+&gt; ⚠️ depends on: `df` (defined in Cell [2])
+
+```python
+df.head()
+```
+
+**Output:**
+
+```
+  month  region  units  revenue
+0   Jan   North     12   1200.0
+1   Jan   South      7    700.0
+2   Feb   North     15   1500.0
+```
+
+## Cell [4] · type:code · id:dd44ee55
+
+&gt; ⚠️ depends on: `df` (defined in Cell [2])
+
+```python
+monthly = df.groupby("month")["revenue"].sum()
+monthly.head(3)
+```
+
+**Output:**
+
+```
+month
+Feb    1500.0
+Jan    1900.0
+Name: revenue, dtype: float64
+```
+
+## Cell [5] · type:code · id:ee55ff66
+
+&gt; ⚠️ depends on: `monthly` (defined in Cell [4])
+
+```python
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots()
+ax.plot(monthly.index, monthly.values)
+ax.set_title("Monthly revenue")
+fig
+```
+
+**Output:**
+
+[Figure: cell_5_output_1.png]
+
+## Cell [p8] · type:markdown · id:md03cccc
+
+Revenue trends upward across the quarter.
+</code></pre>
+      <div class="article-cta">
+        <p>Run this conversion live — or drop your own file. Everything stays in your browser.</p>
+        <a href="/?sample=sales-analysis">Open in the tool →</a>
+      </div>
+      <p class="article-footer">Keywords: ipynb to markdown llm, jupyter notebook llm context · <a href="/examples/">All examples</a></p>
+    </article>
+  </div>
+</body>
+</html>

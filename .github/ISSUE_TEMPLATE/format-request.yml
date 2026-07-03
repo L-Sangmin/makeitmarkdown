@@ -1,0 +1,32 @@
+name: Format request
+description: Ask for a new file format to be supported
+title: "[format] "
+labels: ["format-request"]
+body:
+  - type: input
+    id: format
+    attributes:
+      label: File extension(s)
+      placeholder: ".pptx, .epub, .eml…"
+    validations:
+      required: true
+  - type: textarea
+    id: usecase
+    attributes:
+      label: What do you feed it to, and what breaks today?
+      description: The LLM/workflow you use and what gets lost when you convert by hand.
+      placeholder: "I paste meeting .eml threads into Claude; quoted reply chains triple the tokens…"
+    validations:
+      required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: Sample file
+      description: Attach (or link) a small, non-confidential sample. Parsers here are test-driven — a real sample is the fastest path to support.
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Constraints check
+      options:
+        - label: I understand conversion must run fully in the browser (no server, MIT/BSD/Apache-2.0 libraries only)
+          required: true

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Word document → Markdown with heading semantics — MakeItMarkdown examples</title>
+  <meta name="description" content="Styles map to real headings; the table survives as GFM." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/examples/">Examples</a>
+  </header>
+  <div class="article-wrap">
+  
+    <p class="article-kicker">Example · q1-operations-review.docx</p>
+    <article>
+      <h1>Word document → Markdown with heading semantics</h1>
+      <p class="article-byline">Styles map to real headings; the table survives as GFM.</p>
+      <table>
+        <tr><th>QC score</th><th>Tables</th><th>Figures</th><th>Code cells</th><th>Output size</th></tr>
+        <tr><td>100%</td><td>1</td><td>0</td><td>0</td><td>925 chars ≈ 231 tokens</td></tr>
+      </table>
+      
+      <h2>Converted Markdown</h2>
+      <pre><code># Q1 Operations Review
+
+## Overview
+
+Prepared by the operations team. Internal working document for the April planning cycle.
+
+## Summary
+
+First-quarter fulfillment ran ahead of forecast in two of three regions. Carrier costs rose 4% quarter over quarter, driven by fuel surcharges. On-time delivery held at 96.2%.
+
+## Regional performance
+
+The table below summarizes shipped units and average delivery time by region.
+
+| Region | Units shipped | Avg delivery (days) |
+| --- | --- | --- |
+| North | 18,420 | 2.1 |
+| South | 15,876 | 2.6 |
+| East | 12,034 | 3.0 |
+
+## Risks
+
+Two risks carry into Q2:
+
+-   Carrier contract renewal lands mid-May with an expected 3-5% rate increase.
+-   The East region depends on a single cross-dock facility with no fallback.
+
+## Next steps
+
+1.  Finalize the carrier shortlist by April 18.
+2.  Run the cross-dock contingency tabletop by April 25.
+3.  Publish the Q2 capacity plan by April 30.
+</code></pre>
+      <div class="article-cta">
+        <p>Run this conversion live — or drop your own file. Everything stays in your browser.</p>
+        <a href="/?sample=docx">Open in the tool →</a>
+      </div>
+      <p class="article-footer">Keywords: docx to markdown, word to markdown llm · <a href="/examples/">All examples</a></p>
+    </article>
+  </div>
+</body>
+</html>
