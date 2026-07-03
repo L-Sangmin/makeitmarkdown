@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Email thread → readable message with honest truncation — MakeItMarkdown examples</title>
+  <meta name="description" content="Decoded headers, the newest message intact, the quoted reply chain truncated explicitly, attachments listed." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <span class="bar-spacer"></span>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/examples/">Examples</a>
+    <button class="theme-toggle" type="button" aria-label="Toggle color theme" onclick="(function(){var r=document.documentElement,c=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=c==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('mim-theme',n)}catch(e){}})()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+    </button>
+  </header>
+  <div class="article-wrap">
+  
+    <p class="article-kicker">Example · team-thread.eml</p>
+    <article>
+      <h1>Email thread → readable message with honest truncation</h1>
+      <p class="article-byline">Decoded headers, the newest message intact, the quoted reply chain truncated explicitly, attachments listed.</p>
+      <table>
+        <tr><th>QC score</th><th>Tables</th><th>Figures</th><th>Code cells</th><th>Output size</th></tr>
+        <tr><td>100%</td><td>0</td><td>0</td><td>0</td><td>1,032 chars ≈ 258 tokens</td></tr>
+      </table>
+      <h2>Fidelity warnings</h2><ul><li>long quoted reply chain truncated (5 quoted lines) — token sink; the newest message is intact</li><li>1 attachment listed but not extracted — save them from your mail client if needed</li></ul>
+      <h2>Converted Markdown</h2>
+      <pre><code># Re: Vendor consolidation — next steps
+
+## Message
+
+- **From:** Jordan Lee &lt;jordan@example.com&gt;
+- **To:** Ops Team &lt;ops@example.com&gt;
+- **Cc:** Sam Park &lt;sam@example.com&gt;
+- **Date:** Thu, 02 Jul 2026 09:14:20 +0000
+- **Subject:** Re: Vendor consolidation — next steps
+
+## Body
+
+Agreed on both counts — let's lock the shortlist Friday.
+
+Two updates before then:
+
+1. Contract review finished for the top two vendors.
+2. The tooling audit found 3 duplicate subscriptions we can cut now.
+
+Jordan
+
+On Wed, 01 Jul 2026 at 17:02, Sam Park wrote:
+&gt; Thanks for the summary. My take:
+&gt; - Shortlist should be two vendors, not four.
+&gt; - Procurement wants the decision memo by the 10th.
+&gt; On Tue, 30 Jun 2026 at 11:40, Jordan Lee wrote:
+&gt; &gt; Kicking this off. Current spend is spread over six vendors.
+&gt; &gt; Draft criteria attached; comments welcome.
+&gt; &gt; The long tail here is mostly legacy contracts nobody renewed
+&gt; &gt; on purpose, so expect quick wins.
+&gt; … (5 more quoted lines truncated)
+
+## Attachments
+
+- `criteria.pdf` (~135 B, not extracted)
+</code></pre>
+      <div class="article-cta">
+        <p>Run this conversion live — or drop your own file. Everything stays in your browser.</p>
+        <a href="/?sample=eml">Open in the tool →</a>
+      </div>
+      <p class="article-footer">Keywords: eml to markdown, email thread to llm · <a href="/examples/">All examples</a></p>
+    </article>
+  </div>
+</body>
+</html>

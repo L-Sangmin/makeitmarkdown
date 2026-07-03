@@ -1,0 +1,61 @@
+Return-Path: <jordan@example.com>
+Received: from mail.example.com by mx.example.org; Thu, 02 Jul 2026 09:14:22 +0000
+From: Jordan Lee <jordan@example.com>
+To: Ops Team <ops@example.com>
+Cc: Sam Park <sam@example.com>
+Date: Thu, 02 Jul 2026 09:14:20 +0000
+Subject: =?UTF-8?B?UmU6IFZlbmRvciBjb25zb2xpZGF0aW9uIOKAlCBuZXh0IHN0ZXBz?=
+Message-ID: <20260702091420.12345@example.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="MIXED-BOUNDARY"
+
+--MIXED-BOUNDARY
+Content-Type: multipart/alternative; boundary="ALT-BOUNDARY"
+
+--ALT-BOUNDARY
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Agreed on both counts =E2=80=94 let's lock the shortlist Friday.
+
+Two updates before then:
+
+1. Contract review finished for the top two vendors.
+2. The tooling audit found 3 duplicate subscriptions we can cut now.
+
+Jordan
+
+On Wed, 01 Jul 2026 at 17:02, Sam Park wrote:
+> Thanks for the summary. My take:
+> - Shortlist should be two vendors, not four.
+> - Procurement wants the decision memo by the 10th.
+> On Tue, 30 Jun 2026 at 11:40, Jordan Lee wrote:
+> > Kicking this off. Current spend is spread over six vendors.
+> > Draft criteria attached; comments welcome.
+> > The long tail here is mostly legacy contracts nobody renewed
+> > on purpose, so expect quick wins.
+> > More details in the doc.
+> > Numbers below are from the March audit.
+> > - Vendor A: 41k
+> > - Vendor B: 22k
+> > - Vendor C: 9k
+
+--ALT-BOUNDARY
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+PGh0bWw+PGJvZHk+PHA+QWdyZWVkIG9uIGJvdGggY291bnRzIOKAlCBsZXQncyBsb2NrIHRo
+ZSBzaG9ydGxpc3QgRnJpZGF5LjwvcD48L2JvZHk+PC9odG1sPg==
+
+--ALT-BOUNDARY--
+
+--MIXED-BOUNDARY
+Content-Type: application/pdf; name="criteria.pdf"
+Content-Disposition: attachment; filename="criteria.pdf"
+Content-Transfer-Encoding: base64
+
+JVBERi0xLjQKJcOkw7zDtsOfCjIgMCBvYmoKPDwvTGVuZ3RoIDMgMCBSL0ZpbHRlci9GbGF0
+ZURlY29kZT4+CnN0cmVhbQp4nDPQM1Qo5ypUMFAwALJMLU31jBQsTAz1LBSKUrnCtRTyuQIV
+AIcdB3IKZW5kc3RyZWFtCmVuZG9iagoK
+
+--MIXED-BOUNDARY--

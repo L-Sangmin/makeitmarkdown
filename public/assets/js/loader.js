@@ -33,6 +33,8 @@ const LIBS_BY_EXT = {
   html: ["Readability", "TurndownService", "turndownPluginGfm"],
   htm: ["Readability", "TurndownService", "turndownPluginGfm"],
   pdf: ["pdfjs"],
+  pptx: [],
+  eml: ["TurndownService", "turndownPluginGfm"],
 };
 
 const scriptPromises = new Map();

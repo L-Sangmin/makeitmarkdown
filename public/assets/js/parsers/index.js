@@ -34,9 +34,11 @@ import subtitles from './subtitles.js';
 import text from './text.js';
 import html from './html.js';
 import pdf from './pdf.js';
+import { pptx } from "./pptx.js";
+import { eml } from "./eml.js";
 
 // Order matters: first canHandle() match wins.
-const parsers = [ipynb, docx, csv, xlsx, json, subtitles, text, html, pdf];
+const parsers = [pptx, eml, ipynb, docx, csv, xlsx, json, subtitles, text, html, pdf];
 
 export function findParser(url, doc, filename) {
   return parsers.find((p) => p.canHandle(url, doc, filename)) ?? null;

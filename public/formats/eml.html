@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Feeding emails (.eml) to an LLM — format guide — MakeItMarkdown</title>
+  <meta name="description" content="Saved email threads triple their tokens with quoted reply chains and MIME plumbing. The mapping to a readable message: decoded headers, honest quote truncation, attachments listed." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <span class="bar-spacer"></span>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/formats/">Formats</a>
+    <button class="theme-toggle" type="button" aria-label="Toggle color theme" onclick="(function(){var r=document.documentElement,c=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=c==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('mim-theme',n)}catch(e){}})()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+    </button>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Format guide · .eml</p>
+    <article>
+      <h1>Feeding emails to an LLM</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026</p>
+
+      <p>Drag a message out of most mail clients and you get a
+      <code>.eml</code> — the raw wire format. It's text, technically.
+      It's also transfer encodings, MIME boundaries, an HTML copy of the
+      plain copy, and — the real token sink — the entire thread quoted
+      again inside every reply. A ten-message thread pastes as the first
+      message repeated ten times.</p>
+
+      <h2>What's in the raw file</h2>
+      <ul>
+        <li><strong>Encoded headers</strong> —
+        <code>=?UTF-8?B?…?=</code> subjects that arrive as gibberish
+        without RFC 2047 decoding.</li>
+        <li><strong>MIME multipart plumbing</strong> — boundaries,
+        content types, and base64/quoted-printable encodings wrapping the
+        actual words.</li>
+        <li><strong>Two copies of the body</strong> — plain text and
+        HTML, one of which your paste will duplicate.</li>
+        <li><strong>Quoted reply pyramids</strong> —
+        <code>&gt; &gt; &gt;</code> chains that dwarf the new
+        content.</li>
+      </ul>
+
+      <h2>The element mapping</h2>
+      <table>
+        <tr><th>In the .eml</th><th>In the Markdown</th></tr>
+        <tr><td>From / To / Cc / Date / Subject</td><td>A compact <strong>Message</strong> section, encoded-words decoded</td></tr>
+        <tr><td>plain + HTML alternatives</td><td>The plain part, once (HTML converted only when it's all there is)</td></tr>
+        <tr><td>base64 / quoted-printable bodies</td><td>Decoded to readable text (em-dashes stop being <code>=E2=80=94</code>)</td></tr>
+        <tr><td>Long quoted chains</td><td>First lines kept, the rest cut with an explicit <code>&gt; … (N more quoted lines truncated)</code> — the newest message is never touched</td></tr>
+        <tr><td>Attachments</td><td>Listed by name and size, honestly marked <em>not extracted</em> — convert the attachment file itself separately</td></tr>
+      </table>
+
+      <h2>Honest limits</h2>
+      <ul>
+        <li>One message per .eml — mailbox archives (.mbox) aren't split
+        yet; <a href="/contact.html">request it</a> if you need it.</li>
+        <li>Attachment <em>contents</em> aren't parsed from inside the
+        email — drop the attachment file itself into the converter
+        instead.</li>
+        <li>Inline images become nothing (they're attachments by another
+        name); the attachment list still records them.</li>
+      </ul>
+
+      <h2>FAQ</h2>
+      <p><strong>How do I get a .eml?</strong> Drag the message from your
+      mail client to the desktop (most clients), or use "Save as" /
+      "Show original → Download".</p>
+      <p><strong>Why truncate quotes at all?</strong> Because the chain
+      is the same text repeated — and because we say so in the output,
+      the model knows history was elided rather than missing. That's the
+      difference between lean and lossy.</p>
+      <p><strong>Private correspondence?</strong> Local conversion,
+      nothing uploaded — <a href="/privacy.html">verifiably</a>.</p>
+
+      <div class="article-cta">
+        <p>Try the sample thread — decoded subject, truncated quote
+        pyramid, attachment listed.</p>
+        <a href="/?sample=eml">Convert a .eml →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/examples/eml-to-markdown.html">before/after example</a> ·
+      <a href="/blog/token-budgeting.html">token budgeting 101</a> ·
+      <a href="/formats/">all format guides</a></p>
+    </article>
+  </div>
+</body>
+</html>

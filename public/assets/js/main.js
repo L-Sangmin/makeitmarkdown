@@ -313,6 +313,8 @@ const SAMPLES = {
   docx: "q1-operations-review.docx",
   pdf: "vendor-report.pdf",
   "scanned-pdf": "scanned.pdf",
+  pptx: "quarterly-kickoff.pptx",
+  eml: "team-thread.eml",
 };
 
 async function loadSample(name = "sales-analysis") {

@@ -9,6 +9,7 @@ import { Readability } from "@mozilla/readability";
 import mammoth from "mammoth";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
 import * as XLSX from "xlsx";
+import JSZip from "jszip";
 
 globalThis.DOMParser = new JSDOM("").window.DOMParser;
 globalThis.TurndownService = TurndownService;
@@ -17,6 +18,7 @@ globalThis.Readability = Readability;
 globalThis.mammoth = mammoth;
 globalThis.pdfjsLib = pdfjsLib;
 globalThis.XLSX = XLSX;
+globalThis.JSZip = JSZip;
 
 const { findParser } = await import("../public/assets/js/parsers/index.js");
 const { formatStandard } = await import("../public/assets/js/standard-formatter.js");
@@ -61,6 +63,22 @@ const SAMPLES = [
     title: "Web article → clean Markdown",
     blurb: "Navigation and ads stripped; the article, its table and figures kept.",
     keywords: "html to markdown clean, readability to markdown",
+  },
+  {
+    file: "quarterly-kickoff.pptx",
+    sampleKey: "pptx",
+    slug: "pptx-to-markdown",
+    title: "Slide deck → outlined Markdown with speaker notes",
+    blurb: "Slides become titled sections; the table survives as GFM, images become figures, and speaker notes surface.",
+    keywords: "pptx to markdown, powerpoint to markdown llm",
+  },
+  {
+    file: "team-thread.eml",
+    sampleKey: "eml",
+    slug: "eml-to-markdown",
+    title: "Email thread → readable message with honest truncation",
+    blurb: "Decoded headers, the newest message intact, the quoted reply chain truncated explicitly, attachments listed.",
+    keywords: "eml to markdown, email thread to llm",
   },
   {
     file: "vendor-report.pdf",

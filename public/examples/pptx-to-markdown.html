@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Slide deck → outlined Markdown with speaker notes — MakeItMarkdown examples</title>
+  <meta name="description" content="Slides become titled sections; the table survives as GFM, images become figures, and speaker notes surface." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <span class="bar-spacer"></span>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/examples/">Examples</a>
+    <button class="theme-toggle" type="button" aria-label="Toggle color theme" onclick="(function(){var r=document.documentElement,c=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=c==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('mim-theme',n)}catch(e){}})()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+    </button>
+  </header>
+  <div class="article-wrap">
+  
+    <p class="article-kicker">Example · quarterly-kickoff.pptx</p>
+    <article>
+      <h1>Slide deck → outlined Markdown with speaker notes</h1>
+      <p class="article-byline">Slides become titled sections; the table survives as GFM, images become figures, and speaker notes surface.</p>
+      <table>
+        <tr><th>QC score</th><th>Tables</th><th>Figures</th><th>Code cells</th><th>Output size</th></tr>
+        <tr><td>100%</td><td>1</td><td>1</td><td>0</td><td>507 chars ≈ 127 tokens</td></tr>
+      </table>
+      <h2>Fidelity warnings</h2><ul><li>1 chart detected — chart data lives in embedded worksheets and was not extracted</li><li>slide layout is visual — reading order within a slide is approximate</li></ul>
+      <h2>Converted Markdown</h2>
+      <pre><code># Quarterly Kickoff
+
+## Slide 1 · Quarterly Kickoff
+
+- Operations review and priorities
+
+## Slide 2 · Priorities
+
+- Ship the vendor consolidation
+  - Finish contract review
+  - Cut duplicate tooling
+- Improve onboarding time
+
+**Speaker notes:** Emphasize the onboarding metric — it moved 40% last quarter.
+
+## Slide 3 · Pipeline
+
+| region | units | revenue |
+| --- | --- | --- |
+| North | 1204 | 96432.10 |
+| South | 980 | 71210.55 |
+
+[Figure: slide_3_image_1.png]
+*[Chart on slide 3 — data not extracted]*
+</code></pre>
+      <div class="article-cta">
+        <p>Run this conversion live — or drop your own file. Everything stays in your browser.</p>
+        <a href="/?sample=pptx">Open in the tool →</a>
+      </div>
+      <p class="article-footer">Keywords: pptx to markdown, powerpoint to markdown llm · <a href="/examples/">All examples</a></p>
+    </article>
+  </div>
+</body>
+</html>
