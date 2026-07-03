@@ -8,7 +8,7 @@
 //
 // DEPLOY NOTE: bump VERSION on every deploy — it invalidates old caches.
 
-const VERSION = "v5";
+const VERSION = "v6";
 const CACHE = `mim-${VERSION}`;
 
 const CORE = [
@@ -78,8 +78,12 @@ self.addEventListener("fetch", (e) => {
         (hit) =>
           hit ??
           fetch(e.request).then((res) => {
-            const copy = res.clone();
-            caches.open(CACHE).then((c) => c.put(e.request, copy));
+            // never cache errors — a transient 404/500 must not poison
+            // a cache-first entry forever
+            if (res.ok) {
+              const copy = res.clone();
+              caches.open(CACHE).then((c) => c.put(e.request, copy));
+            }
             return res;
           })
       )

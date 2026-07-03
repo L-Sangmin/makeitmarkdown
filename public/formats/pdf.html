@@ -48,7 +48,7 @@
         <tr><td>Each page's text layer</td><td>A <code>## Page N</code> section with the extracted text lines</td></tr>
         <tr><td>Multi-column / complex layout</td><td>Extracted as-is, with a standing layout-lossy warning in the fidelity report</td></tr>
         <tr><td>Tables</td><td><strong>Not reconstructed as GFM</strong> — a PDF has no table objects, and fake table recovery is how other tools invent data; rows survive as text lines</td></tr>
-        <tr><td>Image-only (scanned) pages</td><td>Detected by character density and flagged loudly, with a next step — never faked</td></tr>
+        <tr><td>Image-only (scanned) pages</td><td>Detected by character density and flagged; an opt-in <em>Try OCR (experimental)</em> button runs locally and returns clearly-labelled approximate text</td></tr>
         <tr><td>Password-protected file</td><td>A clear error with the workaround (open it, remove the password, e.g. Print → Save as PDF)</td></tr>
         <tr><td>Corrupt / truncated file</td><td>A clear "re-export or re-download" error instead of a hang</td></tr>
       </table>

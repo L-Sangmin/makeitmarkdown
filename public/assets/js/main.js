@@ -14,6 +14,7 @@ import { countTokensExact } from "./md-utils.js";
 import { buildResultZip, buildBatchZip } from "./zipper.js";
 import { PRESETS, formatWithPreset } from "./presets.js";
 import { loadHistory, saveToHistory, clearHistory } from "./history.js";
+import { ocrPdfPages, buildOcrResult } from "./ocr.js";
 
 // --- theme -------------------------------------------------------------------
 
@@ -36,7 +37,10 @@ document.getElementById("theme-toggle")?.addEventListener("click", () => {
     /* private mode — theme just won't persist */
   }
   // the dependency DAG bakes theme colors into its SVG
-  if (current && !els.result.hidden) refreshFidelity(els, current.result);
+  if (current && !els.result.hidden) {
+    refreshFidelity(els, current.result);
+    maybeOfferOcr();
+  }
 });
 
 // --- elements ------------------------------------------------------------------
@@ -162,6 +166,60 @@ btnExact.addEventListener("click", async () => {
   }
 });
 
+// --- OCR offer for scanned PDFs ---------------------------------------------------
+// Appears under the fidelity report only when the pdf parser flagged a scan.
+// Everything runs locally; the engine (~8 MB) downloads once, on click.
+
+function maybeOfferOcr() {
+  els.fidelity.querySelector(".ocr-offer")?.remove();
+  const r = current?.result;
+  const scanned =
+    r?.meta?.sourceFormat === "pdf" &&
+    !r.meta.ocr &&
+    current.fileBuffer &&
+    (r.fidelity?.warnings ?? []).some((w) => /appears to be scanned/i.test(w));
+  if (!scanned) return;
+
+  const box = document.createElement("div");
+  box.className = "ocr-offer";
+  const note = document.createElement("p");
+  note.innerHTML =
+    "<strong>Scanned PDF?</strong> You can try OCR — it runs locally " +
+    "(~8&nbsp;MB engine, downloaded once) and takes a few seconds per page. " +
+    "Output is <em>approximate</em>: fine for reading, risky for exact numbers and tables.";
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "btn btn-solid ocr-btn";
+  btn.textContent = "Try OCR (experimental)";
+  btn.addEventListener("click", () => runOcr(btn));
+  box.append(note, btn);
+  els.fidelity.appendChild(box);
+}
+
+async function runOcr(btn) {
+  if (!current?.fileBuffer) return;
+  btn.disabled = true;
+  btn.textContent = "Loading OCR engine…";
+  try {
+    const pages = await ocrPdfPages(current.fileBuffer, {
+      onProgress: ({ page, pages: total }) => {
+        btn.textContent = `Recognizing page ${page}/${total}…`;
+      },
+    });
+    current.result = buildOcrResult(current.result, pages);
+    current.markdown = formatWithPreset(current.result, activePreset);
+    setOriginalCollapsed(renderResult(current, els) === "note");
+    resetExactCount();
+    maybeOfferOcr(); // meta.ocr is set now — the offer removes itself
+    saveToHistory(current, activePreset);
+    renderHistoryList();
+    els.meta.textContent = `${current.filename} · OCR, approximate · processed locally — refresh clears it`;
+  } catch {
+    btn.disabled = false;
+    btn.textContent = "OCR failed — try again";
+  }
+}
+
 // --- views ----------------------------------------------------------------------
 
 function showResult() {
@@ -234,6 +292,7 @@ async function handleFile(file) {
 
     setOriginalCollapsed(renderResult(payload, els) === "note");
     resetExactCount();
+    maybeOfferOcr();
     showResult();
     saveToHistory(payload, activePreset);
     renderHistoryList();
@@ -302,6 +361,7 @@ async function handleFiles(files) {
   els.meta.textContent = `${payloads.length} files converted${failNote} · showing ${current.filename} · Download .zip bundles all`;
   setOriginalCollapsed(renderResult(current, els) === "note");
   resetExactCount();
+  maybeOfferOcr();
   showResult();
 }
 
@@ -401,6 +461,7 @@ function restoreFromHistory(entry) {
   els.meta.textContent = `${entry.filename} · restored from local history (${timeAgo(entry.ts)}) — stored only in this browser`;
   setOriginalCollapsed(renderResult(current, els) === "note");
   resetExactCount();
+  maybeOfferOcr();
   showResult();
 }
 

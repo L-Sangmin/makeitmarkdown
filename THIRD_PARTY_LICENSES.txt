@@ -28,6 +28,8 @@ Libraries covered (Phase 1):
 
   8. SheetJS (xlsx)             Apache License 2.0
   9. gpt-tokenizer              MIT License
+ 12. tesseract.js (+core)       Apache License 2.0
+ 13. tessdata_fast eng model    Apache License 2.0
 
 Fonts (self-hosted in /public/assets/fonts, latin subsets):
 
@@ -301,11 +303,33 @@ License:   MIT License
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 
+--------------------------------------------------------------------------------
+12. tesseract.js / tesseract.js-core
+--------------------------------------------------------------------------------
+Purpose:   Opt-in OCR for scanned PDFs, loaded on demand only
+Homepage:  https://github.com/naptha/tesseract.js
+Version:   7.0.0 (self-hosted: /public/assets/vendor/ocr/tesseract.min.js,
+           worker.min.js, tesseract-core-*-lstm.wasm.js)
+License:   Apache License 2.0 (full text in Appendix A)
+
+  Copyright (c) tesseract.js contributors
+
+--------------------------------------------------------------------------------
+13. tessdata_fast English model (eng.traineddata)
+--------------------------------------------------------------------------------
+Purpose:   OCR language model for tesseract
+Homepage:  https://github.com/tesseract-ocr/tessdata_fast
+Version:   tessdata_fast main (self-hosted: /public/assets/vendor/ocr/eng.traineddata)
+License:   Apache License 2.0 (full text in Appendix A)
+
+  Copyright (c) tesseract-ocr contributors
+
 ================================================================================
 Appendix A — Apache License, Version 2.0
 ================================================================================
 
-Applies to: pdf.js, Readability.js, DOMPurify (as elected above), SheetJS.
+Applies to: pdf.js, Readability.js, DOMPurify (as elected above), SheetJS,
+tesseract.js / tesseract.js-core, and the tessdata_fast English model.
 
                                  Apache License
                            Version 2.0, January 2004

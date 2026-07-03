@@ -683,6 +683,20 @@ kbd {
 .panes.orig-collapsed { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
 .panes.orig-collapsed .pane-original { display: none; }
 
+/* OCR offer under the fidelity report */
+.ocr-offer {
+  margin-top: 1rem;
+  padding: 0.875rem 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  border: 1px dashed color-mix(in srgb, var(--warn) 40%, transparent);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--warn) 6%, transparent);
+}
+.ocr-offer p { margin: 0 0 0.75rem; color: var(--fg-muted); }
+.ocr-btn { font-size: 0.8125rem; }
+.ocr-btn:disabled { opacity: 0.7; cursor: progress; }
+
 /* slide-card preview for decks */
 .slide-preview { display: flex; flex-direction: column; gap: 0.75rem; }
 .slide-card {

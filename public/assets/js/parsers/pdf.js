@@ -44,7 +44,10 @@ export default {
     if (!pdfjs) throw new Error("pdf.js is not loaded");
 
     const filename = input.filename ?? "document.pdf";
-    const data = new Uint8Array(toArrayBuffer(input.fileBuffer));
+    // Copy before handing to pdf.js — it transfers the buffer to its worker,
+    // which would detach the caller's copy (breaking the original preview
+    // and the OCR retry on the same bytes).
+    const data = new Uint8Array(toArrayBuffer(input.fileBuffer).slice(0));
     const loadingTask = pdfjs.getDocument({ data, isEvalSupported: false, verbosity: 0 });
     let doc;
     try {
@@ -70,7 +73,7 @@ export default {
       if (totalChars < doc.numPages * SCANNED_CHARS_PER_PAGE) {
         warnings.push(
           `this PDF appears to be scanned — no text layer detected across ${doc.numPages} page(s)`,
-          "next step: upload the HTML version of this document for full recovery — browser-side OCR is out of scope"
+          "next step: try OCR below (local, approximate) — or upload the HTML version of this document for full recovery"
         );
         sections = [
           {
@@ -78,7 +81,7 @@ export default {
             level: 2,
             content:
               "⚠ Scanned PDF: no text layer was found, so no text could be extracted. " +
-              "If you have the original document or its HTML version, upload that for full recovery.",
+              "You can try the local OCR option in the fidelity panel (approximate), or upload the original document / its HTML version for full recovery.",
           },
         ];
       } else {
