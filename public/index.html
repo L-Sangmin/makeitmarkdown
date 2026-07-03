@@ -40,7 +40,7 @@
 
   <main id="view-landing" class="landing">
     <div class="hero">
-      <h1>Feed your LLM better.</h1>
+      <h1><span class="h1-hash" aria-hidden="true">#</span> Feed your LLM better.</h1>
       <p class="subhead">
         Turn technical documents into LLM-ready Markdown &mdash; and see exactly
         what was preserved.
@@ -48,15 +48,19 @@
 
       <!-- Single input target (HANDOFF §1.5.2) -->
       <button type="button" id="drop-target" class="drop-target" aria-label="Add a document: drop a file, paste, or click to browse">
-        <svg class="drop-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 3v12" />
-          <path d="m7 11 5 5 5-5" />
-          <path d="M4 19h16" />
-        </svg>
+        <span class="drop-tile" aria-hidden="true">
+          <svg class="drop-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12" />
+            <path d="m7 11 5 5 5-5" />
+            <path d="M4 19h16" />
+          </svg>
+        </span>
         <span class="drop-spinner" aria-hidden="true"></span>
         <span class="drop-cta">Drop a file or paste <kbd>&#8984;V</kbd></span>
         <span class="drop-busy-label" aria-hidden="true"></span>
-        <span class="drop-formats">.ipynb &middot; .docx &middot; .xlsx &middot; .csv &middot; .json &middot; .html &middot; .pdf &middot; .srt &middot; .md</span>
+        <span class="drop-formats">
+          <span class="fmt">.ipynb</span><span class="fmt">.docx</span><span class="fmt">.xlsx</span><span class="fmt">.csv</span><span class="fmt">.json</span><span class="fmt">.html</span><span class="fmt">.pdf</span><span class="fmt">.srt</span><span class="fmt-arrow" aria-hidden="true">&rarr;</span><span class="fmt fmt-md">.md</span>
+        </span>
       </button>
 
       <p id="drop-error" class="drop-error" role="alert" hidden></p>
