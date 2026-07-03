@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Feeding Jupyter notebooks (.ipynb) to an LLM — format guide — MakeItMarkdown</title>
+  <meta name="description" content="What a .ipynb actually contains, why raw notebooks break in chat models, and the exact element mapping MakeItMarkdown applies: cell addresses, dependency hints, figure placeholders." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/formats/">Formats</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Format guide · .ipynb</p>
+    <article>
+      <h1>Feeding Jupyter notebooks to an LLM</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026</p>
+
+      <p>The notebook is the hardest general format we handle, and the one
+      where conversion adds the most: a <code>.ipynb</code> is a JSON
+      container in which your actual reasoning — code and prose — is
+      buried under everything the notebook ever displayed.</p>
+
+      <h2>What's inside a .ipynb</h2>
+      <p>Four layers: <strong>code cells</strong> (source + an
+      <code>execution_count</code> recording when you ran it),
+      <strong>markdown cells</strong> (prose, sometimes with pasted images
+      embedded as base64), <strong>outputs</strong> (every chart as an
+      embedded PNG, every dataframe preview, every traceback), and
+      <strong>metadata</strong> (kernel info, widget state). In real
+      notebooks the outputs dominate: our stress-test file is 3.5&nbsp;MB
+      of which about 7% is meaningful text.</p>
+
+      <h2>What breaks if you paste it raw</h2>
+      <ul>
+        <li>The JSON wrapper spends tokens on <code>"cell_type":</code>
+        plumbing around every line of your code.</li>
+        <li>Base64 images are token bombs — one pasted screenshot ≈
+        130,000 junk tokens.</li>
+        <li>Cells have no names, so neither you nor the model can point
+        at one.</li>
+        <li>Out-of-order execution — the notebook's most famous bug — is
+        invisible in the raw file unless you know to compare
+        execution counts.</li>
+      </ul>
+
+      <h2>The element mapping</h2>
+      <table>
+        <tr><th>In the notebook</th><th>In the Markdown</th></tr>
+        <tr><td>Code cell, run as <code>In [7]</code></td><td><code>## Cell [7] · type:code · id:…</code> + fenced <code>```python</code> block</td></tr>
+        <tr><td>Never-run cell</td><td><code>Cell [p12]</code> (position-based address)</td></tr>
+        <tr><td>Markdown cell</td><td>Verbatim prose under its own cell header</td></tr>
+        <tr><td>Text output</td><td><code>**Output:**</code> block, truncated at 30 lines with an explicit note</td></tr>
+        <tr><td>Image output / pasted image</td><td><code>[Figure: cell_7_output_1.png]</code> placeholder; the image itself is extracted into the .zip</td></tr>
+        <tr><td>Decreasing execution counts</td><td>An execution-order warning in the fidelity report</td></tr>
+        <tr><td>Variable reuse across cells</td><td>"depends on <code>df</code> (defined in Cell [2])" annotations</td></tr>
+        <tr><td>Kernel/widget metadata</td><td>Dropped (one-line overview keeps language + cell counts)</td></tr>
+      </table>
+
+      <p>The dependency annotations come from static analysis of
+      assignments and imports, and they're labelled what they are:
+      <em>approximate cell dependency hints</em>. Imports are treated as
+      ambient (a notebook that uses <code>pd</code> in 60 cells doesn't
+      need 60 arrows). The design decisions and their failure cases:
+      <a href="/blog/notebook-cell-dependencies.html">Making Jupyter
+      notebooks LLM-addressable</a>.</p>
+
+      <h2>Honest limits</h2>
+      <ul>
+        <li>Dependency hints are regex-based, not real dataflow — branchy
+        reassignments can fool them (the output says so).</li>
+        <li>Dependency analysis is Python-only; other-language notebooks
+        convert fine but without hints.</li>
+        <li>Interactive widget state is dropped — it has no textual
+        meaning.</li>
+      </ul>
+
+      <h2>FAQ</h2>
+      <p><strong>Does it work on non-Python notebooks?</strong> Yes — the
+      structure conversion is language-agnostic; only the dependency
+      hints are Python-specific.</p>
+      <p><strong>My notebook has cleared outputs — still worth
+      converting?</strong> Yes: you keep addresses, structure and the
+      much smaller paste; there are just no output blocks.</p>
+      <p><strong>My analysis is unpublished. Where does the file
+      go?</strong> Nowhere. Parsing runs in your browser — the site works
+      offline. See <a href="/privacy.html">privacy</a>.</p>
+
+      <div class="article-cta">
+        <p>See the mapping live on a sample notebook — cell addresses,
+        dependency hints, and the fidelity report.</p>
+        <a href="/?sample=sales-analysis">Convert a notebook →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/blog/notebook-too-big-for-llm.html">notebook too big to paste</a> ·
+      <a href="/examples/ipynb-to-markdown.html">before/after example</a> ·
+      <a href="/formats/">all format guides</a></p>
+    </article>
+  </div>
+</body>
+</html>

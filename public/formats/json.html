@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Feeding JSON and JSONL to an LLM — format guide — MakeItMarkdown</title>
+  <meta name="description" content="Deep JSON wastes tokens on braces; JSONL logs repeat keys per line. When to keep JSON as JSON, and the outline + record-table mapping for when a model needs to read it." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/formats/">Formats</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Format guide · .json / .jsonl</p>
+    <article>
+      <h1>Feeding JSON and JSONL to an LLM</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026</p>
+
+      <p>JSON is the one format where the right answer is sometimes
+      "don't convert it" — models read JSON fluently, and nested
+      structures can lose precision when flattened. The problems worth
+      solving are different: <em>orientation</em> (what shape is this
+      file?) and <em>repetition</em> (JSONL logs that spell every key on
+      every line).</p>
+
+      <h2>When to leave it alone</h2>
+      <p>A small config or API payload the model must reason about
+      field-by-field? Paste it as JSON. Convert when the file is
+      <strong>big</strong> (the model needs a map, not a dump),
+      <strong>tabular in disguise</strong> (JSONL where every line shares
+      the same keys), or <strong>headed for a workspace</strong> (raw
+      .json/.jsonl uploads are rejected by several platforms; Markdown
+      never is).</p>
+
+      <h2>The element mapping</h2>
+      <table>
+        <tr><th>In the file</th><th>In the Markdown</th></tr>
+        <tr><td>Any JSON document</td><td>A <strong>structure outline</strong> — <code>`orders` — array[1204] of object</code>, path by path — so the model learns the shape in ~40 lines</td></tr>
+        <tr><td>The document body</td><td>A fenced JSON block, size-capped with an explicit truncation note</td></tr>
+        <tr><td>JSONL with uniform objects</td><td>A <strong>records table</strong>: union of keys as typed columns, first 50 rows, truncation stated</td></tr>
+        <tr><td>JSONL with mixed shapes</td><td>Outlined per shape instead of forced into one table</td></tr>
+        <tr><td>Corrupt lines in JSONL</td><td>Skipped and <em>counted</em> in a fidelity warning — logs are never clean</td></tr>
+        <tr><td>Byte-order marks, trailing junk</td><td>Stripped/tolerated so real-world exports parse</td></tr>
+      </table>
+
+      <h2>Why the outline matters</h2>
+      <p>Ask a model a question about a 2&nbsp;MB JSON dump and it reads
+      until its attention thins out. Give it a 40-line outline first and
+      it knows where everything lives — then the capped body (or your
+      follow-up paste of one subtree) fills in details. It's the
+      table-of-contents trick, applied to data.</p>
+
+      <h2>FAQ</h2>
+      <p><strong>Is anything recomputed or reordered?</strong> No — keys
+      and values pass through untouched; only presentation is added.</p>
+      <p><strong>.ndjson?</strong> Same parser as .jsonl.</p>
+      <p><strong>Really deep nesting?</strong> The outline caps its depth
+      and says so; the fenced body keeps the truth.</p>
+
+      <div class="article-cta">
+        <p>Drop an API log and watch it become a typed records table with
+        the bad lines counted.</p>
+        <a href="/">Convert JSON/JSONL →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/blog/tables-llms-can-read.html">tables deep dive</a> ·
+      <a href="/blog/llms-write-markdown.html">token economics of formats</a> ·
+      <a href="/formats/">all format guides</a></p>
+    </article>
+  </div>
+</body>
+</html>

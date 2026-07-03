@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Feeding Word documents (.docx) to an LLM — format guide — MakeItMarkdown</title>
+  <meta name="description" content="A .docx is a ZIP of XML where headings are style objects. How MakeItMarkdown maps styles to a real Markdown outline, keeps tables as GFM, and what Word features don't survive." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/formats/">Formats</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Format guide · .docx</p>
+    <article>
+      <h1>Feeding Word documents to an LLM</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026</p>
+
+      <p>A <code>.docx</code> is not a document — it's a ZIP archive of
+      XML files describing one: content in one part, styles in another,
+      images in a media folder, plus themes, fonts and settings. That
+      architecture is why a 3-page memo weighs 36&nbsp;KB and why naive
+      extraction loses precisely the things a model needs.</p>
+
+      <h2>What breaks if you paste or extract it raw</h2>
+      <ul>
+        <li><strong>The outline evaporates.</strong> "Heading 2" is a
+        style reference, not markup. Extractors that ignore styles emit
+        every heading as an ordinary paragraph — the document arrives as
+        a flat wall, and retrieval loses its best structure.</li>
+        <li><strong>Tables degrade.</strong> Word tables wrap every cell's
+        content in paragraph elements; careless conversion produces empty
+        cells or one-column mush, and header rows arrive as data.</li>
+        <li><strong>Images vanish or explode.</strong> Either dropped
+        without a trace, or inlined as base64.</li>
+      </ul>
+
+      <h2>The element mapping</h2>
+      <table>
+        <tr><th>In the .docx</th><th>In the Markdown</th></tr>
+        <tr><td>Title / Heading 1–4 styles</td><td><code>#</code> / <code>##</code> / <code>###</code> — a real outline, from the style objects</td></tr>
+        <tr><td>Bold / italic runs</td><td><code>**bold**</code> / <code>*italic*</code></td></tr>
+        <tr><td>Bulleted / numbered lists</td><td>Markdown lists, nesting kept</td></tr>
+        <tr><td>Tables</td><td>GFM pipe tables; first row promoted to a real header when Word didn't mark one</td></tr>
+        <tr><td>Embedded images</td><td><code>[Figure: …]</code> placeholder in place; image file extracted into the .zip's <code>figures/</code></td></tr>
+        <tr><td>Hyperlinks</td><td>Inline Markdown links</td></tr>
+        <tr><td>Headers, footers, page numbers</td><td>Dropped — page furniture, not content</td></tr>
+      </table>
+
+      <h2>Honest limits</h2>
+      <ul>
+        <li><strong>Unstyled "headings"</strong> (someone typed a line and
+        made it big and bold by hand) can't be distinguished from
+        emphasized paragraphs — they convert as bold text. If the outline
+        matters, the source document needs real heading styles.</li>
+        <li><strong>Comments and tracked changes</strong> are not
+        included; convert the accepted-changes version you actually mean
+        to feed the model.</li>
+        <li><strong>Text boxes, shapes and SmartArt</strong> are drawing
+        objects; their text is generally lost, and the fidelity report's
+        detected counts are how you notice.</li>
+        <li><strong>.doc (legacy binary)</strong> is a different,
+        pre-2007 format — resave as .docx first (File → Save As).</li>
+      </ul>
+
+      <h2>FAQ</h2>
+      <p><strong>Where do the images go?</strong> Into the downloaded
+      .zip, next to the Markdown, named as the placeholders say —
+      workspace uploads can include or skip them.</p>
+      <p><strong>Does it read password-protected files?</strong> No —
+      remove protection first; the parser sees only encrypted bytes.</p>
+      <p><strong>Confidential documents?</strong> Conversion is local to
+      your browser; nothing is uploaded. Verify by converting offline.
+      See <a href="/privacy.html">privacy</a>.</p>
+
+      <div class="article-cta">
+        <p>Watch a styled Word report become an outlined, table-intact
+        Markdown file.</p>
+        <a href="/?sample=docx">Convert a .docx →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/examples/docx-to-markdown.html">before/after example</a> ·
+      <a href="/blog/not-a-file-converter.html">what an LLM-first converter does differently</a> ·
+      <a href="/formats/">all format guides</a></p>
+    </article>
+  </div>
+</body>
+</html>

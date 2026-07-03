@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Markdown and plain text in the converter — format guide — MakeItMarkdown</title>
+  <meta name="description" content="Why run .md through a Markdown converter? Structure reports, token counts, and the preset outputs — chat-lean, RAG anchors, Obsidian, archive — from files that are already text." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/formats/">Formats</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Format guide · .md / .txt</p>
+    <article>
+      <h1>Markdown and plain text in the converter</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026</p>
+
+      <p>Feeding Markdown to a Markdown converter sounds circular. It
+      isn't, because most of what this tool does was never "conversion" —
+      it's <em>measurement and retargeting</em>, and both apply to files
+      that are already text.</p>
+
+      <h2>What you get for a .md file</h2>
+      <ul>
+        <li><strong>A structure report.</strong> The fidelity panel counts
+        the document's sections, tables, figures, equations and code
+        fences, and runs the same five-point QC as every other format —
+        a quick audit of whether your hand-written notes follow
+        <a href="/guide.html">the field manual</a>.</li>
+        <li><strong>Token accounting.</strong> Size and estimated tokens
+        up front; the <em>count exactly</em> button loads a real o200k
+        tokenizer for a precise number before you commit a paste.</li>
+        <li><strong>Preset retargeting.</strong> The same document as a
+        token-lean chat paste, a RAG version with chunk comments and
+        stable anchors, an Obsidian note with callouts and frontmatter,
+        or a full-frontmatter archive copy — without touching the
+        source file.</li>
+      </ul>
+
+      <h2>The element mapping</h2>
+      <table>
+        <tr><th>In the file</th><th>What happens</th></tr>
+        <tr><td>First <code>#</code> heading</td><td>Becomes the document title</td></tr>
+        <tr><td>Headings</td><td>Split into addressable sections (this is what presets and anchors hang off)</td></tr>
+        <tr><td>Tables / figures / fences / equations</td><td>Counted for the fidelity report; content untouched</td></tr>
+        <tr><td>.txt (no markup)</td><td>An overview section (lines, words, token estimate) + the verbatim content — honest framing for a model, no fake structure invented</td></tr>
+      </table>
+
+      <h2>FAQ</h2>
+      <p><strong>Is my prose rewritten?</strong> Never — body content
+      passes through byte-faithful; only structure is indexed and preset
+      wrappers are added around it.</p>
+      <p><strong>Why does my .txt score low on QC?</strong> Because it
+      has no detectable structure — that's the report telling you a model
+      will see a wall. Add headings (or accept the wall
+      knowingly).</p>
+      <p><strong>Front matter in my .md?</strong> Passes through with the
+      body today; the Archive preset adds its own document-level
+      frontmatter block.</p>
+
+      <div class="article-cta">
+        <p>Run your notes through the QC — five checks, ten seconds.</p>
+        <a href="/">Check a Markdown file →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/guide.html">the field manual</a> ·
+      <a href="/blog/rag-ready-markdown.html">RAG-ready Markdown</a> ·
+      <a href="/formats/">all format guides</a></p>
+    </article>
+  </div>
+</body>
+</html>

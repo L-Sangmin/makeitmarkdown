@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Feeding CSV files to an LLM — format guide — MakeItMarkdown</title>
+  <meta name="description" content="CSV looks simple until quoting, delimiters and ragged rows break it. The typed GFM mapping — sniffed delimiters, per-column types, explicit truncation — that models read reliably." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/formats/">Formats</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Format guide · .csv / .tsv</p>
+    <article>
+      <h1>Feeding CSV files to an LLM</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026</p>
+
+      <p>CSV is the format everyone assumes is trivial — it's "just
+      commas". In the wild it's a family of dialects: semicolons in
+      European locales, tabs from database exports, quoted fields with
+      embedded commas and newlines, and rows whose column counts drift.
+      Models read messy CSV the way you'd expect: confidently and
+      inconsistently.</p>
+
+      <h2>What breaks in a raw paste</h2>
+      <ul>
+        <li><strong>Quoting is invisible logic.</strong>
+        <code>"Portland, OR",1200</code> is two fields; a model skimming
+        commas sees three. Embedded newlines inside quotes are worse —
+        they look like new rows.</li>
+        <li><strong>The delimiter is a guess.</strong> Semicolon files
+        pasted as "CSV" read as one giant column.</li>
+        <li><strong>No types.</strong> Is <code>0042</code> a number or a
+        code? Is <code>45922</code> a date? The bytes don't say.</li>
+        <li><strong>Length.</strong> Ten thousand rows don't fit a chat
+        input; whatever cuts them off won't tell the model it
+        happened.</li>
+      </ul>
+
+      <h2>The element mapping</h2>
+      <table>
+        <tr><th>In the file</th><th>In the Markdown</th></tr>
+        <tr><td>Delimiter (comma/semicolon/tab/pipe)</td><td>Auto-sniffed, then parsed with real RFC-4180 quoting rules</td></tr>
+        <tr><td>Header row</td><td>GFM header with inferred per-column types: <code>region (str) · units (int) · revenue (float)</code></td></tr>
+        <tr><td>Rows</td><td>First 50 as a GFM table + an explicit "first 50 of N" sentence</td></tr>
+        <tr><td>Ragged rows</td><td>Padded to rectangular; counted in a fidelity warning</td></tr>
+        <tr><td>Pipes in values</td><td>Escaped so the table can't shear</td></tr>
+        <tr><td>Overview</td><td>Row/column counts up front, so the model knows the dataset's true size</td></tr>
+      </table>
+
+      <h2>Honest limits</h2>
+      <ul>
+        <li>The first row is assumed to be a header — a headerless file
+        gets its first data row promoted, which the preview makes obvious
+        in one glance.</li>
+        <li>Type inference is per-column majority; a column mixing
+        <code>12</code> and <code>n/a</code> reads as <code>str</code>,
+        which is the safe call.</li>
+        <li>50 rows is a paste-budget default. For whole-dataset
+        questions, ask the model for the code to compute the answer, not
+        the answer.</li>
+      </ul>
+
+      <h2>FAQ</h2>
+      <p><strong>.tsv?</strong> Yes — tabs are one of the sniffed
+      delimiters.</p>
+      <p><strong>Huge files?</strong> Parsing happens in your browser's
+      memory; hundreds of MB may be slow. The output stays small by
+      design.</p>
+      <p><strong>Why not JSON output for data?</strong> Per-row key
+      repetition costs ~15–40% more tokens for flat tables — measured in
+      <a href="/blog/llms-write-markdown.html">LLMs speak Markdown</a>.</p>
+
+      <div class="article-cta">
+        <p>Drop a CSV and check the typed header line — it's the piece
+        models thank you for.</p>
+        <a href="/?sample=sales-csv">Convert a CSV →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/examples/csv-for-llm.html">before/after example</a> ·
+      <a href="/blog/tables-llms-can-read.html">tables deep dive</a> ·
+      <a href="/formats/">all format guides</a></p>
+    </article>
+  </div>
+</body>
+</html>

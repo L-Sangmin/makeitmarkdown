@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Format guides — MakeItMarkdown</title>
+  <meta name="description" content="One guide per supported format: what's really inside the file, what breaks when you feed it to an LLM raw, and the exact element mapping the converter applies." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/">← Tool</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Format guides</p>
+    <article>
+      <h1>What's really inside your files</h1>
+      <p class="article-byline">One guide per format: the file's anatomy,
+      what breaks when a model reads it raw, and the exact element mapping
+      the converter applies — limits included.</p>
+
+      <ul class="post-list">
+        <li><a class="post-card" href="/formats/ipynb.html">
+          <h2>Jupyter notebooks</h2>
+          <p>Cell addresses, dependency hints, execution-order warnings,
+          base64 extraction — the hardest format, and the biggest win.</p>
+          <span class="post-date">.ipynb</span>
+        </a></li>
+        <li><a class="post-card" href="/formats/docx.html">
+          <h2>Word documents</h2>
+          <p>Styles become a real outline; tables survive as GFM; page
+          furniture is dropped.</p>
+          <span class="post-date">.docx</span>
+        </a></li>
+        <li><a class="post-card" href="/formats/xlsx.html">
+          <h2>Excel workbooks</h2>
+          <p>ISO dates instead of serials, cached formula values, one
+          section per sheet, explicit truncation.</p>
+          <span class="post-date">.xlsx · .xls</span>
+        </a></li>
+        <li><a class="post-card" href="/formats/csv.html">
+          <h2>CSV / TSV</h2>
+          <p>Sniffed delimiters, RFC-4180 quoting, typed columns, ragged
+          rows repaired and confessed.</p>
+          <span class="post-date">.csv · .tsv</span>
+        </a></li>
+        <li><a class="post-card" href="/formats/pdf.html">
+          <h2>PDF</h2>
+          <p>Per-page text with honest limits: no fake tables, scans
+          flagged, layout loss disclosed.</p>
+          <span class="post-date">.pdf</span>
+        </a></li>
+        <li><a class="post-card" href="/formats/html.html">
+          <h2>Webpages</h2>
+          <p>Reader-style article extraction: content kept with tables and
+          figures, chrome discarded.</p>
+          <span class="post-date">.html</span>
+        </a></li>
+        <li><a class="post-card" href="/formats/json.html">
+          <h2>JSON / JSONL</h2>
+          <p>A structure outline plus record tables — and when to leave
+          JSON as JSON.</p>
+          <span class="post-date">.json · .jsonl</span>
+        </a></li>
+        <li><a class="post-card" href="/formats/subtitles.html">
+          <h2>Subtitles</h2>
+          <p>Timestamped transcripts with compact time markers; styling
+          and numbering stripped.</p>
+          <span class="post-date">.srt · .vtt</span>
+        </a></li>
+        <li><a class="post-card" href="/formats/markdown.html">
+          <h2>Markdown / plain text</h2>
+          <p>Structure QC, exact token counts, and retargeting to chat,
+          RAG, Obsidian or archive presets.</p>
+          <span class="post-date">.md · .txt</span>
+        </a></li>
+      </ul>
+
+      <p class="article-footer">Missing a format?
+      <a href="/contact.html">Request it with a sample file</a> —
+      parsers here are test-driven. ·
+      <a href="/">Open the tool</a> · <a href="/guide.html">Field manual</a> ·
+      <a href="/blog/">Context Lab</a></p>
+    </article>
+  </div>
+</body>
+</html>

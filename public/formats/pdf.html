@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Feeding PDFs to an LLM — format guide — MakeItMarkdown</title>
+  <meta name="description" content="PDFs store positioned glyphs, not structure. What per-page text extraction can honestly recover, how scanned pages are detected, and when to hunt for the HTML instead." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/formats/">Formats</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Format guide · .pdf</p>
+    <article>
+      <h1>Feeding PDFs to an LLM</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026</p>
+
+      <p>PDF is the only format on this site where our guide begins with
+      "avoid it if you can". A PDF stores drawing instructions — put this
+      glyph at these coordinates — and nothing about paragraphs, headings
+      or tables. Everything any tool "extracts" from a PDF is
+      reconstruction, and honest conversion means saying so. (The full
+      autopsy: <a href="/blog/why-llms-choke-on-pdfs.html">Why PDFs are
+      hostile input for LLMs</a>.)</p>
+
+      <h2>What can honestly be recovered</h2>
+      <p>For born-digital PDFs (exported from a word processor or
+      browser), the text itself is intact — it's the <em>structure</em>
+      that's gone. Per-page text extraction recovers the words in reading
+      order for simple single-column layouts, and progressively less
+      reliably for columns, floats and dense tables.</p>
+
+      <h2>The element mapping</h2>
+      <table>
+        <tr><th>In the PDF</th><th>In the Markdown</th></tr>
+        <tr><td>Each page's text layer</td><td>A <code>## Page N</code> section with the extracted text lines</td></tr>
+        <tr><td>Multi-column / complex layout</td><td>Extracted as-is, with a standing layout-lossy warning in the fidelity report</td></tr>
+        <tr><td>Tables</td><td><strong>Not reconstructed as GFM</strong> — a PDF has no table objects, and fake table recovery is how other tools invent data; rows survive as text lines</td></tr>
+        <tr><td>Image-only (scanned) pages</td><td>Detected by character density and flagged loudly, with a next step — never faked</td></tr>
+        <tr><td>Password-protected file</td><td>A clear error with the workaround (open it, remove the password, e.g. Print → Save as PDF)</td></tr>
+        <tr><td>Corrupt / truncated file</td><td>A clear "re-export or re-download" error instead of a hang</td></tr>
+      </table>
+
+      <p>Long documents show per-page progress while converting; a
+      40-page report takes moments, not minutes.</p>
+
+      <h2>The decision tree</h2>
+      <ol>
+        <li><strong>Does the content exist as HTML or .docx anywhere?</strong>
+        Convert that instead — every downstream use improves. (This is
+        the single highest-leverage move in this entire guide.)</li>
+        <li><strong>Born-digital PDF, simple layout?</strong> Convert it;
+        expect clean text with page addresses.</li>
+        <li><strong>Complex layout?</strong> Convert, then read the
+        fidelity warnings and spot-check the sections you'll rely
+        on.</li>
+        <li><strong>Scan?</strong> Different problem — see
+        <a href="/blog/scanned-pdf-cant-convert.html">the scanned-PDF
+        guide</a>.</li>
+      </ol>
+
+      <h2>FAQ</h2>
+      <p><strong>Why does the QC score cap lower for PDFs?</strong>
+      Because structural checks (real sections, intact tables) genuinely
+      can't fully pass on a structureless source — the score is honest
+      rather than flattering.</p>
+      <p><strong>Big PDFs?</strong> Parsing is local (pdf.js, the same
+      engine as Firefox); size is limited by your machine, not by an
+      upload cap.</p>
+      <p><strong>Forms and annotations?</strong> Body text only — filled
+      form values and comments aren't extracted today.</p>
+
+      <div class="article-cta">
+        <p>Convert a PDF and read its warnings — knowing what's shaky is
+        the feature.</p>
+        <a href="/?sample=pdf">Convert a PDF →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/examples/pdf-to-markdown.html">before/after example</a> ·
+      <a href="/blog/claude-projects-pdf-fix.html">Claude Projects PDF fix</a> ·
+      <a href="/formats/">all format guides</a></p>
+    </article>
+  </div>
+</body>
+</html>

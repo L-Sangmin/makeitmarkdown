@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Feeding Excel workbooks (.xlsx) to an LLM — format guide — MakeItMarkdown</title>
+  <meta name="description" content="Serial dates, cached formulas, merged cells, hidden sheets: what's really in an .xlsx and the typed-table Markdown mapping that keeps a model from misreading it." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/formats/">Formats</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Format guide · .xlsx</p>
+    <article>
+      <h1>Feeding Excel workbooks to an LLM</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026</p>
+
+      <p>Spreadsheets look like tables but store something stranger:
+      typed cells whose <em>displayed</em> value and <em>stored</em> value
+      differ. That gap — dates stored as day-counts, formulas stored as
+      expressions, layout stored as merges — is where models get
+      systematically misled.</p>
+
+      <h2>What breaks if you hand it over raw</h2>
+      <ul>
+        <li><strong>Serial dates:</strong> the cell shows
+        <code>2025-09-22</code>, the file stores <code>45922</code>. Raw
+        extractions hand the model five-digit numbers it happily treats
+        as amounts.</li>
+        <li><strong>Formulas:</strong> depending on the path, the model
+        sees <code>=SUM(B2:B13)</code> instead of the number — or a
+        number with no hint it's computed.</li>
+        <li><strong>Merged headers</strong> unmerge into one value and
+        blanks, shifting columns.</li>
+        <li><strong>Multi-sheet workbooks</strong> flatten into one
+        undifferentiated stream, or lose all but the first sheet.</li>
+      </ul>
+
+      <h2>The element mapping</h2>
+      <table>
+        <tr><th>In the workbook</th><th>In the Markdown</th></tr>
+        <tr><td>Each sheet</td><td>Its own <code>##</code> section, in workbook order</td></tr>
+        <tr><td>Data range</td><td>GFM table with <strong>type-annotated headers</strong> — <code>units (int)</code>, <code>month (date)</code></td></tr>
+        <tr><td>Date cells</td><td>ISO dates (<code>2025-09-22</code>), never serials</td></tr>
+        <tr><td>Formula cells</td><td>The cached computed value, with a note that values are cached</td></tr>
+        <tr><td>Rows beyond 50</td><td>Truncated with an explicit "first 50 of N" sentence</td></tr>
+        <tr><td>Ragged/merged regions</td><td>Padded to rectangular + a fidelity warning</td></tr>
+        <tr><td>Empty sheets</td><td>Named and flagged, not silently skipped</td></tr>
+        <tr><td>Charts, pivot caches, styling</td><td>Not extracted — values only (the report says what was detected)</td></tr>
+      </table>
+
+      <p>Why the type annotations matter more than anything else here:
+      <a href="/blog/tables-llms-can-read.html">Tables LLMs can actually
+      read</a>.</p>
+
+      <h2>Honest limits</h2>
+      <ul>
+        <li>Formulas are <strong>not recomputed</strong> — you get the
+        value cached at last save. Stale saves mean stale numbers (the
+        note in the output reminds the reader).</li>
+        <li>Charts don't survive: a chart is a drawing bound to data; the
+        data survives, the picture doesn't.</li>
+        <li>Fifty rows per table is a deliberate paste-budget default —
+        for full-table workloads, attach the .md and the original
+        together, or ask the model for code to run over the real
+        file.</li>
+      </ul>
+
+      <h2>FAQ</h2>
+      <p><strong>Legacy .xls?</strong> Yes — both the modern ZIP format
+      and the legacy binary are read (each is verified by its magic bytes
+      first, so mislabeled files fail loudly, not weirdly).</p>
+      <p><strong>Several sheets, one question?</strong> Every sheet is a
+      titled section, so you can tell the model "use the Summary
+      section".</p>
+      <p><strong>Financial data privacy?</strong> Local conversion,
+      nothing uploaded — <a href="/privacy.html">verifiably</a>.</p>
+
+      <div class="article-cta">
+        <p>Convert a workbook and inspect the typed headers and the cached-value note.</p>
+        <a href="/">Convert an .xlsx →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/blog/pasted-table-garbage.html">why tables mangle in chat</a> ·
+      <a href="/blog/llm-invents-numbers.html">the model invents numbers</a> ·
+      <a href="/formats/">all format guides</a></p>
+    </article>
+  </div>
+</body>
+</html>

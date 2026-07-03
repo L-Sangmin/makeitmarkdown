@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Feeding webpages (.html) to an LLM — format guide — MakeItMarkdown</title>
+  <meta name="description" content="Saved webpages are 80–95% scaffolding. How Readability-based article extraction finds the content, what survives (tables, figures, links), and where extraction can pick wrong." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/formats/">Formats</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Format guide · .html</p>
+    <article>
+      <h1>Feeding webpages to an LLM</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026</p>
+
+      <p>HTML is the best-structured source most people ever feed a model
+      — real headings, real tables, real links — wrapped in the worst
+      noise: navigation, ads, consent banners, recommendation sidebars.
+      The conversion problem isn't recovering structure (it's there); it's
+      finding the content.</p>
+
+      <h2>How article extraction works</h2>
+      <p>We run Mozilla's Readability — the algorithm family behind
+      Reader View — in your browser. It scores the page's element tree
+      for the densest coherent block of text and discards the rest. The
+      surviving article then converts to Markdown with its structure
+      intact.</p>
+
+      <h2>The element mapping</h2>
+      <table>
+        <tr><th>In the page</th><th>In the Markdown</th></tr>
+        <tr><td>Article headings</td><td>The <code>#/##</code> outline (levels normalized)</td></tr>
+        <tr><td>Article tables</td><td>GFM pipe tables</td></tr>
+        <tr><td>Images + captions</td><td><code>[Figure: …]</code> placeholders with captions; original URLs kept in the figure list</td></tr>
+        <tr><td>Links</td><td>Inline Markdown links; <strong>relative</strong> links are flagged in the fidelity report (a saved file can't resolve <code>/pricing</code>)</td></tr>
+        <tr><td>Code blocks</td><td>Fenced blocks</td></tr>
+        <tr><td>Nav, ads, banners, sidebars, footers</td><td>Discarded by the extraction pass</td></tr>
+      </table>
+
+      <h2>Honest limits</h2>
+      <ul>
+        <li><strong>JavaScript-rendered pages:</strong> what you saved is
+        what converts. Save the page <em>after</em> it has rendered
+        (Ctrl/Cmd-S in the browser), not via a raw source download.</li>
+        <li><strong>Extraction can pick the wrong block</strong> on
+        unusual layouts — comment threads have out-scored short articles
+        before. The fidelity report's detected counts (title? sections?
+        the table you expected?) are how you catch it in five
+        seconds.</li>
+        <li><strong>No URL fetching.</strong> You give us the file, not
+        the address — the site makes no network requests with your
+        content, which is the whole <a href="/privacy.html">privacy
+        model</a>. Saving the page first is the one extra step.</li>
+      </ul>
+
+      <h2>FAQ</h2>
+      <p><strong>Can I paste HTML instead of saving a file?</strong>
+      Yes — paste page source onto the landing page with
+      <kbd>⌘V</kbd>.</p>
+      <p><strong>Documentation pages with heavy chrome?</strong> That's
+      the sweet spot — see the junk-flood walkthrough in
+      <a href="/blog/webpage-paste-junk.html">the fix article</a>.</p>
+      <p><strong>Whole sites?</strong> One page per file today; batch-drop
+      several saved pages at once and the .zip bundles them.</p>
+
+      <div class="article-cta">
+        <p>Try the sample article — nav and ads in, clean outline out.</p>
+        <a href="/?sample=article">Convert a webpage →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/examples/html-article-to-markdown.html">before/after example</a> ·
+      <a href="/blog/webpage-paste-junk.html">webpage paste junk</a> ·
+      <a href="/formats/">all format guides</a></p>
+    </article>
+  </div>
+</body>
+</html>

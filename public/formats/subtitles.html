@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Feeding subtitles (.srt / .vtt) to an LLM — format guide — MakeItMarkdown</title>
+  <meta name="description" content="Subtitle files are timestamped transcripts wearing numbering and styling tags. The mapping to a readable transcript with time markers a model can cite." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/formats/">Formats</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Format guide · .srt / .vtt</p>
+    <article>
+      <h1>Feeding subtitles to an LLM</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026</p>
+
+      <p>Every talk, lecture and meeting recording has a transcript
+      hiding in its subtitle track — and subtitle files are almost, but
+      not quite, readable text. The "not quite" is what wastes tokens
+      and confuses citation.</p>
+
+      <h2>What's in the raw file</h2>
+      <pre><code>42
+00:03:17,240 --> 00:03:21,900
+&lt;i&gt;so the second condition
+only holds when...&lt;/i&gt;</code></pre>
+      <p>Sequence numbers, millisecond-precise timing pairs, styling tags
+      and mid-sentence line breaks — for every line of speech, roughly
+      two lines of apparatus. Pasted raw, a one-hour talk spends a third
+      of its tokens on numbers nobody will ask about.</p>
+
+      <h2>The element mapping</h2>
+      <table>
+        <tr><th>In the .srt / .vtt</th><th>In the Markdown</th></tr>
+        <tr><td>Sequence numbers</td><td>Dropped</td></tr>
+        <tr><td>Timing pairs</td><td>Compact <code>[03:17]</code> markers, one per block — enough to jump into the video</td></tr>
+        <tr><td>Styling tags (<code>&lt;i&gt;</code>, positioning codes)</td><td>Stripped</td></tr>
+        <tr><td>Caption text</td><td>Flowed into readable transcript lines</td></tr>
+        <tr><td>WebVTT headers, NOTE/STYLE blocks</td><td>Skipped</td></tr>
+        <tr><td>Malformed blocks</td><td>Skipped and counted in a fidelity warning</td></tr>
+      </table>
+
+      <h2>What this unlocks</h2>
+      <ul>
+        <li>"Summarize the section around <code>[41:30]</code>" — time
+        markers give the model stable addresses into the recording.</li>
+        <li>Meeting minutes from the auto-captions your video tool
+        already produced.</li>
+        <li>Workspace-ready lecture transcripts that chunk sensibly
+        (see <a href="/blog/ai-workspaces-markdown.html">Markdown for AI
+        workspaces</a>).</li>
+      </ul>
+
+      <h2>FAQ</h2>
+      <p><strong>Speaker names?</strong> Kept when they're in the caption
+      text (as most auto-captioners emit them); subtitle formats have no
+      reliable speaker field to extract.</p>
+      <p><strong>.ass/.ssa?</strong> Not yet — <a
+      href="/contact.html">request it</a> with a sample; the parser
+      family makes additions cheap.</p>
+      <p><strong>Full timestamps?</strong> Hours appear when the
+      recording passes one hour: <code>[1:03:17]</code>.</p>
+
+      <div class="article-cta">
+        <p>Drop the .srt from your last recorded meeting.</p>
+        <a href="/">Convert subtitles →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/formats/markdown.html">plain text &amp; Markdown guide</a> ·
+      <a href="/blog/ai-workspaces-markdown.html">AI workspaces</a> ·
+      <a href="/formats/">all format guides</a></p>
+    </article>
+  </div>
+</body>
+</html>
