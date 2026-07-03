@@ -12,8 +12,9 @@
 .article-kicker {
   margin: 2rem 0 0.5rem;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--accent);
 }
@@ -142,8 +143,9 @@ article a:hover { text-decoration: underline; }
 .gallery-kicker {
   margin: 0 0 0.25rem;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
+  font-size: 0.8125rem;
+  font-weight: 650;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--accent);
 }
@@ -179,7 +181,10 @@ article a:hover { text-decoration: underline; }
 
 .card-thumb {
   aspect-ratio: 16 / 8;
-  background: color-mix(in srgb, var(--accent) 5%, transparent);
+  background: light-dark(
+    color-mix(in srgb, var(--accent) 9%, #e6e8f0),
+    color-mix(in srgb, var(--accent) 5%, transparent)
+  );
   border-bottom: 1px solid var(--border);
 }
 
