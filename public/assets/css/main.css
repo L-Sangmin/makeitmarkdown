@@ -679,6 +679,29 @@ kbd {
   min-height: 0;
 }
 
+/* original pane folded away — markdown + fidelity share the width */
+.panes.orig-collapsed { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+.panes.orig-collapsed .pane-original { display: none; }
+
+/* slide-card preview for decks */
+.slide-preview { display: flex; flex-direction: column; gap: 0.75rem; }
+.slide-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 0.875rem;
+  background: color-mix(in srgb, var(--fg) 2.5%, transparent);
+}
+.slide-card h3 { margin: 0 0 0.375rem; font-size: 0.8125rem; font-weight: 600; }
+.slide-card pre {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.71875rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--fg-muted);
+}
+
 .pane {
   display: flex;
   flex-direction: column;

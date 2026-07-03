@@ -180,12 +180,14 @@
       <span class="bar-spacer"></span>
       <!-- populated from PRESETS (presets.js) -->
       <div class="seg" id="preset-seg" role="group" aria-label="Output preset"></div>
+      <button type="button" id="btn-original" class="btn btn-ghost" aria-pressed="true">Hide original</button>
       <button type="button" id="btn-copy" class="btn btn-ghost">Copy</button>
-      <button type="button" id="btn-zip" class="btn btn-solid">Download .zip</button>
+      <button type="button" id="btn-md" class="btn btn-ghost" title="Markdown file only">.md</button>
+      <button type="button" id="btn-zip" class="btn btn-solid" title="Markdown + extracted figures">.zip</button>
     </div>
 
     <div class="panes">
-      <section class="pane" aria-label="Original preview">
+      <section class="pane pane-original" aria-label="Original preview">
         <h2 class="pane-title">Original</h2>
         <div class="pane-body" id="original-body"></div>
       </section>

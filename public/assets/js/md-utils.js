@@ -180,8 +180,10 @@ export function buildFrontmatter(result, mode = "basic") {
 
 // Map "[Figure: id]" / "[Figure: id.ext]" placeholders to a per-figure
 // filename (used by the Obsidian wikilink pass and the ZIP layout).
+const EXT_BY_MIME = { png: "png", jpeg: "jpg", gif: "gif", "svg+xml": "svg", webp: "webp", bmp: "bmp" };
+
 export function figureFilename(fig) {
-  const extFromUrl = /^data:image\/(png|jpeg)/.exec(fig.url ?? "")?.[1];
-  const ext = extFromUrl === "jpeg" ? "jpg" : (extFromUrl ?? "png");
+  const mime = /^data:image\/([\w.+-]+)/.exec(fig.url ?? "")?.[1];
+  const ext = EXT_BY_MIME[mime] ?? "png";
   return /\.[a-z0-9]+$/i.test(fig.id) ? fig.id : `${fig.id}.${ext}`;
 }

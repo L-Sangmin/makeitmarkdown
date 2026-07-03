@@ -55,6 +55,9 @@ const els = {
   fidelity: document.getElementById("fidelity-body"),
   btnCopy: document.getElementById("btn-copy"),
   btnZip: document.getElementById("btn-zip"),
+  btnMd: document.getElementById("btn-md"),
+  btnOriginal: document.getElementById("btn-original"),
+  panes: document.querySelector(".panes"),
 };
 
 let current = null; // { result, markdown, ms, filename, fileBuffer }
@@ -117,6 +120,31 @@ function resetExactCount() {
   btnExact.hidden = false;
   btnExact.textContent = "count exactly";
 }
+
+// --- original pane: collapsible (auto-collapsed when there is no real viewer) --
+
+function setOriginalCollapsed(collapsed) {
+  els.panes.classList.toggle("orig-collapsed", collapsed);
+  els.btnOriginal.textContent = collapsed ? "Show original" : "Hide original";
+  els.btnOriginal.setAttribute("aria-pressed", String(!collapsed));
+}
+
+els.btnOriginal.addEventListener("click", () => {
+  setOriginalCollapsed(!els.panes.classList.contains("orig-collapsed"));
+});
+
+// --- downloads: markdown only, or the full zip -----------------------------------
+
+els.btnMd.addEventListener("click", () => {
+  if (!current) return;
+  const stem = current.filename.replace(/\.[^.]+$/, "") || "converted";
+  const blob = new Blob([current.markdown], { type: "text/markdown" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `${stem}.md`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
 
 btnExact.addEventListener("click", async () => {
   if (!current) return;
@@ -204,7 +232,7 @@ async function handleFile(file) {
 
     els.meta.textContent = `${payload.filename} · converted in ${formatDuration(payload.ms)} · processed locally — refresh clears it`;
 
-    renderResult(payload, els);
+    setOriginalCollapsed(renderResult(payload, els) === "note");
     resetExactCount();
     showResult();
     saveToHistory(payload, activePreset);
@@ -272,7 +300,7 @@ async function handleFiles(files) {
   syncPresetSeg();
   const failNote = failures.length ? ` · ${failures.length} failed` : "";
   els.meta.textContent = `${payloads.length} files converted${failNote} · showing ${current.filename} · Download .zip bundles all`;
-  renderResult(current, els);
+  setOriginalCollapsed(renderResult(current, els) === "note");
   resetExactCount();
   showResult();
 }
@@ -371,7 +399,7 @@ function restoreFromHistory(entry) {
   activePreset = entry.preset ?? "standard";
   syncPresetSeg();
   els.meta.textContent = `${entry.filename} · restored from local history (${timeAgo(entry.ts)}) — stored only in this browser`;
-  renderResult(current, els);
+  setOriginalCollapsed(renderResult(current, els) === "note");
   resetExactCount();
   showResult();
 }

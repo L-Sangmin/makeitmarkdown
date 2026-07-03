@@ -39,3 +39,17 @@ test("batch zip: one folder per source file, collisions suffixed", async () => {
   assert.ok(zip.file("nb/nb.md"));
   assert.ok(zip.file("nb/figures/f1.png"));
 });
+
+test("zip: figure ids that already carry an extension are not doubled", async () => {
+  const { blob } = await buildResultZip({
+    markdown: "# t",
+    filename: "deck.pptx",
+    figures: [
+      { id: "slide_3_image_1.png", url: PNG_URL },
+      { id: "plain_id", url: PNG_URL.replace("image/png", "image/gif") },
+    ],
+  });
+  const zip = await JSZip.loadAsync(await blob.arrayBuffer());
+  assert.ok(zip.file("figures/slide_3_image_1.png"), "no double extension");
+  assert.ok(zip.file("figures/plain_id.gif"), "gif mime mapped");
+});

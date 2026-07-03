@@ -11,9 +11,10 @@ const escapeHtml = (s) =>
   String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 export function renderResult(payload, els) {
-  renderOriginal(els.original, payload);
+  const viewerKind = renderOriginal(els.original, payload);
   setMarkdown(els, payload.markdown);
   renderFidelity(els.fidelity, payload.result);
+  return viewerKind; // "rich" | "text" | "note" — drives the collapse default
 }
 
 // Also used when the preset toggle reformats an existing result.
@@ -63,14 +64,14 @@ function renderOriginal(container, payload) {
     note.textContent =
       "Restored from this browser's local history — the original file itself was not kept.";
     container.appendChild(note);
-    return;
+    return "note";
   }
 
   if (format === "ipynb") {
     try {
       const raw = new TextDecoder("utf-8").decode(payload.fileBuffer);
       container.appendChild(renderNotebook(JSON.parse(raw)));
-      return;
+      return "rich";
     } catch {
       /* fall through to plain text */
     }
@@ -84,23 +85,89 @@ function renderOriginal(container, payload) {
     embed.src = lastObjectUrl;
     embed.className = "pdf-embed";
     container.appendChild(embed);
-    return;
+    return "rich";
   }
 
-  if (format === "docx" || format === "pptx" || format === "xlsx") {
-    const note = document.createElement("p");
-    note.className = "original-note";
-    note.textContent =
-      `Binary ${format === "docx" ? "Word document" : format === "pptx" ? "slide deck" : "workbook"} — no inline preview for .${format} yet. ` +
-      "The Markdown panel holds the converted content.";
-    container.appendChild(note);
-    return;
+  if (format === "docx") {
+    fillAsync(container, async () => {
+      const { value } = await globalThis.mammoth.convertToHtml({
+        arrayBuffer: payload.fileBuffer.slice(0),
+      });
+      return sanitized(value);
+    });
+    return "rich";
+  }
+
+  if (format === "xlsx") {
+    fillAsync(container, async () => {
+      const wb = globalThis.XLSX.read(payload.fileBuffer, { type: "array", cellDates: true });
+      const parts = [];
+      for (const name of wb.SheetNames.slice(0, 3)) {
+        parts.push(`<h3>${escapeHtml(name)}</h3>`);
+        parts.push(globalThis.XLSX.utils.sheet_to_html(wb.Sheets[name], { header: "", footer: "" }));
+      }
+      if (wb.SheetNames.length > 3) {
+        parts.push(`<p>… ${wb.SheetNames.length - 3} more sheet(s) not previewed.</p>`);
+      }
+      return sanitized(parts.join("\n"));
+    });
+    return "rich";
+  }
+
+  if (format === "pptx") {
+    // Slide-card preview rebuilt from the parsed sections — the binary
+    // itself has no cheap visual rendering in a browser.
+    const wrap = document.createElement("div");
+    wrap.className = "slide-preview";
+    for (const sec of payload.result.sections ?? []) {
+      const card = document.createElement("div");
+      card.className = "slide-card";
+      const h = document.createElement("h3");
+      h.textContent = sec.heading;
+      const pre = document.createElement("pre");
+      pre.textContent = sec.content;
+      card.append(h, pre);
+      wrap.appendChild(card);
+    }
+    container.appendChild(wrap);
+    return "rich";
+  }
+
+  if (format === "html") {
+    const raw = new TextDecoder("utf-8").decode(payload.fileBuffer);
+    const div = document.createElement("div");
+    div.className = "md-preview doc-preview";
+    div.innerHTML = sanitized(raw);
+    container.appendChild(div);
+    return "rich";
   }
 
   const pre = document.createElement("pre");
   pre.className = "nb-src";
   pre.textContent = new TextDecoder("utf-8").decode(payload.fileBuffer).slice(0, 20000);
   container.appendChild(pre);
+  return "text";
+}
+
+const sanitized = (html) =>
+  globalThis.DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+
+// Async viewers show a placeholder, then swap in the rendered preview.
+function fillAsync(container, render) {
+  const note = document.createElement("p");
+  note.className = "original-note";
+  note.textContent = "Rendering preview…";
+  container.appendChild(note);
+  render()
+    .then((html) => {
+      const div = document.createElement("div");
+      div.className = "md-preview doc-preview";
+      div.innerHTML = html;
+      container.replaceChildren(div);
+    })
+    .catch(() => {
+      note.textContent = "Preview unavailable for this file — the Markdown panel holds the converted content.";
+    });
 }
 
 function renderNotebook(nb) {
