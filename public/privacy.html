@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Privacy — MakeItMarkdown</title>
+  <meta name="description" content="MakeItMarkdown's privacy policy: your files are processed entirely in your browser and never uploaded. What is stored locally, and what we don't collect." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/">← Tool</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Privacy</p>
+    <article>
+      <h1>Your files never leave your browser</h1>
+      <p class="article-byline">Last updated July 4, 2026</p>
+
+      <p><strong>The short version:</strong> MakeItMarkdown is a static
+      website. When you convert a document, the parsing happens inside your
+      own browser. Your file is never uploaded, transmitted, or seen by us
+      — there is no server that could receive it.</p>
+
+      <h2>How conversion works</h2>
+      <p>The site ships JavaScript parsers to your browser. When you drop a
+      file, your browser reads it from your disk into its own memory,
+      converts it to Markdown locally, and shows you the result. No network
+      request carries your file or its contents anywhere.</p>
+      <p>You can verify this yourself in two ways:</p>
+      <ul>
+        <li><strong>Go offline.</strong> Load the page once, disconnect
+        from the internet, and convert a file. It works — because the
+        conversion never needed a network.</li>
+        <li><strong>Watch the network tab.</strong> Open your browser's
+        developer tools while converting. The only requests you'll see
+        fetch the site's own code and fonts from our static host — never
+        your document.</li>
+      </ul>
+
+      <h2>What is stored on your device</h2>
+      <p>A few things are kept in your browser's local storage, on your
+      device only, to make the tool nicer to use:</p>
+      <ul>
+        <li><strong>Recent conversions</strong> — up to five converted
+        results (Markdown text and the fidelity report, without embedded
+        images) so you can reopen them. Remove them any time with the
+        <em>Clear</em> button on the start screen, or by clearing the
+        site's data in your browser settings.</li>
+        <li><strong>Theme choice</strong> — whether you picked light or
+        dark mode.</li>
+        <li><strong>Offline cache</strong> — the site's own code and fonts,
+        cached by a service worker so the tool loads fast and works
+        offline. This cache contains our files, never yours.</li>
+      </ul>
+      <p>None of this is visible to us. It lives in your browser, and
+      clearing the site's data removes all of it.</p>
+
+      <h2>What we don't do</h2>
+      <ul>
+        <li>No accounts, no sign-in, no email collection.</li>
+        <li>No analytics or tracking scripts at the time of writing.</li>
+        <li>No cookies at the time of writing.</li>
+        <li>No third-party requests at runtime — every library and font the
+        site uses is self-hosted, so converting a file doesn't ping anyone
+        else's servers.</li>
+      </ul>
+
+      <h2>Advertising</h2>
+      <p>The site currently shows no advertising. If we ever introduce ads
+      to keep the project free, this page will be updated <em>before</em>
+      rollout with exactly which partner is involved and which cookies or
+      identifiers it uses — and conversion will remain fully local
+      regardless. Ads would fund the site; they would never see your
+      files.</p>
+
+      <h2>GitHub is the exception — by your choice</h2>
+      <p>If you report a bug on our
+      <a href="https://github.com/L-Sangmin/makeitmarkdown/issues" rel="noopener">GitHub issue tracker</a>
+      and attach a sample file there, that attachment is uploaded to GitHub
+      and visible to anyone who can see the issue. That is a deliberate act
+      on GitHub's platform, separate from this site — strip anything
+      confidential from samples first. Nothing you do inside the converter
+      itself ever creates such an upload.</p>
+
+      <h2>Changes</h2>
+      <p>If this policy changes, the date at the top changes with it, and
+      material changes will be called out in the site's
+      <a href="https://github.com/L-Sangmin/makeitmarkdown/commits/main" rel="noopener">public commit history</a>.
+      Questions? See <a href="/contact.html">contact</a>.</p>
+
+      <p class="article-footer">
+        <a href="/">Tool</a> · <a href="/examples/">Examples</a> ·
+        <a href="/blog/">Writing</a> · <a href="/about.html">About</a> ·
+        <a href="/contact.html">Contact</a>
+      </p>
+    </article>
+  </div>
+</body>
+</html>

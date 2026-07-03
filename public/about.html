@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>About — MakeItMarkdown</title>
+  <meta name="description" content="What MakeItMarkdown is, how it converts documents into LLM-ready Markdown entirely in your browser, and the principles behind it." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/">← Tool</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">About</p>
+    <article>
+      <h1>A context workbench, not a file converter</h1>
+      <p class="article-byline">MakeItMarkdown · updated July 2026</p>
+
+      <p>MakeItMarkdown turns technical documents — Jupyter notebooks, Word
+      files, spreadsheets, web articles, PDFs, subtitles — into Markdown
+      that language models can actually use. Not "a Markdown file that
+      opens without errors": Markdown with real headings, tables that
+      survive as tables, figures that become explicit placeholders instead
+      of base64 noise, and a fidelity report that tells you what was
+      detected and what to double-check.</p>
+
+      <p>The distinction matters because most conversion tools optimize for
+      <em>human</em> readers — they try to make the output look like the
+      original. A model doesn't care how it looks. It cares whether the
+      structure is explicit, whether the tokens are spent on content or on
+      formatting debris, and whether anything silently vanished. That is
+      what we optimize for.</p>
+
+      <h2>How it works</h2>
+
+      <div class="article-hero" aria-hidden="true">
+        <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="">
+          <rect width="680" height="200" fill="var(--bg-raised)"/>
+          <g font-family="ui-monospace,monospace" font-size="10.5" fill="var(--fg-muted)">
+            <text x="36" y="42">.ipynb</text>
+            <text x="36" y="62">.docx</text>
+            <text x="36" y="82">.xlsx .csv</text>
+            <text x="36" y="102">.html .pdf</text>
+            <text x="36" y="122">.json .srt</text>
+            <text x="36" y="142">.md .txt</text>
+          </g>
+          <text x="36" y="170" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">9 parsers</text>
+          <path d="M130 96 h44" stroke="var(--fg-faint)" stroke-width="1.25"/>
+          <path d="M168 90 l10 6 -10 6z" fill="var(--fg-faint)"/>
+          <rect x="192" y="56" width="150" height="84" rx="8" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="267" y="90" font-family="ui-monospace,monospace" font-size="11" fill="var(--fg)" text-anchor="middle">one shared</text>
+          <text x="267" y="108" font-family="ui-monospace,monospace" font-size="11" fill="var(--fg)" text-anchor="middle">schema</text>
+          <text x="267" y="128" font-family="ui-monospace,monospace" font-size="9" fill="var(--accent)" text-anchor="middle">+ fidelity report</text>
+          <path d="M348 96 h44" stroke="var(--fg-faint)" stroke-width="1.25"/>
+          <path d="M386 90 l10 6 -10 6z" fill="var(--fg-faint)"/>
+          <g font-family="ui-monospace,monospace" font-size="10.5" fill="var(--fg-muted)">
+            <text x="412" y="52">Standard Markdown</text>
+            <text x="412" y="76">Chat paste (token-lean)</text>
+            <text x="412" y="100">RAG chunks + anchors</text>
+            <text x="412" y="124">Obsidian vault</text>
+            <text x="412" y="148">Archive (full frontmatter)</text>
+          </g>
+          <text x="412" y="176" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">formatters + presets</text>
+        </svg>
+      </div>
+
+      <p>Every format gets its own parser, but they all emit the same
+      internal structure: title, sections, tables, figures, references —
+      plus a fidelity record of what was detected along the way. Output
+      presets (chat paste, RAG, Obsidian, archive) are thin formatters on
+      top of that shared structure, so improving a parser improves every
+      output at once.</p>
+
+      <h2>Principles</h2>
+
+      <p><strong>Private by architecture, not by promise.</strong> The
+      converter is a static site. There is no server to upload to — parsing
+      runs in your browser's own JavaScript engine. You can verify this the
+      blunt way: load the page once, turn off your network, and convert a
+      file. It works offline, because nothing ever needed to leave your
+      machine. Details in the <a href="/privacy.html">privacy page</a>.</p>
+
+      <p><strong>Honest about loss.</strong> Every conversion ships with a
+      fidelity report: counts of detected tables, figures, equations and
+      code cells, explicit warnings, and a five-point structural quality
+      score. We say "detected", never "preserved" — a converter that claims
+      perfection is describing its blind spots.</p>
+
+      <p><strong>Free to run, free to use.</strong> The whole product is
+      static files on a CDN. No accounts, no quotas, no file-size upsell.
+      The libraries we build on are MIT, BSD or Apache-2.0 licensed and
+      credited in
+      <a href="https://github.com/L-Sangmin/makeitmarkdown/blob/main/THIRD_PARTY_LICENSES.txt" rel="noopener">THIRD_PARTY_LICENSES.txt</a>.</p>
+
+      <h2>What it handles today</h2>
+      <ul>
+        <li><strong>.ipynb</strong> — addressable cells, execution-order
+        warnings, approximate dependency hints, embedded images extracted
+        to placeholders</li>
+        <li><strong>.docx</strong> — style-aware headings, tables as GFM,
+        images as figure placeholders</li>
+        <li><strong>.xlsx / .csv / .tsv</strong> — column types annotated,
+        explicit truncation, dates normalized</li>
+        <li><strong>.html</strong> — article extraction (navigation and ads
+        stripped), links and figures kept</li>
+        <li><strong>.pdf</strong> — per-page text with honest layout
+        warnings; scanned pages flagged instead of faked</li>
+        <li><strong>.json / .jsonl</strong> — structural outline plus
+        record tables</li>
+        <li><strong>.srt / .vtt</strong> — timestamped transcript sections</li>
+        <li><strong>.md / .txt</strong> — normalized structure and a token
+        overview</li>
+      </ul>
+
+      <p>Want another format? <a href="/contact.html">Ask for it</a> — a
+      small sample file is the fastest path to support.</p>
+
+      <h2>Who makes this</h2>
+      <p>MakeItMarkdown is an independent project, developed in the open at
+      <a href="https://github.com/L-Sangmin/makeitmarkdown" rel="noopener">github.com/L-Sangmin/makeitmarkdown</a>.
+      The test suite runs every parser against deliberately messy fixtures —
+      ragged CSVs, out-of-order notebooks, corrupt archives — because real
+      files are never clean.</p>
+
+      <div class="article-cta">
+        <p>Drop a file and read its fidelity report — everything runs in
+        your browser.</p>
+        <a href="/">Open MakeItMarkdown →</a>
+      </div>
+
+      <p class="article-footer">
+        <a href="/">Tool</a> · <a href="/examples/">Examples</a> ·
+        <a href="/blog/">Writing</a> · <a href="/privacy.html">Privacy</a> ·
+        <a href="/contact.html">Contact</a>
+      </p>
+    </article>
+  </div>
+</body>
+</html>

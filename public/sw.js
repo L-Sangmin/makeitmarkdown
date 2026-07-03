@@ -8,11 +8,14 @@
 //
 // DEPLOY NOTE: bump VERSION on every deploy — it invalidates old caches.
 
-const VERSION = "v1";
+const VERSION = "v2";
 const CACHE = `mim-${VERSION}`;
 
 const CORE = [
   "/",
+  "/about.html",
+  "/privacy.html",
+  "/contact.html",
   "/manifest.webmanifest",
   "/assets/css/main.css",
   "/assets/css/article.css",
