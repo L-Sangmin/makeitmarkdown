@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
   <title>Writing — MakeItMarkdown</title>
   <meta name="description" content="Field notes on feeding documents to LLMs: why Markdown wins, how the converter works under the hood, real-world workspace workflows, and RAG pipelines." />
   <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
@@ -162,6 +163,7 @@
           <li><a class="gallery-card" href="/blog/lecture-notes-case-study.html">
             <div class="card-thumb" aria-hidden="true">
               <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+                <rect x="76" y="44" width="58" height="76" rx="5" fill="none" stroke="var(--fg-faint)" stroke-width="1.25" opacity="0.55" transform="rotate(-5 105 82)"/>
                 <rect x="84" y="40" width="58" height="76" rx="5" fill="none" stroke="var(--warn)" stroke-width="1.5" transform="rotate(-3 113 78)"/>
                 <text x="112" y="84" text-anchor="middle" font-family="ui-monospace,monospace" font-size="12" fill="var(--warn)">PDF</text>
                 <path d="M156 78 h28" stroke="var(--fg-faint)" stroke-width="1.5"/>
@@ -189,7 +191,6 @@
                   <text x="150" y="96">b.md</text>
                   <text x="196" y="96">c.md</text>
                 </g>
-                <path d="M104 106 h112" stroke="var(--fg-faint)" stroke-width="1" stroke-dasharray="3 3"/>
               </svg>
             </div>
             <div class="card-body">
@@ -218,9 +219,9 @@
                 <g font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-muted)">
                   <text x="100" y="51">&lt;!-- chunk: intro --&gt;</text>
                   <text x="100" y="84">&lt;!-- chunk: results --&gt;</text>
-                  <text x="100" y="117">…</text>
+                  <text x="160" y="117" text-anchor="middle">…</text>
                 </g>
-                <path d="M244 74 a10 10 0 0 1 10 -10 h4 M258 88 a10 10 0 0 1 -10 10 h-4" stroke="var(--fg-faint)" stroke-width="1.75" fill="none" stroke-linecap="round"/>
+                <path d="M244 74 a10 10 0 0 1 10 -10 h4 M258 88 a10 10 0 0 1 -10 10 h-4" stroke="var(--accent)" stroke-width="1.75" fill="none" stroke-linecap="round"/>
               </svg>
             </div>
             <div class="card-body">
