@@ -100,3 +100,55 @@ export function decodeText(input) {
 
 export const filenameStem = (filename, fallback) =>
   (filename ?? "").replace(/\.[^.]+$/, "") || fallback;
+
+// --- formatter helpers -------------------------------------------------------
+
+export function slugify(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "section";
+}
+
+// Stable, unique anchor slugs for one document.
+export function makeSlugger() {
+  const seen = new Map();
+  return (text) => {
+    const base = slugify(text);
+    const n = (seen.get(base) ?? 0) + 1;
+    seen.set(base, n);
+    return n === 1 ? base : `${base}-${n}`;
+  };
+}
+
+const yamlString = (v) => `"${String(v).replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
+
+// YAML frontmatter from the shared schema. mode: "basic" | "full".
+// Only fields that exist are emitted.
+export function buildFrontmatter(result, mode = "basic") {
+  const lines = ["---"];
+  if (result.title) lines.push(`title: ${yamlString(result.title)}`);
+  if (result.meta?.filename) lines.push(`source: ${yamlString(result.meta.filename)}`);
+  if (result.meta?.sourceFormat) lines.push(`format: ${result.meta.sourceFormat}`);
+  if (mode === "full") {
+    if (result.authors?.length) {
+      lines.push("authors:");
+      for (const a of result.authors) lines.push(`  - ${yamlString(a)}`);
+    }
+    if (result.year != null) lines.push(`year: ${result.year}`);
+    if (result.journal) lines.push(`journal: ${yamlString(result.journal)}`);
+    if (result.doi) lines.push(`doi: ${yamlString(result.doi)}`);
+    lines.push(`tool: ${yamlString(`MakeItMarkdown (${result.meta?.parserVersion ?? "dev"})`)}`);
+  }
+  lines.push(`converted: ${new Date().toISOString().slice(0, 10)}`);
+  lines.push("---", "");
+  return lines.join("\n");
+}
+
+// Map "[Figure: id]" / "[Figure: id.ext]" placeholders to a per-figure
+// filename (used by the Obsidian wikilink pass and the ZIP layout).
+export function figureFilename(fig) {
+  const extFromUrl = /^data:image\/(png|jpeg)/.exec(fig.url ?? "")?.[1];
+  const ext = extFromUrl === "jpeg" ? "jpg" : (extFromUrl ?? "png");
+  return /\.[a-z0-9]+$/i.test(fig.id) ? fig.id : `${fig.id}.${ext}`;
+}

@@ -70,12 +70,8 @@
       <button type="button" id="btn-new" class="btn btn-ghost">&larr; New</button>
       <span id="result-meta" class="result-meta"></span>
       <span class="bar-spacer"></span>
-      <div class="seg" role="group" aria-label="Output format">
-        <button type="button" class="seg-item is-active" aria-pressed="true">Standard</button>
-        <button type="button" class="seg-item" disabled aria-disabled="true" title="Obsidian output ships in a later phase">
-          Obsidian <span class="seg-soon">soon</span>
-        </button>
-      </div>
+      <!-- populated from PRESETS (presets.js) -->
+      <div class="seg" id="preset-seg" role="group" aria-label="Output preset"></div>
       <button type="button" id="btn-copy" class="btn btn-ghost">Copy</button>
       <button type="button" id="btn-zip" class="btn btn-solid">Download .zip</button>
     </div>

@@ -11,9 +11,14 @@ const escapeHtml = (s) =>
 
 export function renderResult(payload, els) {
   renderOriginal(els.original, payload);
-  els.markdown.textContent = payload.markdown;
-  els.mdSize.textContent = sizeNote(payload.markdown);
+  setMarkdown(els, payload.markdown);
   renderFidelity(els.fidelity, payload.result);
+}
+
+// Also used when the preset toggle reformats an existing result.
+export function setMarkdown(els, markdown) {
+  els.markdown.textContent = markdown;
+  els.mdSize.textContent = sizeNote(markdown);
 }
 
 function sizeNote(md) {

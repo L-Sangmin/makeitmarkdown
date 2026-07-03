@@ -366,13 +366,6 @@ kbd {
 
 .seg-item:disabled { cursor: not-allowed; color: var(--fg-faint); }
 
-.seg-soon {
-  font-size: 0.625rem;
-  font-family: var(--font-mono);
-  color: var(--fg-faint);
-  vertical-align: super;
-}
-
 /* panes */
 
 .panes {

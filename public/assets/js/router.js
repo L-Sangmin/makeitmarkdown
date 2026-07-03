@@ -24,5 +24,6 @@ export async function convertFile(file) {
   const t0 = performance.now();
   const result = await parser.parse({ fileBuffer, filename: file.name });
   const ms = Math.max(1, Math.round(performance.now() - t0));
+  result.meta.filename ??= file.name; // formatters use it for frontmatter
   return { result, ms, filename: file.name, fileBuffer };
 }

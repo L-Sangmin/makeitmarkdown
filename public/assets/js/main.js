@@ -8,9 +8,9 @@
 //   exists (progressive disclosure). Nothing persists across refresh.
 
 import { convertFile, UnsupportedFormatError } from "./router.js";
-import { renderResult } from "./result-view.js";
+import { renderResult, setMarkdown } from "./result-view.js";
 import { buildResultZip } from "./zipper.js";
-import { formatStandard } from "./standard-formatter.js";
+import { PRESETS, formatWithPreset } from "./presets.js";
 
 // --- theme -------------------------------------------------------------------
 
@@ -52,6 +52,39 @@ const els = {
 };
 
 let current = null; // { result, markdown, ms, filename, fileBuffer }
+let activePreset = "standard"; // in-memory only — resets on refresh, by design
+
+// --- preset segmented control ---------------------------------------------------
+
+const presetSeg = document.getElementById("preset-seg");
+
+for (const preset of PRESETS) {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "seg-item";
+  btn.dataset.preset = preset.id;
+  btn.title = preset.hint;
+  btn.textContent = preset.label;
+  btn.addEventListener("click", () => applyPreset(preset.id));
+  presetSeg.appendChild(btn);
+}
+
+function syncPresetSeg() {
+  for (const btn of presetSeg.querySelectorAll(".seg-item")) {
+    const active = btn.dataset.preset === activePreset;
+    btn.classList.toggle("is-active", active);
+    btn.setAttribute("aria-pressed", String(active));
+  }
+}
+syncPresetSeg();
+
+function applyPreset(id) {
+  activePreset = id;
+  syncPresetSeg();
+  if (!current) return;
+  current.markdown = formatWithPreset(current.result, id);
+  setMarkdown(els, current.markdown);
+}
 
 // --- views ----------------------------------------------------------------------
 
@@ -85,8 +118,9 @@ async function handleFile(file) {
   hideError();
   try {
     const payload = await convertFile(file);
-    payload.markdown = formatStandard(payload.result);
+    payload.markdown = formatWithPreset(payload.result, activePreset);
     current = payload;
+    syncPresetSeg();
 
     const time = payload.ms < 1000 ? `${payload.ms}ms` : `${(payload.ms / 1000).toFixed(1)}s`;
     els.meta.textContent = `${payload.filename} · converted in ${time} · processed locally — refresh clears it`;
@@ -162,8 +196,14 @@ async function loadSample(name = "sales-analysis") {
 
 document.getElementById("btn-sample")?.addEventListener("click", () => loadSample());
 
-// Deep link for demos/tests: /?sample=sales-analysis | out-of-order
-const sampleParam = new URLSearchParams(location.search).get("sample");
+// Deep links for demos/tests: ?sample=<name> and ?preset=<id>
+const params = new URLSearchParams(location.search);
+const presetParam = params.get("preset");
+if (presetParam && PRESETS.some((p) => p.id === presetParam)) {
+  activePreset = presetParam;
+  syncPresetSeg();
+}
+const sampleParam = params.get("sample");
 if (sampleParam) loadSample(sampleParam === "1" ? "sales-analysis" : sampleParam);
 
 // --- result actions ----------------------------------------------------------------------
