@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Build an LLM-readable wiki from your documents — MakeItMarkdown</title>
+  <meta name="description" content="A folder of archive-preset Markdown in git is a knowledge base humans browse, models retrieve, and diffs audit. The Archive preset and the conventions that make it a wiki." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Advanced · 05</p>
+    <article>
+      <h1>Build an LLM-readable wiki from your documents</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 6 min read</p>
+
+      <p>Teams keep knowledge in files — reports, specs, meeting
+      transcripts, analyses — scattered across formats that neither
+      search nor models read well. The cheapest durable fix isn't a
+      platform. It's a convention: <strong>a git repository of converted
+      Markdown</strong>, one document per file, browsable by humans
+      (GitHub renders it), retrievable by models, auditable by diff.</p>
+
+      <h2>Why the Archive preset is the wiki format</h2>
+      <p>The <em>Archive</em> preset optimizes for faithfulness and
+      provenance rather than paste budget:</p>
+      <pre><code>---
+title: "Q1 operations review"
+source: "q1-operations-review.docx"
+converted: "2026-07-04"
+format: "docx"
+---</code></pre>
+      <ul>
+        <li><strong>Full front matter</strong> — every page knows what it
+        is and where it came from; tooling (site generators, Dataview,
+        your own scripts) can index it.</li>
+        <li><strong>Faithful body</strong> — nothing truncated harder
+        than the source forced; this is the copy of record, not the
+        paste copy.</li>
+        <li><strong>Figures as real files</strong> — the .zip's
+        <code>figures/</code> folder commits alongside, so embeds render
+        in any Markdown viewer.</li>
+      </ul>
+
+      <h2>Conventions that turn a folder into a wiki</h2>
+      <ol>
+        <li><strong>Stable, descriptive filenames</strong> —
+        <code>2026-03-vendor-consolidation-review.md</code>. Filenames
+        are your URLs, your link text, and your retrieval titles.</li>
+        <li><strong>One index page</strong> — a hand-kept
+        <code>README.md</code> grouping documents by topic. Models
+        navigate indexes brilliantly; so do new teammates.</li>
+        <li><strong>Convert on arrival</strong> — a document enters the
+        wiki by being dropped through the converter, so everything inside
+        obeys the same rules (typed tables, figure placeholders, honest
+        truncation). The fidelity report is your admission check: a file
+        that converts at QC 40% needs a better source before it becomes
+        "knowledge".</li>
+        <li><strong>Let git be the history</strong> — re-convert updated
+        sources onto the same filename; the diff shows exactly what the
+        new version changed, which is often the most interesting
+        knowledge of all.</li>
+      </ol>
+
+      <h2>What each consumer gets</h2>
+      <table>
+        <tr><th>Consumer</th><th>What the wiki gives it</th></tr>
+        <tr><td>Humans</td><td>Rendered pages, working search, one canonical copy</td></tr>
+        <tr><td>Chat assistants</td><td>Paste-ready pages; front matter answers "what is this?"</td></tr>
+        <tr><td>Workspaces / RAG</td><td>Upload or index the folder; heading-aligned chunks + <a href="/blog/rag-ready-markdown.html">stable anchors</a> if you re-emit with the RAG preset</td></tr>
+        <tr><td>Agents</td><td>A greppable corpus with addresses — <a href="/blog/agent-context.html">the docs-md/ pattern</a>, promoted to team scale</td></tr>
+      </table>
+
+      <h2>Starting today, with what you have</h2>
+      <p>Batch-drop one project's documents into <a href="/">the
+      converter</a> with the Archive preset, commit the .zip's contents
+      to a fresh repo, write ten lines of README index. That's the whole
+      bootstrap — the discipline (convert on arrival, stable names,
+      re-convert on update) is what compounds.</p>
+
+      <div class="article-cta">
+        <p>Convert the first ten pages of your future wiki in one drop.</p>
+        <a href="/?sample=docx&amp;preset=archive">Try the Archive preset →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/blog/obsidian-llm-vault.html">Obsidian as a knowledge base</a> ·
+      <a href="/guide.html">the field manual</a> ·
+      <a href="/blog/">Context Lab</a></p>
+    </article>
+  </div>
+</body>
+</html>

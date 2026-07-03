@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Obsidian as an LLM knowledge base — MakeItMarkdown</title>
+  <meta name="description" content="Your vault is already a retrieval corpus: local Markdown with links. How the Obsidian preset converts documents into callout-structured, wikilinked, front-mattered notes." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Advanced · 03</p>
+    <article>
+      <h1>Obsidian as an LLM knowledge base</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 6 min read</p>
+
+      <p>An Obsidian vault has quietly become the best personal
+      infrastructure for LLM work: a folder of plain Markdown, linked
+      into a graph, fully local. Every AI integration that reads vaults —
+      and every copy-paste into a chat — inherits whatever quality your
+      notes have. Which makes the conversion question concrete: when a
+      PDF, notebook or report enters your vault, <em>what should it
+      become</em>?</p>
+
+      <h2>Why the vault shape fits LLMs</h2>
+      <ul>
+        <li><strong>It's already Markdown</strong> — the model's native
+        register, no extraction step between your notes and any
+        assistant.</li>
+        <li><strong>Links are structure.</strong> <code>[[wikilinks]]</code>
+        encode the relations retrieval wishes it could infer; an
+        assistant following your links reads your knowledge graph, not
+        just your files.</li>
+        <li><strong>Local-first matches confidential work</strong> — the
+        vault never left your disk; neither does conversion here.</li>
+      </ul>
+
+      <h2>What the Obsidian preset emits</h2>
+      <table>
+        <tr><th>Element</th><th>Output</th></tr>
+        <tr><td>Document metadata</td><td>YAML front matter (title, source file, date) — Dataview-queryable</td></tr>
+        <tr><td>Overview / summary sections</td><td><code>&gt; [!abstract]</code> callouts</td></tr>
+        <tr><td>Method-like sections</td><td><code>&gt; [!info]</code> / <code>&gt; [!warning]</code> callouts by role (limitations get warnings)</td></tr>
+        <tr><td>Figures</td><td><code>![[figures/chart_1.png]]</code> embeds — drop the .zip's figures folder into the vault and they render</td></tr>
+        <tr><td>Notebook cells</td><td>Kept as plain sections (cell headers stay addressable, not callout-wrapped)</td></tr>
+      </table>
+
+      <p>The callout mapping is heuristic and says so — it styles the
+      note for scanning; the underlying text is untouched.</p>
+
+      <h2>Three vault workflows this unlocks</h2>
+      <ol>
+        <li><strong>The reading inbox.</strong> Saved articles
+        (<a href="/formats/html.html">.html</a>) convert to notes with
+        the chrome already stripped — your highlights-and-links pass
+        starts from clean text.</li>
+        <li><strong>The analysis archive.</strong> Notebooks convert with
+        cell addresses, so a note can cite <code>Cell [12]</code> and a
+        future chat about that note can too.</li>
+        <li><strong>The AI-readable reference shelf.</strong> Specs,
+        reports and transcripts (<a
+        href="/formats/subtitles.html">.srt</a> meeting captions
+        included) become vault citizens that any assistant-with-vault
+        -access can retrieve properly — the same chunking logic as <a
+        href="/blog/ai-workspaces-markdown.html">hosted workspaces</a>,
+        but on your disk.</li>
+      </ol>
+
+      <h2>Vault hygiene that pays off with models</h2>
+      <ul>
+        <li>Descriptive filenames (they become link text and retrieval
+        titles).</li>
+        <li>One document, one note — split monsters by section if a note
+        exceeds a few thousand tokens (<a
+        href="/blog/token-budgeting.html">budgeting guide</a>).</li>
+        <li>Keep the front matter — future-you will Dataview it, and
+        assistants read <code>source:</code> to cite properly.</li>
+      </ul>
+
+      <div class="article-cta">
+        <p>Convert something with the Obsidian preset and drop it straight
+        into your vault — front matter, callouts, figure embeds.</p>
+        <a href="/?sample=docx&amp;preset=obsidian">Try the Obsidian preset →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/blog/rag-ready-markdown.html">RAG-ready Markdown</a> ·
+      <a href="/guide.html">the field manual</a> ·
+      <a href="/blog/">Context Lab</a></p>
+    </article>
+  </div>
+</body>
+</html>

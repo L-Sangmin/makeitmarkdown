@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>MakeItMarkdown vs cloud parsing APIs — MakeItMarkdown</title>
+  <meta name="description" content="Hosted document-parsing APIs bring OCR and layout models at per-page prices. When a pipeline needs them, and when a free local converter is the right tool." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Choosing tools · 04</p>
+    <article>
+      <h1>MakeItMarkdown vs cloud parsing APIs</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 5 min read</p>
+
+      <p>A different species of alternative: hosted document-intelligence
+      APIs — the parsing services attached to RAG frameworks and cloud
+      providers. You POST a document, they return structured
+      Markdown/JSON, you pay per page. These are serious tools solving a
+      harder problem than ours, and the honest comparison is about which
+      problem you actually have.</p>
+
+      <h2>What the APIs genuinely add</h2>
+      <ul>
+        <li><strong>OCR and layout models.</strong> Scanned pages,
+        photographed documents, complex multi-column layouts, visual
+        table reconstruction — ML-powered extraction that no rule-based
+        local parser matches on hostile input.</li>
+        <li><strong>Scale.</strong> Ten thousand documents, queued,
+        retried, webhooked.</li>
+        <li><strong>Pipeline integration.</strong> An HTTP call fits an
+        ingestion service; a browser tab doesn't.</li>
+      </ul>
+
+      <h2>What you trade for it</h2>
+      <ul>
+        <li><strong>Custody.</strong> Every document transits and is
+        processed on the provider's infrastructure — fine for public
+        docs, a real question for client or unpublished material.</li>
+        <li><strong>Cost with volume.</strong> Per-page pricing is cheap
+        until the corpus is large or reprocessed often.</li>
+        <li><strong>Opacity.</strong> Model-based extraction can
+        hallucinate structure — a reconstructed table can contain cells
+        the page never had, and you'll rarely get a per-file account of
+        confidence or loss.</li>
+        <li><strong>A dependency.</strong> Keys, quotas, deprecations,
+        latency.</li>
+      </ul>
+
+      <h2>The decision, plainly</h2>
+      <table>
+        <tr><th>Your situation</th><th>Right tool</th></tr>
+        <tr><td>Scanned/photographed documents at volume</td><td>Cloud parsing API (that's the OCR you're paying for)</td></tr>
+        <tr><td>Automated ingestion service, thousands of files</td><td>Cloud parsing API (or pandoc in a worker for clean formats)</td></tr>
+        <tr><td>Born-digital files, interactive use, confidential material</td><td>MakeItMarkdown — free, local, instant, loss-accounted</td></tr>
+        <tr><td>Notebooks specifically</td><td>MakeItMarkdown (cell addresses and dependency hints don't exist elsewhere)</td></tr>
+        <tr><td>Feeding a personal/team workspace (Projects, Spaces)</td><td>MakeItMarkdown — <a href="/blog/ai-workspaces-markdown.html">the measured wins</a></td></tr>
+      </table>
+
+      <p>A pattern we like: use the local converter as the default path
+      for everything born-digital (which is most of a typical corpus),
+      and reserve the paid API for the scanned residue it's actually
+      built for. The fidelity report tells you which pile each file
+      belongs to — scans get flagged at drop time.</p>
+
+      <div class="article-cta">
+        <p>Sort your corpus in one batch drop: clean files convert now,
+        scans get flagged for the OCR pile.</p>
+        <a href="/">Open MakeItMarkdown →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/blog/scanned-pdf-cant-convert.html">scanned PDFs</a> ·
+      <a href="/blog/rag-ready-markdown.html">RAG-ready Markdown</a> ·
+      <a href="/blog/">Context Lab</a></p>
+    </article>
+  </div>
+</body>
+</html>

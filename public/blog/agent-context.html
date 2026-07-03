@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Giving a coding agent readable context — MakeItMarkdown</title>
+  <meta name="description" content="Agents re-read documents dozens of times per session. Stable cell addresses, section anchors and honest truncation cut that cost — how converted Markdown serves agent workflows." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Advanced · 02</p>
+    <article>
+      <h1>Giving a coding agent readable context</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 6 min read</p>
+
+      <p>Chat use reads a document once. An agent — a coding assistant
+      grinding through a task with tools — comes back to the same
+      material again and again: greps it, quotes it, re-opens it after
+      compaction, cites it in a commit message. That access pattern
+      changes what "good input" means, in three specific ways.</p>
+
+      <h2>1. Addresses beat descriptions</h2>
+      <p>An agent that can say "per <code>analysis.md</code>, Cell [12]"
+      doesn't need to re-establish context each time — it navigates. This
+      is why converted notebooks keep stable cell addresses and why the
+      RAG preset emits <code>&lt;a id="slug"&gt;&lt;/a&gt;</code> anchors:
+      they turn prose into a coordinate system. Instructions to the agent
+      get shorter and more reliable too ("update the constants documented
+      in <code>#configuration</code>" is unambiguous; "the settings part
+      of the doc" is a dice roll).</p>
+
+      <h2>2. Grep-ability is a real requirement</h2>
+      <p>Agents search files with literal tools before reading them. A
+      <code>.docx</code> is a ZIP — ungreppable; a PDF greps as glyph
+      soup; a notebook greps through JSON escapes. The same content as
+      Markdown is one <code>grep -n</code> away, and heading lines make
+      the search results self-locating. If your repo carries reference
+      documents agents must consult (specs, vendor docs, analysis
+      notebooks), a <code>docs-md/</code> mirror of converted copies is
+      cheap infrastructure: one batch drop here produces it.</p>
+
+      <h2>3. Token discipline compounds</h2>
+      <p>A human pays a document's token cost once; an agent pays it on
+      every re-read across a long session, competing with its own working
+      memory. The conversion properties that were nice-to-have in chat —
+      base64 stripped, outputs truncated with a note, boilerplate gone —
+      become budget policy. Our measured notebook case (3.5&nbsp;MB →
+      ~64K tokens) is the difference between "the agent can consult the
+      analysis" and "the analysis evicts the agent's plan".</p>
+
+      <h2>The honest-gaps rule matters most for agents</h2>
+      <p>A human notices when quoted text looks thin. An agent takes its
+      input as ground truth and <em>acts</em> — writes code against it,
+      asserts facts from it. That's why explicit markers
+      (<code>Showing the first 50 of 4,812 rows</code>, scanned-page
+      warnings, <code>[Figure: …]</code> placeholders) aren't cosmetic
+      here: they're the difference between an agent that says "the data
+      continues beyond my excerpt, I'll compute over the real file" and
+      one that hard-codes a wrong total. Silent loss turns into wrong
+      commits with surprising efficiency.</p>
+
+      <h2>A working recipe</h2>
+      <ol>
+        <li>Batch-convert reference documents with the <strong>RAG</strong>
+        preset (anchors + chunk comments double as agent navigation).</li>
+        <li>Commit them to the repo the agent works in, filenames stable,
+        one <code>docs-md/</code> directory.</li>
+        <li>In the agent's instructions, point to sections by anchor, and
+        state the convention once: "documents in docs-md/ carry explicit
+        truncation notes; trust them."</li>
+        <li>Re-convert when sources change — conversion is deterministic,
+        so diffs stay reviewable.</li>
+      </ol>
+
+      <div class="article-cta">
+        <p>Build your docs-md/ mirror in one batch drop — local, instant,
+        loss-accounted.</p>
+        <a href="/">Open MakeItMarkdown →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/blog/rag-ready-markdown.html">RAG-ready Markdown</a> ·
+      <a href="/blog/token-budgeting.html">token budgeting 101</a> ·
+      <a href="/blog/">Context Lab</a></p>
+    </article>
+  </div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Token budgeting 101 for document context — MakeItMarkdown</title>
+  <meta name="description" content="Chars-over-4 lies to you by 20% on technical text. How to actually count, where document tokens hide, and the budgets for chat, workspaces and pipelines." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Advanced · 04</p>
+    <article>
+      <h1>Token budgeting 101 for document context</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 6 min read</p>
+
+      <p>Context windows are quoted in tokens; your documents are sized in
+      pages and megabytes; the exchange rate between them decides whether
+      your paste fits, what it costs, and how much room the model has left
+      to think. Most people budget with folklore. Here's the practical
+      version.</p>
+
+      <h2>The estimate, and how it lies</h2>
+      <p>The folk rule — one token ≈ 4 characters of English — is a fine
+      starting estimate, and it's what our size line shows by default
+      (<code>≈ 438 tokens</code>). But technical text tokenizes
+      denser: code, pipes, underscores, numbers and non-English words
+      split into more tokens per character. Converting our sample
+      notebook: the chars/4 estimate said <strong>438</strong>; the real
+      o200k count is <strong>542</strong> — 24% more. On a 100K-token
+      paste, that error is a whole section that didn't fit.</p>
+      <p>That's why the Markdown pane has a <em>count exactly</em>
+      button: it loads a real tokenizer (o200k, the encoding family used
+      by current frontier models) in your browser, once, and replaces the
+      estimate. Budget with the exact number when the paste is large or
+      the window is tight.</p>
+
+      <h2>Where document tokens actually hide</h2>
+      <table>
+        <tr><th>Hiding place</th><th>Typical cost</th><th>Cure</th></tr>
+        <tr><td>Base64 images in notebooks</td><td>100K+ tokens each</td><td>Extracted to <code>[Figure: …]</code> automatically</td></tr>
+        <tr><td>Notebook JSON plumbing</td><td>2–5× the code itself</td><td>Conversion strips it</td></tr>
+        <tr><td>Repeated page headers/footers in PDFs</td><td>hundreds per long doc</td><td>Flagged by structure; trim on review</td></tr>
+        <tr><td>Full-precision dumps of long outputs</td><td>thousands</td><td>Truncated with an explicit note (Chat preset truncates harder)</td></tr>
+        <tr><td>Webpage chrome</td><td>often > the article</td><td>Readability extraction</td></tr>
+        <tr><td>JSON key repetition (JSONL)</td><td>15–40% of the data</td><td>Records table</td></tr>
+      </table>
+
+      <h2>Budgets by destination</h2>
+      <ul>
+        <li><strong>One-shot chat paste:</strong> spend at most ~half the
+        window on the document — the model needs the rest for your
+        conversation and its own reasoning. The <em>Chat</em> preset
+        (hard output truncation + token estimate up top) is built for
+        this shape.</li>
+        <li><strong>Workspaces (Projects/Spaces):</strong> per-question
+        retrieval budgets are small (a handful of chunks), so what
+        matters is <em>chunk density</em>, not file totals — see <a
+        href="/blog/ai-workspaces-markdown.html">the three workspace
+        wins</a>.</li>
+        <li><strong>RAG pipelines:</strong> budget per chunk
+        (embedding-model limits are typically 512–8K tokens); the chunk
+        comments in the RAG preset give your splitter clean units to
+        count.</li>
+        <li><strong>Agents:</strong> assume every document is read
+        multiple times; token waste compounds — <a
+        href="/blog/agent-context.html">the agent-context guide</a>.</li>
+      </ul>
+
+      <h2>A five-minute budgeting routine</h2>
+      <ol>
+        <li>Convert the document; read the size line.</li>
+        <li>Click <em>count exactly</em> if the number matters.</li>
+        <li>Over budget? Switch to the <em>Chat</em> preset and re-count —
+        output truncation is usually the biggest single lever.</li>
+        <li>Still over? Feed by section (headings make clean cut points)
+        and tell the model what you omitted — an honest gap beats a
+        silent one.</li>
+      </ol>
+
+      <div class="article-cta">
+        <p>Check a real number now — estimate first, exact on click.</p>
+        <a href="/?sample=sales-analysis">Count a document's tokens →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/blog/notebook-too-big-for-llm.html">notebook too big to paste</a> ·
+      <a href="/blog/llms-write-markdown.html">the token bill of formats</a> ·
+      <a href="/blog/">Context Lab</a></p>
+    </article>
+  </div>
+</body>
+</html>

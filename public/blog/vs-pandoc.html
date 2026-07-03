@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>MakeItMarkdown vs pandoc — MakeItMarkdown</title>
+  <meta name="description" content="pandoc is the universal document converter; MakeItMarkdown is an LLM-context tool. An honest comparison: when you want the CLI, when you want the fidelity report." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Choosing tools · 01</p>
+    <article>
+      <h1>MakeItMarkdown vs pandoc</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 5 min read</p>
+
+      <p>Let's start with respect: pandoc is one of the great pieces of
+      open-source software — a universal document converter that reads and
+      writes dozens of formats and has anchored publishing pipelines for
+      nearly two decades. If your task is "convert anything to anything,
+      scriptably", pandoc is the answer and this page won't pretend
+      otherwise.</p>
+
+      <p>The comparison exists because "get this file into an LLM" is a
+      different task than "convert this file" — and the differences are
+      exactly where the two tools diverge.</p>
+
+      <h2>Where pandoc is simply better</h2>
+      <ul>
+        <li><strong>Format breadth</strong> — LaTeX, EPUB, DocBook, org,
+        reStructuredText, and everything between, in and out.</li>
+        <li><strong>Scriptability</strong> — a CLI in a Makefile beats a
+        browser tab for converting 400 files on a schedule.</li>
+        <li><strong>Publishing features</strong> — citations, filters,
+        templates; it's a typesetting ecosystem, not just a
+        converter.</li>
+      </ul>
+
+      <h2>Where the LLM task diverges</h2>
+      <ul>
+        <li><strong>The fidelity report.</strong> pandoc's contract is
+        "convert what's convertible"; loss is silent by design. Our
+        contract is <a href="/blog/not-a-file-converter.html">"tell you
+        what was detected and what's shaky"</a> — counts, warnings, and a
+        structural QC score per file. When the output feeds a model that
+        can't complain about missing tables, the report is the
+        product.</li>
+        <li><strong>Notebook semantics.</strong> pandoc converts
+        <code>.ipynb</code> structurally; it doesn't give cells stable
+        addresses, flag out-of-order execution, or annotate cell
+        dependencies — the things that make a <a
+        href="/formats/ipynb.html">notebook askable-about</a>.</li>
+        <li><strong>LLM-specific output discipline.</strong> Typed table
+        headers, explicit truncation sentences, token estimates and an
+        exact o200k count, chunk anchors for RAG — none of these are
+        conversion in pandoc's sense; all of them change model
+        behavior.</li>
+        <li><strong>Zero install, zero shell.</strong> The person with a
+        failing PDF in a chat window is usually not the person with a
+        package manager open. A browser tab that works offline is the
+        right shape for that moment.</li>
+      </ul>
+
+      <h2>Privacy is a tie</h2>
+      <p>Both run entirely on your machine — pandoc as a local binary,
+      MakeItMarkdown as local JavaScript (verify it: load once, go
+      offline, convert). Both beat any upload-based service for
+      confidential files.</p>
+
+      <h2>The honest recommendation</h2>
+      <table>
+        <tr><th>Task</th><th>Use</th></tr>
+        <tr><td>Batch-convert a repository of docs in CI</td><td>pandoc</td></tr>
+        <tr><td>LaTeX/EPUB/exotic formats</td><td>pandoc</td></tr>
+        <tr><td>One failing file, right now, into a chat</td><td>MakeItMarkdown</td></tr>
+        <tr><td>Notebooks for LLM consumption</td><td>MakeItMarkdown</td></tr>
+        <tr><td>Non-technical teammates</td><td>MakeItMarkdown</td></tr>
+        <tr><td>Feeding a RAG pipeline with loss accounting</td><td>MakeItMarkdown (or pandoc + your own QC layer)</td></tr>
+      </table>
+
+      <div class="article-cta">
+        <p>Fastest way to compare: convert the same file both ways and
+        diff what each tells you about what it did.</p>
+        <a href="/">Open MakeItMarkdown →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/blog/vs-just-pasting.html">vs just pasting the file</a> ·
+      <a href="/blog/vs-online-converters.html">vs uploader converter sites</a> ·
+      <a href="/blog/">Context Lab</a></p>
+    </article>
+  </div>
+</body>
+</html>
