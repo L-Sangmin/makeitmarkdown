@@ -8,7 +8,7 @@
 //
 // DEPLOY NOTE: bump VERSION on every deploy — it invalidates old caches.
 
-const VERSION = "v4";
+const VERSION = "v5";
 const CACHE = `mim-${VERSION}`;
 
 const CORE = [
@@ -36,6 +36,8 @@ const CORE = [
   "/assets/js/parsers/index.js",
   "/assets/js/parsers/ipynb.js",
   "/assets/js/parsers/docx.js",
+  "/assets/js/parsers/pptx.js",
+  "/assets/js/parsers/eml.js",
   "/assets/js/parsers/csv.js",
   "/assets/js/parsers/xlsx.js",
   "/assets/js/parsers/json.js",

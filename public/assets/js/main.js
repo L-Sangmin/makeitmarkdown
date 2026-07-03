@@ -212,7 +212,7 @@ async function handleFile(file) {
   } catch (err) {
     if (err instanceof UnsupportedFormatError) {
       showError(
-        `That file type isn't supported yet. Works today: <code>.ipynb</code> · <code>.docx</code> · <code>.xlsx</code> · <code>.csv</code> · <code>.json</code> · <code>.html</code> · <code>.pdf</code> · <code>.srt</code> · <code>.md</code> · <code>.txt</code>.`
+        `That file type isn't supported yet. Works today: <code>.ipynb</code> · <code>.docx</code> · <code>.pptx</code> · <code>.xlsx</code> · <code>.csv</code> · <code>.json</code> · <code>.html</code> · <code>.pdf</code> · <code>.eml</code> · <code>.srt</code> · <code>.md</code> · <code>.txt</code>.`
       );
     } else if (NOT_READY.test(err.message ?? "")) {
       showError(

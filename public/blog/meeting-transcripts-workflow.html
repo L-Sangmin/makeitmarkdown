@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Meeting recordings → minutes your model can quote — MakeItMarkdown</title>
+  <meta name="description" content="Your video tool already produced captions. The .srt-to-Markdown workflow: timestamped transcripts, minutes with [23:14] receipts, and a searchable meeting archive." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <span class="bar-spacer"></span>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+    <button class="theme-toggle" type="button" aria-label="Toggle color theme" onclick="(function(){var r=document.documentElement,c=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=c==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('mim-theme',n)}catch(e){}})()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+    </button>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Real-world workflows · 03</p>
+    <article>
+      <h1>Meeting recordings → minutes your model can quote</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 5 min read</p>
+
+      <p>Every recorded meeting already has a transcript — the caption
+      track your video tool generated automatically. Almost nobody uses
+      it, because raw <code>.srt</code> is two-thirds numbering and
+      timing apparatus. Ten minutes of workflow turns that dead file into
+      minutes with receipts and a searchable meeting archive.</p>
+
+      <h2>Step 1: get the captions out</h2>
+      <p>Meeting and video platforms export captions as
+      <code>.srt</code> or <code>.vtt</code> (usually under the
+      recording's download or accessibility options). That file is the
+      whole meeting, timestamped to the second.</p>
+
+      <h2>Step 2: convert</h2>
+      <p><a href="/">Drop it here</a>. The
+      <a href="/formats/subtitles.html">subtitle mapping</a> strips
+      sequence numbers and styling tags, flows caption fragments into
+      readable lines, and keeps one compact <code>[23:14]</code> marker
+      per block — the part that makes everything downstream
+      quotable. A one-hour meeting typically lands well under a
+      chat-paste budget once the apparatus is gone.</p>
+
+      <h2>Step 3: minutes with receipts</h2>
+      <p>Paste the converted transcript and ask for exactly the minutes
+      you wish someone had written:</p>
+      <pre><code>From this transcript, produce:
+1. Decisions made — with the [mm:ss] marker where each was agreed
+2. Action items — owner, deadline if stated, marker
+3. Open questions that were raised but not resolved
+Quote the transcript for anything ambiguous.</code></pre>
+      <p>The time markers do two jobs: they let anyone jump into the
+      recording to verify ("did we really agree to that?"), and they keep
+      the model honest — an answer that must cite <code>[41:30]</code>
+      can't drift far from what was said at 41:30.</p>
+
+      <h2>Step 4: the meeting archive</h2>
+      <p>Converted transcripts are ideal workspace citizens: name them
+      <code>2026-07-03-vendor-sync.md</code>, upload to your Project or
+      Space, and "what did we decide about the shortlist?" becomes
+      answerable across months of meetings — with markers back into the
+      recordings. (Why Markdown retrieves so much better than raw files:
+      <a href="/blog/ai-workspaces-markdown.html">the workspace
+      guide</a>.)</p>
+
+      <h2>Honest limits</h2>
+      <ul>
+        <li>Auto-captions mishear names and jargon — minutes inherit the
+        captioner's errors; the markers make spot-checking cheap.</li>
+        <li>Speaker attribution exists only if your captioner writes
+        names into the text (many do; subtitle formats carry no speaker
+        field).</li>
+        <li>A malformed block here and there is normal — they're skipped
+        and counted in the fidelity report, not silently absorbed.</li>
+      </ul>
+
+      <div class="article-cta">
+        <p>Have a recording from this week? Its captions are ten minutes
+        from being minutes.</p>
+        <a href="/">Convert a transcript →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/formats/subtitles.html">the .srt format guide</a> ·
+      <a href="/blog/lecture-notes-case-study.html">the lecture-notes case study</a> ·
+      <a href="/blog/">Context Lab</a></p>
+    </article>
+  </div>
+</body>
+</html>

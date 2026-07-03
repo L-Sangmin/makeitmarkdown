@@ -87,11 +87,11 @@ function renderOriginal(container, payload) {
     return;
   }
 
-  if (format === "docx") {
+  if (format === "docx" || format === "pptx" || format === "xlsx") {
     const note = document.createElement("p");
     note.className = "original-note";
     note.textContent =
-      "Binary Word document — no inline preview for .docx yet. " +
+      `Binary ${format === "docx" ? "Word document" : format === "pptx" ? "slide deck" : "workbook"} — no inline preview for .${format} yet. ` +
       "The Markdown panel holds the converted content.";
     container.appendChild(note);
     return;

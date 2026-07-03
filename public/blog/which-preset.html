@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Which output preset should I use? — MakeItMarkdown</title>
+  <meta name="description" content="Standard, Chat, RAG, Obsidian or Archive — one detected structure, five output disciplines. The 30-second decision guide with what each preset actually changes." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <span class="bar-spacer"></span>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+    <button class="theme-toggle" type="button" aria-label="Toggle color theme" onclick="(function(){var r=document.documentElement,c=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=c==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('mim-theme',n)}catch(e){}})()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+    </button>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Under the hood · 04</p>
+    <article>
+      <h1>Which output preset should I use?</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · 4 min read</p>
+
+      <p>Every conversion detects one structure; the preset control decides
+      how it's written out. The 30-second rule: <strong>pick by
+      destination, not by file.</strong></p>
+
+      <h2>The decision in one table</h2>
+      <table>
+        <tr><th>You're about to…</th><th>Preset</th><th>What changes</th></tr>
+        <tr><td>Paste into a chat window</td><td><strong>Chat</strong></td><td>Outputs truncated hard, token estimate on line one — fits first, asks questions later</td></tr>
+        <tr><td>Upload to a Project / Space / knowledge base</td><td><strong>Standard</strong></td><td>Plain GFM — the workspace does its own chunking; don't decorate</td></tr>
+        <tr><td>Index into your own retrieval pipeline</td><td><strong>RAG</strong></td><td><code>&lt;!-- chunk: slug --&gt;</code> boundaries + stable anchors for citations</td></tr>
+        <tr><td>Drop into your Obsidian vault</td><td><strong>Obsidian</strong></td><td>YAML front matter, callouts, <code>![[wikilink]]</code> figure embeds</td></tr>
+        <tr><td>Keep a copy of record</td><td><strong>Archive</strong></td><td>Full front matter (source, date), faithful body, nothing extra truncated</td></tr>
+      </table>
+
+      <h2>Three details people miss</h2>
+      <ul>
+        <li><strong>Switching is free and instant.</strong> Presets
+        re-format the already-parsed structure — click through them on
+        one conversion and diff the Markdown pane. Nothing is
+        re-parsed, nothing re-uploaded (nothing was uploaded).</li>
+        <li><strong>Chat ≠ smaller everywhere.</strong> Chat truncates
+        <em>outputs</em> (logs, dataframe dumps); your prose and tables
+        are untouched. If the document is still too big, that's a
+        <a href="/blog/token-budgeting.html">budgeting problem</a>, not a
+        preset problem.</li>
+        <li><strong>Standard is the deliberate default</strong>, not the
+        boring one: for workspaces that chunk internally, added anchors
+        and comments are noise. Decoration belongs where <em>you</em>
+        control the pipeline.</li>
+      </ul>
+
+      <h2>Try each in ten seconds</h2>
+      <p>These links load a sample with the preset pre-selected — watch
+      the same document change discipline:</p>
+      <ul>
+        <li><a href="/?sample=sales-analysis&amp;preset=chat">Chat</a> —
+        token estimate appears at the top, outputs cut at 12 lines</li>
+        <li><a href="/?sample=sales-analysis&amp;preset=rag">RAG</a> —
+        chunk comments and anchors appear at every section</li>
+        <li><a href="/?sample=docx&amp;preset=obsidian">Obsidian</a> —
+        front matter and callouts</li>
+        <li><a href="/?sample=docx&amp;preset=archive">Archive</a> —
+        full provenance block</li>
+      </ul>
+
+      <div class="article-cta">
+        <p>One structure, five disciplines — flip through them live.</p>
+        <a href="/?sample=sales-analysis">Open a sample →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/guide.html">the field manual</a> ·
+      <a href="/blog/rag-ready-markdown.html">RAG-ready Markdown</a> ·
+      <a href="/blog/obsidian-llm-vault.html">Obsidian vault guide</a> ·
+      <a href="/blog/">Context Lab</a></p>
+    </article>
+  </div>
+</body>
+</html>

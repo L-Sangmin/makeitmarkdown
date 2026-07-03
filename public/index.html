@@ -79,7 +79,86 @@
         </h2>
         <ul id="history-list" class="history-list"></ul>
       </section>
+
+      <a class="scroll-cue" href="#how">See how it works <span aria-hidden="true">&darr;</span></a>
     </div>
+
+    <section class="strip" aria-label="Measured results">
+      <div class="strip-inner stats">
+        <div class="stat"><span class="stat-num">30&times;</span><span class="stat-label">smaller &mdash; a 26.6&nbsp;KB sample PDF becomes 0.9&nbsp;KB of the same text</span></div>
+        <div class="stat"><span class="stat-num">64K</span><span class="stat-label">tokens &mdash; a 3.5&nbsp;MB, 100-cell notebook made paste-able, cell addresses intact</span></div>
+        <div class="stat"><span class="stat-num">11</span><span class="stat-label">formats in, one shared structure, five output presets</span></div>
+        <div class="stat"><span class="stat-num">0</span><span class="stat-label">uploads &mdash; conversion runs in this tab and works offline</span></div>
+      </div>
+    </section>
+
+    <section class="strip" id="how" aria-label="How it works">
+      <div class="strip-inner">
+        <h2 class="strip-title">Drop. Inspect. Export.</h2>
+        <div class="steps">
+          <div class="step">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 19h16"/></svg>
+            <h3>1 &middot; Drop anything</h3>
+            <p>Notebooks, Word, slides, spreadsheets, PDFs, emails &mdash; several at once. Parsing happens in your browser; your files never leave it.</p>
+          </div>
+          <div class="step">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" aria-hidden="true"><rect x="2.5" y="4" width="5.6" height="16" rx="1.2"/><rect x="9.2" y="4" width="5.6" height="16" rx="1.2"/><rect x="15.9" y="4" width="5.6" height="16" rx="1.2"/><path d="M17.4 8.5h2.6M17.4 11.5h2.6" stroke-linecap="round"/></svg>
+            <h3>2 &middot; Inspect the fidelity report</h3>
+            <p>Original, Markdown, and a report of what was <em>detected</em> &mdash; counts, warnings, a five-check QC score. Silent loss becomes visible loss.</p>
+          </div>
+          <div class="step">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h10M4 17h13"/><path d="m17.5 10.5 3 1.5-3 1.5z" fill="var(--accent)" stroke="none"/></svg>
+            <h3>3 &middot; Export for the destination</h3>
+            <p>Token-lean chat paste, RAG chunks with stable anchors, Obsidian callouts, or a faithful archive &mdash; with exact token counts on demand.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="strip" aria-label="Supported formats">
+      <div class="strip-inner">
+        <h2 class="strip-title">What&rsquo;s really inside your files</h2>
+        <p class="strip-sub">One guide per format &mdash; the file&rsquo;s anatomy, what breaks when a model reads it raw, and the exact element mapping applied.</p>
+        <p class="format-chips">
+          <a href="/formats/ipynb.html">.ipynb</a>
+          <a href="/formats/docx.html">.docx</a>
+          <a href="/formats/pptx.html">.pptx</a>
+          <a href="/formats/xlsx.html">.xlsx</a>
+          <a href="/formats/csv.html">.csv</a>
+          <a href="/formats/pdf.html">.pdf</a>
+          <a href="/formats/html.html">.html</a>
+          <a href="/formats/json.html">.json</a>
+          <a href="/formats/eml.html">.eml</a>
+          <a href="/formats/subtitles.html">.srt</a>
+          <a href="/formats/markdown.html">.md</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="strip" aria-label="From the Context Lab">
+      <div class="strip-inner">
+        <h2 class="strip-title">From the Context Lab</h2>
+        <p class="strip-sub">Field notes on feeding documents to LLMs &mdash; measured, honest, reproducible.</p>
+        <div class="teasers">
+          <a class="teaser" href="/blog/lecture-notes-case-study.html">
+            <h3>The lecture notes that made a smaller model smarter</h3>
+            <p>Same workspace, same questions &mdash; the only change was PDF &rarr; Markdown. A case study with numbers.</p>
+            <span class="teaser-meta">case study</span>
+          </a>
+          <a class="teaser" href="/blog/llms-write-markdown.html">
+            <h3>LLMs don&rsquo;t just read Markdown &mdash; they speak it</h3>
+            <p>Ask a model anything: it answers in headings and code fences. Feed its native register back.</p>
+            <span class="teaser-meta">why it works</span>
+          </a>
+          <a class="teaser" href="/guide.html">
+            <h3>Markdown for LLMs: the field manual</h3>
+            <p>The ten rules the converter encodes &mdash; usable by hand, linkable in reviews.</p>
+            <span class="teaser-meta">reference</span>
+          </a>
+        </div>
+        <p class="strip-more"><a href="/blog/">All articles &rarr;</a></p>
+      </div>
+    </section>
 
     <footer class="site-footer">
       <a href="/examples/">Examples</a>
