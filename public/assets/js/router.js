@@ -15,14 +15,18 @@ export class UnsupportedFormatError extends Error {
   }
 }
 
-export async function convertFile(file) {
+export async function convertFile(file, hooks = {}) {
   const parser = findParser(null, null, file.name);
   if (!parser) throw new UnsupportedFormatError(file.name);
 
   await ensureLibsFor(file.name);
   const fileBuffer = await file.arrayBuffer();
   const t0 = performance.now();
-  const result = await parser.parse({ fileBuffer, filename: file.name });
+  const result = await parser.parse({
+    fileBuffer,
+    filename: file.name,
+    onProgress: hooks.onProgress,
+  });
   const ms = Math.max(1, Math.round(performance.now() - t0));
   result.meta.filename ??= file.name; // formatters use it for frontmatter
   return { result, ms, filename: file.name, fileBuffer };

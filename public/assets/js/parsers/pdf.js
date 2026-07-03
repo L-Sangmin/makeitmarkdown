@@ -9,6 +9,21 @@ import { qcScore, toArrayBuffer, filenameStem } from "../md-utils.js";
 const PARSER_VERSION = "0.1.0";
 const SCANNED_CHARS_PER_PAGE = 16;
 
+// pdf.js exception → a message the user can act on.
+export function mapPdfError(err) {
+  if (err?.name === "PasswordException") {
+    return new Error(
+      "This PDF is password-protected — remove the password first (open it and Print → Save as PDF works), then try again"
+    );
+  }
+  if (err?.name === "InvalidPDFException") {
+    return new Error(
+      "This file doesn't look like a valid PDF — re-export or re-download it and try again"
+    );
+  }
+  return err;
+}
+
 async function pageText(page) {
   const content = await page.getTextContent();
   let text = "";
@@ -31,7 +46,12 @@ export default {
     const filename = input.filename ?? "document.pdf";
     const data = new Uint8Array(toArrayBuffer(input.fileBuffer));
     const loadingTask = pdfjs.getDocument({ data, isEvalSupported: false, verbosity: 0 });
-    const doc = await loadingTask.promise;
+    let doc;
+    try {
+      doc = await loadingTask.promise;
+    } catch (err) {
+      throw mapPdfError(err);
+    }
 
     const warnings = [
       "PDF text extraction is layout-lossy: multi-column text and tables may interleave — prefer an HTML or source version when one exists",
@@ -42,6 +62,7 @@ export default {
       const pages = [];
       for (let i = 1; i <= doc.numPages; i++) {
         pages.push(await pageText(await doc.getPage(i)));
+        input.onProgress?.({ page: i, pages: doc.numPages });
       }
       const totalChars = pages.reduce((n, p) => n + p.length, 0);
 

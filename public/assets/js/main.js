@@ -145,8 +145,13 @@ function setBusy(filename) {
 async function handleFile(file) {
   hideError();
   const clearBusy = setBusy(file.name);
+  const busyLabel = els.dropTarget.querySelector(".drop-busy-label");
   try {
-    const payload = await convertFile(file);
+    const payload = await convertFile(file, {
+      onProgress: ({ page, pages }) => {
+        if (pages > 1) busyLabel.textContent = `Converting ${file.name} — page ${page}/${pages}`;
+      },
+    });
     payload.markdown = formatWithPreset(payload.result, activePreset);
     current = payload;
     syncPresetSeg();

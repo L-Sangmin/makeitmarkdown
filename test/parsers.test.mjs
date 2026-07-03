@@ -175,6 +175,37 @@ test("pdf: extracts text pages into sections", async () => {
   assert.ok(r.fidelity.qcScore >= 0.8, `qc ${r.fidelity.qcScore}`);
 });
 
+test("pdf: password/corrupt errors map to next-action messages", async () => {
+  const { mapPdfError } = await import("../public/assets/js/parsers/pdf.js");
+  assert.match(
+    mapPdfError({ name: "PasswordException", message: "x" }).message,
+    /password-protected.*remove the password/is
+  );
+  assert.match(
+    mapPdfError({ name: "InvalidPDFException", message: "x" }).message,
+    /valid PDF.*re-export/is
+  );
+  assert.equal(mapPdfError(new RangeError("boom")).message, "boom");
+});
+
+test("pdf: truncated file rejects with the invalid-PDF message", async () => {
+  const buf = (await load("vendor-report.pdf")).subarray(0, 120); // garbage tail
+  await assert.rejects(
+    pdf.parse({ fileBuffer: buf, filename: "broken.pdf" }),
+    /valid PDF/i
+  );
+});
+
+test("pdf: reports per-page progress", async () => {
+  const calls = [];
+  await pdf.parse({
+    fileBuffer: await load("vendor-report.pdf"),
+    filename: "vendor-report.pdf",
+    onProgress: (p) => calls.push(p),
+  });
+  assert.deepEqual(calls, [{ page: 1, pages: 1 }]);
+});
+
 test("pdf: image-only PDF warns instead of failing", async () => {
   const buf = await load("scanned.pdf");
   const r = await pdf.parse({ fileBuffer: buf, filename: "scanned.pdf" });
