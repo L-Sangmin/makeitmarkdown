@@ -144,7 +144,7 @@ await writeFile(
   page({
     title: "Conversion examples",
     description: "Before/after conversions for every supported format — notebooks, Word, CSV, HTML articles and PDFs into LLM-ready Markdown.",
-    body: `<article><h1>Examples</h1><p class="article-byline">Real conversions of the built-in samples — what goes in, what comes out, and what the fidelity report says.</p><ul class="post-list">${cards.join("\n")}</ul><p class="article-footer">All conversion happens in your browser. <a href="/">Open the tool</a> · <a href="/blog/">Writing</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a> · <a href="/contact.html">Contact</a></p></article>`,
+    body: `<article><h1>Examples</h1><p class="article-byline">Real conversions of the built-in samples — what goes in, what comes out, and what the fidelity report says.</p><ul class="post-list">${cards.join("\n")}</ul><p class="article-footer">All conversion happens in your browser. <a href="/">Open the tool</a> · <a href="/blog/">Context Lab</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a> · <a href="/contact.html">Contact</a></p></article>`,
   })
 );
 console.log("built index —", SAMPLES.length, "examples");
