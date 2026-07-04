@@ -295,3 +295,65 @@ article a:hover { text-decoration: underline; }
   max-width: 24rem;
   text-align: center;
 }
+
+/* emphasis components ------------------------------------------------------- */
+
+/* takeaway — the article's one-sentence point, impossible to miss */
+.takeaway {
+  margin: 1.5rem 0;
+  padding: 0.875rem 1.125rem;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.takeaway strong:first-child { color: var(--accent); }
+
+/* pull-stats — key numbers lifted out of the prose */
+.pull-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.pull-stat {
+  flex: 1 1 10rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-raised);
+  text-align: center;
+}
+.pull-stat .n {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 1.625rem;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+.pull-stat .l {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--fg-muted);
+  line-height: 1.45;
+}
+
+/* ui-shot — real product screenshots embedded at the action point */
+.ui-shot { margin: 1.25rem 0 1.5rem; }
+.ui-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 28px -14px rgb(0 0 0 / 0.35);
+}
+.ui-shot figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.78125rem;
+  color: var(--fg-faint);
+  text-align: center;
+}

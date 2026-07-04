@@ -1109,3 +1109,29 @@ kbd {
   .drop-target { padding: 3rem 1.25rem 2.75rem; }
   .drop-cta kbd { display: none; } /* no ⌘V on touch-first screens */
 }
+
+/* reserved ad container (landing) — same contract as article.css */
+.ad-slot {
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--fg) 2.5%, transparent);
+}
+.ad-slot::before {
+  content: "Advertisement";
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.ad-slot.ad-demo::after {
+  content: "demo placeholder — a responsive unit renders here after approval";
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--fg-faint);
+  max-width: 24rem;
+  text-align: center;
+}

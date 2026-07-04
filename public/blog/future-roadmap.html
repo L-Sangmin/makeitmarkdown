@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Where this goes next: a CLI, agent skills, and stronger local OCR — MakeItMarkdown</title>
+  <meta name="description" content="The public roadmap: the same parsers as an installable CLI, packaged as an agent skill for Claude Code/Codex-class assistants, and OCR upgraded from tesseract to local CPU/GPU models." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <span class="bar-spacer"></span>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/blog/">Context Lab</a>
+    <button class="theme-toggle" type="button" aria-label="Toggle color theme" onclick="(function(){var r=document.documentElement,c=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=c==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('mim-theme',n)}catch(e){}})()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+    </button>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Advanced · 06 · Roadmap</p>
+    <article>
+      <h1>Where this goes next: a CLI, agent skills, and stronger local OCR</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026 · roadmap — plans, not promises</p>
+
+      <div class="article-hero icon-hero" aria-hidden="true">
+        <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+          <rect x="60" y="54" width="72" height="52" rx="7" fill="none" stroke="var(--fg-muted)" stroke-width="1.5"/>
+          <text x="74" y="86" font-family="ui-monospace,monospace" font-size="12" fill="var(--accent)">$ mim</text>
+          <rect x="152" y="54" width="72" height="52" rx="7" fill="none" stroke="var(--fg-muted)" stroke-width="1.5"/>
+          <text x="188" y="80" text-anchor="middle" font-family="ui-monospace,monospace" font-size="10" fill="var(--fg)">agent</text>
+          <text x="188" y="94" text-anchor="middle" font-family="ui-monospace,monospace" font-size="10" fill="var(--fg)">skill</text>
+          <rect x="244" y="54" width="26" height="52" rx="7" fill="none" stroke="var(--ok)" stroke-width="1.5"/>
+          <text x="257" y="86" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" fill="var(--ok)">👁</text>
+          <text x="160" y="132" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">same parsers · same honesty · new surfaces</text>
+        </svg>
+      </div>
+
+      <p class="takeaway"><strong>The point:</strong> the parsers are
+      plain, dependency-light JavaScript that already runs in Node for
+      every test — the browser is just their first surface. The next
+      surfaces are your terminal, your agent, and better eyes for
+      scans.</p>
+
+      <h2>1 · An installable CLI</h2>
+      <p>Every parser in this site runs in Node today (that's how the 97
+      tests work). Packaging them as a command-line tool is mostly
+      plumbing, and it unlocks the batch cases a browser tab shouldn't
+      own:</p>
+      <pre><code>npx makeitmarkdown docs/*.pdf --preset rag --out docs-md/
+# or: pip install makeitmarkdown  (a thin wrapper over the same engine)</code></pre>
+      <ul>
+        <li>Whole-folder conversion into the
+        <a href="/blog/agent-context.html">docs-md/ mirror pattern</a>,
+        scriptable in CI.</li>
+        <li>The same fidelity report, as JSON on stdout — pipelines can
+        gate on QC score ("reject sources under 0.8").</li>
+        <li>Same honesty rules: detected-not-preserved, explicit
+        truncation, no network calls.</li>
+      </ul>
+
+      <h2>2 · An agent skill</h2>
+      <p>Coding agents (Claude Code, Codex-class assistants) hit
+      unreadable files mid-task constantly — a .docx spec, a .xlsx of
+      test cases, a PDF datasheet. A packaged <em>skill</em> lets the
+      agent convert in-session instead of giving up:</p>
+      <ul>
+        <li>The agent detects an unreadable format, invokes the skill,
+        and reads the Markdown — with the fidelity warnings attached, so
+        it knows what not to trust (agents act on their input;
+        <a href="/blog/agent-context.html">honest gaps matter more for
+        them than for you</a>).</li>
+        <li>Same deterministic output as the site, so converted docs are
+        diff-stable across sessions.</li>
+      </ul>
+
+      <h2>3 · OCR beyond tesseract: local models, CPU and GPU</h2>
+      <p>Today's <a href="/blog/scanned-pdf-cant-convert.html">opt-in
+      OCR</a> is tesseract — honest, local, decent on clean print. The
+      ceiling above it is model-based recognition, and it can stay
+      local:</p>
+      <table>
+        <tr><th>Tier</th><th>Engine</th><th>Where it runs</th><th>Trade</th></tr>
+        <tr><td>Today</td><td>tesseract.js (LSTM)</td><td>Browser, CPU/WASM</td><td>~8 MB, seconds/page; weak on tables & handwriting</td></tr>
+        <tr><td>Next</td><td>Compact recognition models (ONNX)</td><td>Browser, WebGPU when available, WASM fallback</td><td>tens of MB; markedly better layout & table recovery</td></tr>
+        <tr><td>With the CLI</td><td>Full local models</td><td>Your machine's CPU/GPU, no size ceiling</td><td>Best quality; still zero upload</td></tr>
+      </table>
+      <p>The rule that doesn't change: OCR output stays <em>labelled
+      approximate</em>, opt-in, and QC-capped. Better eyes, same
+      honesty.</p>
+
+      <h2>What will never change</h2>
+      <ul>
+        <li><strong>Local first.</strong> Files don't leave your machine —
+        browser, CLI or agent alike.</li>
+        <li><strong>One schema.</strong> Every surface emits the same
+        structure, so presets and fidelity reports carry over.</li>
+        <li><strong>Detected, never "preserved".</strong></li>
+      </ul>
+
+      <div class="article-cta">
+        <p>Which surface would you use first — CLI, agent skill, or
+        stronger OCR? Votes steer the order.</p>
+        <a href="/contact.html">Tell us on GitHub →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/blog/agent-context.html">agent context</a> ·
+      <a href="/blog/scanned-pdf-cant-convert.html">scanned PDFs & OCR</a> ·
+      <a href="/blog/">Context Lab</a></p>
+    </article>
+  </div>
+</body>
+</html>
