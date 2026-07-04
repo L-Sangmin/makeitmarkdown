@@ -8,7 +8,7 @@
 //
 // DEPLOY NOTE: bump VERSION on every deploy — it invalidates old caches.
 
-const VERSION = "v16";
+const VERSION = "v17";
 const CACHE = `mim-${VERSION}`;
 
 const CORE = [
@@ -34,6 +34,7 @@ const CORE = [
   "/assets/js/standard-formatter.js",
   "/assets/js/obsidian-formatter.js",
   "/assets/js/md-utils.js",
+  "/assets/js/tok-worker.js",
   "/assets/js/ipynb-dag.js",
   "/assets/js/parsers/index.js",
   "/assets/js/parsers/ipynb.js",
