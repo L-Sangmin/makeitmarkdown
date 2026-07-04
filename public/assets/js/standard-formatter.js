@@ -9,7 +9,7 @@
 //   headingAnchors: boolean     — stable <a id="slug"></a> per section
 //   frontmatter: "none"|"full"  — YAML header
 
-import { makeSlugger, buildFrontmatter } from "./md-utils.js";
+import { makeSlugger, buildFrontmatter, linkifyFigures } from "./md-utils.js";
 
 export function formatStandard(parseResult, options = {}) {
   const slug = makeSlugger();
@@ -28,7 +28,7 @@ export function formatStandard(parseResult, options = {}) {
       if (options.headingAnchors) out.push(`<a id="${id}"></a>`);
     }
     out.push(`${"#".repeat(level)} ${s.heading}`, "");
-    let content = s.content ?? "";
+    let content = linkifyFigures(s.content ?? "", parseResult.figures);
     if (options.truncateOutputLines) {
       content = truncateOutputBlocks(content, options.truncateOutputLines);
     }

@@ -243,3 +243,21 @@ export function figureFilename(fig) {
   const ext = EXT_BY_MIME[mime] ?? "png";
   return /\.[a-z0-9]+$/i.test(fig.id) ? fig.id : `${fig.id}.${ext}`;
 }
+
+// Extracted figures (data URLs — the ones the ZIP actually bundles) become
+// real Markdown images with paths relative to the .md, so GitHub/Obsidian
+// render them from the unpacked figures/ folder. Figures that were never
+// extracted (no data URL) keep their explicit [Figure: …] placeholder.
+export function linkifyFigures(content, figures) {
+  let out = content;
+  for (const fig of figures ?? []) {
+    if (!/^data:image\//.test(fig.url ?? "")) continue;
+    const filename = figureFilename(fig);
+    const alt = (fig.caption || `Figure: ${fig.id}`).replace(/[\[\]\n]/g, " ").trim();
+    const link = `![${alt}](figures/${filename})`;
+    out = out
+      .replaceAll(`[Figure: ${filename}]`, link)
+      .replaceAll(`[Figure: ${fig.id}]`, link);
+  }
+  return out;
+}

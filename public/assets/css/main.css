@@ -718,13 +718,74 @@ kbd {
 .dl-item-text small { font-size: 0.71875rem; color: var(--fg-muted); }
 
 .info-dot {
+  position: relative;
   flex: none;
   font-size: 0.8125rem;
   line-height: 1;
   color: var(--fg-faint);
   cursor: help;
 }
-.info-dot:hover { color: var(--fg-muted); }
+.info-dot:hover, .info-dot:focus-visible { color: var(--fg-muted); }
+
+/* custom tooltip — native title is unreliable inside menu buttons */
+.info-dot::after {
+  content: attr(data-tip);
+  position: absolute;
+  right: -0.25rem;
+  bottom: calc(100% + 0.5rem);
+  z-index: 40;
+  width: 15rem;
+  padding: 0.5rem 0.625rem;
+  font-size: 0.71875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
+  color: var(--fg);
+  background: var(--bg-raised);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 24px -10px rgb(0 0 0 / 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--ease);
+  pointer-events: none;
+}
+.info-dot:hover::after, .info-dot:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* "Copied" bubble above the copy button */
+.btn-icon { position: relative; }
+
+.copy-toast {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.5rem);
+  z-index: 40;
+  padding: 0.3125rem 0.625rem;
+  font-size: 0.71875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--ok);
+  background: var(--bg-raised);
+  border: 1px solid color-mix(in srgb, var(--ok) 45%, transparent);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 24px -10px rgb(0 0 0 / 0.35);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.copy-toast.is-shown {
+  opacity: 1;
+  visibility: visible;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .copy-toast.is-shown { animation: toast-rise 200ms cubic-bezier(0.22, 1, 0.36, 1); }
+}
+@keyframes toast-rise {
+  from { opacity: 0; transform: translateY(4px); }
+}
 
 .btn {
   display: inline-flex;
@@ -927,6 +988,17 @@ kbd {
   vertical-align: baseline;
 }
 .fig-ph svg { color: var(--accent); flex: none; }
+
+/* resolved figure images in the preview — the real extracted pixels */
+.md-preview .md-fig {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0.75rem 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: #fff; /* transparent PNGs from notebooks assume a light canvas */
+}
 
 /* OCR offer under the fidelity report */
 .ocr-offer {

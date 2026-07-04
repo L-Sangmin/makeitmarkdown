@@ -96,7 +96,7 @@ function applyPreset(id) {
   syncPresetSeg();
   if (!current) return;
   current.markdown = formatWithPreset(current.result, id);
-  setMarkdown(els, current.markdown);
+  setMarkdown(els, current.markdown, current.result?.figures);
   resetExactCount();
   updateTokSave();
 }
@@ -107,48 +107,96 @@ function applyPreset(id) {
 // Prefill time uses a stated 1,000 tok/s reading rate — an assumption, labelled.
 
 const tokSaveBox = document.getElementById("tok-save");
+let tokSaveSeq = 0;
 
 function fmtTok(n) {
   return n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0 : 1)}K` : String(n);
 }
 
-function updateTokSave() {
-  if (!tokSaveBox) return;
-  const rawBytes = current?.fileBuffer?.byteLength;
-  if (!rawBytes || !current.markdown) {
-    tokSaveBox.hidden = true;
-    return;
+// Raw side is exact only when the file is genuinely text (it decodes as
+// UTF-8); binary containers (docx/pdf/…) keep a byte-based estimate — an
+// exact token count of ZIP bytes would be a meaningless number.
+function rawText(buffer) {
+  try {
+    return new TextDecoder("utf-8", { fatal: true }).decode(buffer);
+  } catch {
+    return null;
   }
-  const before = Math.round(rawBytes / 4);
-  const after = Math.round(current.markdown.length / 4);
+}
+
+function renderTokSave({ before, after, beforeExact, afterExact }) {
   const reduction = 1 - after / before;
   const secSaved = (before - after) / 1000;
-
   const pctLabel =
-    reduction >= 0.005
-      ? `&minus;${Math.round(reduction * 100)}%`
-      : `&plusmn;0%`;
+    reduction >= 0.005 ? `&minus;${Math.round(reduction * 100)}%` : `&plusmn;0%`;
   const barPct = Math.max(2, Math.min(100, Math.round((after / before) * 100)));
   const timeNote =
     secSaved >= 0.1
       ? `&approx;${secSaved >= 10 ? Math.round(secSaved) : secSaved.toFixed(1)}s less prefill at 1k tok/s`
       : "about the same size";
+  const mark = (exact) => (exact ? "" : "&approx;");
 
   tokSaveBox.title =
-    "Estimates: raw file bytes and Markdown characters, both at ≈4 chars per token; " +
-    "prefill time at an assumed 1,000 tokens/s. Use “count exactly” for the precise output count.";
+    (beforeExact && afterExact
+      ? "Exact o200k token counts (the tokenizer current frontier models use)."
+      : beforeExact || afterExact
+        ? "Markdown side is an exact o200k count; the raw side of a binary container stays a byte-based ≈4 chars/token estimate."
+        : "Estimates at ≈4 chars per token; exact o200k counts load in the background.") +
+    " Prefill time assumes 1,000 tokens/s.";
   tokSaveBox.innerHTML = `
     <div class="tok-pct">
       <span class="tok-pct-num">${pctLabel}</span>
-      <span class="tok-pct-label">token estimate vs raw</span>
+      <span class="tok-pct-label">tokens vs raw${beforeExact && afterExact ? " · o200k" : ""}</span>
       <div class="tok-bar" role="presentation"><span style="width:${barPct}%"></span></div>
     </div>
     <div class="tok-nums">
-      <span class="tok-line"><span class="tok-k">raw file</span> &approx;${fmtTok(before)} tok</span>
-      <span class="tok-line"><span class="tok-k">Markdown</span> &approx;${fmtTok(after)} tok</span>
+      <span class="tok-line"><span class="tok-k">raw file</span> ${mark(beforeExact)}${fmtTok(before)} tok</span>
+      <span class="tok-line"><span class="tok-k">Markdown</span> ${mark(afterExact)}${fmtTok(after)} tok</span>
       <span class="tok-time">${timeNote}</span>
     </div>`;
   tokSaveBox.hidden = false;
+}
+
+function updateTokSave() {
+  if (!tokSaveBox) return;
+  const seq = ++tokSaveSeq;
+  const rawBytes = current?.fileBuffer?.byteLength;
+  if (!rawBytes || !current.markdown) {
+    tokSaveBox.hidden = true;
+    return;
+  }
+  // instant estimate first — exact numbers swap in when the tokenizer lands
+  renderTokSave({
+    before: Math.round(rawBytes / 4),
+    after: Math.round(current.markdown.length / 4),
+    beforeExact: false,
+    afterExact: false,
+  });
+
+  const markdown = current.markdown;
+  const buffer = current.fileBuffer;
+  ensureTokenizer()
+    .then(() => {
+      if (seq !== tokSaveSeq || current?.markdown !== markdown) return;
+      const text = rawText(buffer);
+      renderTokSave({
+        before: text !== null ? countTokensExact(text) : Math.round(buffer.byteLength / 4),
+        after: countTokensExact(markdown),
+        beforeExact: text !== null,
+        afterExact: true,
+      });
+      applyExactSizeNote(markdown);
+    })
+    .catch(() => {}); // offline before the tokenizer was cached — estimates stand
+}
+
+// Shared by the "count exactly" button and the automatic pass above.
+function applyExactSizeNote(markdown) {
+  if (current?.markdown !== markdown) return;
+  const n = countTokensExact(markdown);
+  els.mdSize.textContent =
+    `${markdown.length.toLocaleString("en-US")} chars · ${n.toLocaleString("en-US")} tokens (o200k)`;
+  btnExact.hidden = true;
 }
 
 // --- markdown pane: raw/preview toggle + exact token count -----------------------
@@ -236,10 +284,7 @@ btnExact.addEventListener("click", async () => {
   btnExact.textContent = "counting…";
   try {
     await ensureTokenizer();
-    const n = countTokensExact(current.markdown);
-    els.mdSize.textContent =
-      `${current.markdown.length.toLocaleString("en-US")} chars · ${n.toLocaleString("en-US")} tokens (o200k)`;
-    btnExact.hidden = true;
+    applyExactSizeNote(current.markdown);
   } catch {
     // Most likely offline before the tokenizer was ever cached.
     btnExact.textContent = "count unavailable";
@@ -649,12 +694,26 @@ function flashCopied() {
   checkIcon.hidden = false;
   els.btnCopy.classList.add("is-done");
   els.btnCopy.setAttribute("aria-label", "Copied");
+
+  let toast = els.btnCopy.querySelector(".copy-toast");
+  if (!toast) {
+    toast = document.createElement("span");
+    toast.className = "copy-toast";
+    toast.setAttribute("role", "status");
+    toast.textContent = "Copied";
+    els.btnCopy.appendChild(toast);
+  }
+  toast.classList.remove("is-shown");
+  void toast.offsetWidth; // restart the animation on rapid re-copies
+  toast.classList.add("is-shown");
+
   setTimeout(() => {
     copyIcon.hidden = false;
     checkIcon.hidden = true;
     els.btnCopy.classList.remove("is-done");
     els.btnCopy.setAttribute("aria-label", "Copy Markdown");
-  }, 1200);
+    toast.classList.remove("is-shown");
+  }, 1400);
 }
 
 els.btnCopy?.addEventListener("click", async () => {

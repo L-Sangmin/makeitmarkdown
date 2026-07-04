@@ -5,23 +5,24 @@
 // parser found — never promised as "preserved".
 
 import { renderDependencyDag } from "./ipynb-dag.js";
-import { qcChecks } from "./md-utils.js";
+import { qcChecks, figureFilename } from "./md-utils.js";
 
 const escapeHtml = (s) =>
   String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 export function renderResult(payload, els) {
   const viewerKind = renderOriginal(els.original, payload);
-  setMarkdown(els, payload.markdown);
+  setMarkdown(els, payload.markdown, payload.result?.figures);
   renderFidelity(els.fidelity, payload.result);
   return viewerKind; // "rich" | "text" | "note" — drives the collapse default
 }
 
 // Also used when the preset toggle reformats an existing result.
-export function setMarkdown(els, markdown) {
+export function setMarkdown(els, markdown, figures) {
   els.markdown.textContent = markdown;
   els.mdSize.textContent = sizeNote(markdown);
   els._markdown = markdown;
+  if (figures !== undefined) els._figures = figures;
   if (els.preview && !els.preview.hidden) renderPreview(els);
 }
 
@@ -42,7 +43,38 @@ export function renderPreview(els) {
   const body = globalThis.DOMPurify.sanitize(globalThis.marked.parse(md), {
     USE_PROFILES: { html: true },
   });
-  els.preview.innerHTML = fmHtml + figureChips(body);
+  els.preview.innerHTML = fmHtml + figureChips(body, els._figures);
+  resolvePreviewImages(els.preview, els._figures);
+}
+
+// figures/… image paths resolve to the extracted data URLs so the preview
+// shows the actual figure; external image URLs are never fetched — they
+// become chips (the URL still travels in the Markdown itself).
+function resolvePreviewImages(container, figures) {
+  const byName = new Map();
+  for (const fig of figures ?? []) {
+    if (/^data:image\//.test(fig.url ?? "")) byName.set(figureFilename(fig), fig);
+  }
+  for (const img of [...container.querySelectorAll("img")]) {
+    const src = img.getAttribute("src") ?? "";
+    if (src.startsWith("data:image/")) continue;
+    const local = /^(?:\.\/)?figures\/(.+)$/.exec(src);
+    const fig = local ? byName.get(local[1]) : null;
+    if (fig) {
+      img.src = fig.url;
+      img.className = "md-fig";
+      img.loading = "lazy";
+      continue;
+    }
+    const chip = document.createElement("span");
+    chip.className = "fig-ph";
+    chip.title = /^https?:/.test(src)
+      ? "External image — the URL travels in the Markdown, but nothing is fetched from here"
+      : "Figure file — included in the .zip's figures/ folder";
+    chip.innerHTML = FIG_SVG;
+    chip.append(img.getAttribute("alt") || src);
+    img.replaceWith(chip);
+  }
 }
 
 function frontmatterBox(yaml) {
@@ -69,10 +101,20 @@ function frontmatterBox(yaml) {
 const FIG_SVG =
   '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.5-3.5L6 23"/></svg>';
 
-function figureChips(html) {
+function figureChips(html, figures) {
+  const byName = new Map();
+  for (const fig of figures ?? []) {
+    if (/^data:image\//.test(fig.url ?? "")) byName.set(figureFilename(fig), fig);
+  }
   return html
     .replace(/\[Figure: ([^\]<]+)\]/g, (_, name) =>
-      `<span class="fig-ph" title="Extracted figure — included in the .zip's figures/ folder">${FIG_SVG}${escapeHtml(name)}</span>`)
+      `<span class="fig-ph" title="Detected figure — not extracted from this format">${FIG_SVG}${escapeHtml(name)}</span>`)
+    .replace(/!\[\[(?:\.\/)?figures\/([^\]<]+)\]\]/g, (_, name) => {
+      const fig = byName.get(name);
+      return fig
+        ? `<img class="md-fig" loading="lazy" alt="${escapeHtml(name)}" src="${fig.url}">`
+        : `<span class="fig-ph" title="Obsidian embed — resolves inside a vault">${FIG_SVG}${escapeHtml(name)}</span>`;
+    })
     .replace(/!\[\[([^\]<]+)\]\]/g, (_, name) =>
       `<span class="fig-ph" title="Obsidian embed — resolves inside a vault">${FIG_SVG}${escapeHtml(name)}</span>`);
 }

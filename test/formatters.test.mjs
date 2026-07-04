@@ -60,6 +60,24 @@ test("standard: default output is unchanged plain GFM", async () => {
   assert.ok(!md.startsWith("---"), "no frontmatter by default");
 });
 
+test("standard: extracted figures become relative image links into figures/", async () => {
+  const r = await parseFixture("sales-analysis.ipynb");
+  const md = formatStandard(r);
+  assert.ok(
+    md.includes("](figures/cell_5_output_1.png)"),
+    "extracted figure links relatively into the ZIP's figures/ folder"
+  );
+  assert.ok(!md.includes("[Figure: cell_5_output_1.png]"), "placeholder replaced");
+});
+
+test("standard: figures without a data URL keep their explicit placeholder", () => {
+  const r = paperResult();
+  r.sections.push({ heading: "Fig", level: 2, content: "[Figure: fig_2]" });
+  r.figures.push({ id: "fig_2", caption: "External", url: "https://example.com/x.png" });
+  const md = formatStandard(r);
+  assert.ok(md.includes("[Figure: fig_2]"), "never-extracted figure stays a placeholder");
+});
+
 test("chat preset: truncates long outputs and shows a token estimate", async () => {
   const r = await parseFixture("out-of-order.ipynb");
   const md = formatWithPreset(r, "chat");
