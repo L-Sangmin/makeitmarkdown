@@ -68,6 +68,11 @@ article h2 .sec-num {
 
 .related-head a { font-size: 0.8125rem; }
 
+/* touch: keep the small link but grow its hit area */
+@media (pointer: coarse) {
+  .related-head a { padding: 0.75rem 0.375rem; margin: -0.75rem -0.375rem; }
+}
+
 .related-kicker {
   margin: 0;
   font-size: 0.9375rem;
