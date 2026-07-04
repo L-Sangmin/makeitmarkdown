@@ -44,7 +44,8 @@ export default {
       fidelity.detected.tables = fidelity.recovered.tables = tables;
       fidelity.detected.figures = fidelity.recovered.figures = figs;
       fidelity.detected.equations = fidelity.recovered.equations = eqs;
-      fidelity.detected.codeCells = (raw.match(/^```/gm) ?? []).length >> 1;
+      fidelity.detected.codeCells = fidelity.recovered.codeCells =
+        (raw.match(/^```/gm) ?? []).length >> 1;
     } else {
       title = filenameStem(filename, "notes");
       const lines = raw.replace(/\n+$/, "").split("\n");

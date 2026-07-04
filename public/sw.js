@@ -8,7 +8,7 @@
 //
 // DEPLOY NOTE: bump VERSION on every deploy — it invalidates old caches.
 
-const VERSION = "v9";
+const VERSION = "v10";
 const CACHE = `mim-${VERSION}`;
 
 const CORE = [
@@ -23,6 +23,7 @@ const CORE = [
   "/assets/fonts/inter-var-latin.woff2",
   "/assets/fonts/jetbrains-mono-var-latin.woff2",
   "/assets/js/main.js",
+  "/assets/js/cta-drop.js",
   "/assets/js/router.js",
   "/assets/js/loader.js",
   "/assets/js/result-view.js",

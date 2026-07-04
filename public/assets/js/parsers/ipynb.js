@@ -8,6 +8,8 @@
 // Returns the shared schema (HANDOFF §10) plus a `notebook` block consumed
 // by the dependency DAG mini-map (ipynb-dag.js).
 
+import { qcScore } from "../md-utils.js";
+
 const PARSER_VERSION = "0.1.0";
 
 const MAX_OUTPUT_LINES = 30;
@@ -414,7 +416,7 @@ export default {
     const figures = [];
     const fidelity = {
       detected: { tables: 0, figures: 0, equations: 0, codeCells: 0 },
-      recovered: { tables: 0, figures: 0, equations: 0 },
+      recovered: { tables: 0, figures: 0, equations: 0, codeCells: 0 },
       warnings,
       qcScore: 0,
     };
@@ -427,6 +429,7 @@ export default {
       const flags = [];
       if (cell.type === "code") {
         fidelity.detected.codeCells += 1;
+        fidelity.recovered.codeCells += 1; // every cell is rendered as a fenced section
         if (cell.execCount == null) flags.push("(not executed)");
       }
       const heading = `Cell [${cell.label}] · type:${cell.type}${flags.length ? " " + flags.join(" ") : ""} · id:${cell.id.slice(0, 8)}`;
@@ -607,14 +610,3 @@ function textBlock(raw, onTruncate) {
   return fence(text);
 }
 
-// QC per HANDOFF §16, expressed as a fraction instead of a boolean.
-function qcScore(r) {
-  const checks = [
-    (r.title?.length ?? 0) > 0,
-    (r.sections?.length ?? 0) >= 3,
-    (r.figures ?? []).every((f) => f.url && f.caption),
-    (r.tables ?? []).every((t) => t.markdown),
-    !r.sections?.some((s) => /\?\?|□□/.test(s.content)),
-  ];
-  return checks.filter(Boolean).length / checks.length;
-}
