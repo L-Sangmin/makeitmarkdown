@@ -1,9 +1,11 @@
 /* Article pages — same token system as the app, tuned for long-form reading. */
 
 .article-wrap {
+  width: 100%; /* auto margins would otherwise size it to fit-content, letting a long <pre> line widen the page */
   max-width: 42rem;
   margin: 0 auto;
   padding: 1rem 1.5rem 5rem;
+  box-sizing: border-box;
 }
 
 .article-hero { margin: 1.5rem 0 0.5rem; }
@@ -400,6 +402,16 @@ article p a, article li a, article td a, article figcaption a {
 .ba pre { margin: 0; height: calc(100% - 1.4rem); }
 .ba-after pre { border-color: color-mix(in srgb, var(--ok) 35%, var(--border)); }
 @media (max-width: 720px) { .ba { grid-template-columns: 1fr; } .ba pre { height: auto; } }
+
+/* Small screens: wide tables scroll inside their own box instead of
+   stretching the page (a 5-column mapping table's min width is ~620px). */
+@media (max-width: 767px) {
+  article table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
 
 /* icon hero — the article's gallery glyph, promoted */
 .icon-hero {
