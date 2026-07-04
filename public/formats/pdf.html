@@ -71,7 +71,22 @@
         guide</a>.</li>
       </ol>
 
-      <h2>FAQ</h2>
+      <h2>Before → after</h2>
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">In the file</p><pre><code>Regional per formance
+North 18,420 2.1 South
+15,876 2.6 the table
+continues mid-sentence…</code></pre></div>
+        <div class="ba-col ba-after"><p class="ba-label">In the Markdown</p><pre><code>## Page 3
+
+Regional performance
+North 18,420 2.1
+South 15,876 2.6
+
+&gt; Warning: layout-lossy — verify tables against the source.</code></pre></div>
+      </div>
+
+<h2>FAQ</h2>
       <p><strong>Why does the QC score cap lower for PDFs?</strong>
       Because structural checks (real sections, intact tables) genuinely
       can't fully pass on a structureless source — the score is honest

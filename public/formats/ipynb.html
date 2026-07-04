@@ -76,6 +76,25 @@
       <a href="/blog/notebook-cell-dependencies.html">Making Jupyter
       notebooks LLM-addressable</a>.</p>
 
+      <h2>Before → after</h2>
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">In the file</p><pre><code>{"cell_type":"code","execution_count":2,
+ "source":["df = pd.read_csv(\"sales.csv\")\n","df.shape"],
+ "outputs":[{"data":{"text/plain":["(120, 4)"]}}],
+ "metadata":{"scrolled":true,"tags":[]}}</code></pre></div>
+        <div class="ba-col ba-after"><p class="ba-label">In the Markdown</p><pre><code>## Cell [2] · type:code · id:bb22cc33
+
+```python
+df = pd.read_csv("sales.csv")
+df.shape
+```
+
+**Output:**
+```
+(120, 4)
+```</code></pre></div>
+      </div>
+
       <h2>Honest limits</h2>
       <ul>
         <li>Dependency hints are regex-based, not real dataflow — branchy

@@ -59,7 +59,25 @@
         <tr><td>Attachments</td><td>Listed by name and size, honestly marked <em>not extracted</em> — convert the attachment file itself separately</td></tr>
       </table>
 
-      <h2>Honest limits</h2>
+      <h2>Before → after</h2>
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">In the file</p><pre><code>Subject: =?UTF-8?B?UmU6IFZlbmRvciDigJQgbmV4dCBzdGVwcw==?=
+Content-Transfer-Encoding: quoted-printable
+
+Agreed =E2=80=94 let's lock it Friday.
+&gt; On Tue, Jordan wrote:
+&gt; &gt; On Mon, Sam wrote:
+&gt; &gt; &gt; (…the whole thread again…)</code></pre></div>
+        <div class="ba-col ba-after"><p class="ba-label">In the Markdown</p><pre><code>## Message
+- **Subject:** Re: Vendor — next steps
+
+## Body
+Agreed — let's lock it Friday.
+&gt; On Tue, Jordan wrote:
+&gt; … (23 more quoted lines truncated)</code></pre></div>
+      </div>
+
+<h2>Honest limits</h2>
       <ul>
         <li>One message per .eml — mailbox archives (.mbox) aren't split
         yet; <a href="/contact.html">request it</a> if you need it.</li>

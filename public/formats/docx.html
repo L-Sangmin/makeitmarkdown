@@ -58,6 +58,18 @@
         <tr><td>Headers, footers, page numbers</td><td>Dropped — page furniture, not content</td></tr>
       </table>
 
+      <h2>Before → after</h2>
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">In the file</p><pre><code>&lt;w:p&gt;&lt;w:pPr&gt;&lt;w:pStyle w:val="Heading2"/&gt;&lt;/w:pPr&gt;
+  &lt;w:r&gt;&lt;w:t&gt;Regional performance&lt;/w:t&gt;&lt;/w:r&gt;&lt;/w:p&gt;
+&lt;w:tbl&gt;&lt;w:tr&gt;&lt;w:tc&gt;&lt;w:p&gt;&lt;w:r&gt;&lt;w:t&gt;Region&lt;/w:t&gt;&lt;/w:r&gt;…</code></pre></div>
+        <div class="ba-col ba-after"><p class="ba-label">In the Markdown</p><pre><code>## Regional performance
+
+| Region | Units shipped | Avg delivery (days) |
+| --- | --- | --- |
+| North | 18,420 | 2.1 |</code></pre></div>
+      </div>
+
       <h2>Honest limits</h2>
       <ul>
         <li><strong>Unstyled "headings"</strong> (someone typed a line and

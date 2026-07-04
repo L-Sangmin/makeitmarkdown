@@ -182,7 +182,7 @@ article a:hover { text-decoration: underline; }
 .card-thumb {
   aspect-ratio: 16 / 8;
   background: light-dark(
-    color-mix(in srgb, var(--accent) 9%, #e6e8f0),
+    color-mix(in srgb, var(--accent) 6%, #f0f1f7),
     color-mix(in srgb, var(--accent) 5%, transparent)
   );
   border-bottom: 1px solid var(--border);
@@ -239,3 +239,18 @@ article a:hover { text-decoration: underline; }
   transition: border-color var(--ease), color var(--ease);
 }
 .format-chips a:hover { color: var(--fg); border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); text-decoration: none; }
+
+/* format guides: before/after sample pair */
+.ba { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 0 0 1.1rem; }
+.ba-label {
+  margin: 0 0 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.ba-after .ba-label { color: var(--ok); }
+.ba pre { margin: 0; height: calc(100% - 1.4rem); }
+.ba-after pre { border-color: color-mix(in srgb, var(--ok) 35%, var(--border)); }
+@media (max-width: 720px) { .ba { grid-template-columns: 1fr; } .ba pre { height: auto; } }

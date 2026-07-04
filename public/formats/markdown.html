@@ -58,7 +58,22 @@
         <tr><td>.txt (no markup)</td><td>An overview section (lines, words, token estimate) + the verbatim content — honest framing for a model, no fake structure invented</td></tr>
       </table>
 
-      <h2>FAQ</h2>
+      <h2>Before → after</h2>
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">In the file</p><pre><code>meeting notes tuesday
+decided to move the deadline
+carol owns the rollout
+also need to fix the docs</code></pre></div>
+        <div class="ba-col ba-after"><p class="ba-label">In the Markdown</p><pre><code>## Overview
+4 lines · 17 words · ≈22 tokens — no headings detected
+(QC will tell you a model sees an unstructured wall)
+
+## Content
+meeting notes tuesday
+decided to move the deadline…</code></pre></div>
+      </div>
+
+<h2>FAQ</h2>
       <p><strong>Is my prose rewritten?</strong> Never — body content
       passes through byte-faithful; only structure is indexed and preset
       wrappers are added around it.</p>

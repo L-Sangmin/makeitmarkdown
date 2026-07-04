@@ -61,7 +61,20 @@
       follow-up paste of one subtree) fills in details. It's the
       table-of-contents trick, applied to data.</p>
 
-      <h2>FAQ</h2>
+      <h2>Before → after</h2>
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">In the file</p><pre><code>{"ts":"2026-07-01T09:14:22Z","route":"/api/convert","status":200,"ms":41}
+{"ts":"2026-07-01T09:14:25Z","route":"/api/convert","status":500,"ms":902}
+not json at all — a stray log line
+{"ts":"2026-07-01T09:14:29Z","route":"/api/health","status":200,"ms":3}</code></pre></div>
+        <div class="ba-col ba-after"><p class="ba-label">In the Markdown</p><pre><code>| ts (str) | route (str) | status (int) | ms (int) |
+| --- | --- | --- | --- |
+| 2026-07-01T09:14:22Z | /api/convert | 200 | 41 |
+| 2026-07-01T09:14:25Z | /api/convert | 500 | 902 |
+1 malformed line was skipped (counted in the report).</code></pre></div>
+      </div>
+
+<h2>FAQ</h2>
       <p><strong>Is anything recomputed or reordered?</strong> No — keys
       and values pass through untouched; only presentation is added.</p>
       <p><strong>.ndjson?</strong> Same parser as .jsonl.</p>

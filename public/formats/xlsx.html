@@ -65,6 +65,18 @@
       <a href="/blog/tables-llms-can-read.html">Tables LLMs can actually
       read</a>.</p>
 
+      <h2>Before → after</h2>
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">In the file</p><pre><code>A2: 45922            (formatted as 2025-09-22)
+B2: =SUM(B3:B14)     (cached value 79)
+C1: "Revenue
+     (EUR)"           (merged across C1:D1)</code></pre></div>
+        <div class="ba-col ba-after"><p class="ba-label">In the Markdown</p><pre><code>| month (date) | total (int) | revenue_eur (float) |
+| --- | --- | --- |
+| 2025-09-22 | 79 | 96432.10 |
+Values are cached formula results from the last save.</code></pre></div>
+      </div>
+
       <h2>Honest limits</h2>
       <ul>
         <li>Formulas are <strong>not recomputed</strong> — you get the

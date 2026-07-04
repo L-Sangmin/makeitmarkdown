@@ -51,7 +51,20 @@
         <tr><td>Nav, ads, banners, sidebars, footers</td><td>Discarded by the extraction pass</td></tr>
       </table>
 
-      <h2>Honest limits</h2>
+      <h2>Before → after</h2>
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">In the file</p><pre><code>&lt;nav&gt;Home · Pricing · Blog&lt;/nav&gt;
+&lt;div class="cookie-banner"&gt;We value your privacy…&lt;/div&gt;
+&lt;article&gt;&lt;h2&gt;The measurement&lt;/h2&gt;&lt;p&gt;We logged…&lt;/p&gt;&lt;/article&gt;
+&lt;aside&gt;Related: 14 stories&lt;/aside&gt;</code></pre></div>
+        <div class="ba-col ba-after"><p class="ba-label">In the Markdown</p><pre><code>## The measurement
+
+We logged…
+
+(nav, cookie banner and sidebar discarded by extraction)</code></pre></div>
+      </div>
+
+<h2>Honest limits</h2>
       <ul>
         <li><strong>JavaScript-rendered pages:</strong> what you saved is
         what converts. Save the page <em>after</em> it has rendered

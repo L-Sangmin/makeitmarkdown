@@ -60,6 +60,18 @@
         <tr><td>Overview</td><td>Row/column counts up front, so the model knows the dataset's true size</td></tr>
       </table>
 
+      <h2>Before → after</h2>
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">In the file</p><pre><code>region;units;"revenue, gross";signup
+North;12;"1.204,50";45922
+South;;"980,00";45923</code></pre></div>
+        <div class="ba-col ba-after"><p class="ba-label">In the Markdown</p><pre><code>| region (str) | units (int) | revenue, gross (str) | signup (int) |
+| --- | --- | --- | --- |
+| North | 12 | 1.204,50 | 45922 |
+| South |  | 980,00 | 45923 |
+1 ragged row was padded (see fidelity warnings).</code></pre></div>
+      </div>
+
       <h2>Honest limits</h2>
       <ul>
         <li>The first row is assumed to be a header — a headerless file
