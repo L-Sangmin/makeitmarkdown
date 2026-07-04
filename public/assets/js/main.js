@@ -275,6 +275,15 @@ function showLanding() {
 function showError(html) {
   els.dropError.innerHTML = html;
   els.dropError.hidden = false;
+  // brief head-shake on the target (restart cleanly if already playing)
+  els.dropTarget.classList.remove("is-rejected");
+  void els.dropTarget.offsetWidth;
+  els.dropTarget.classList.add("is-rejected");
+  els.dropTarget.addEventListener(
+    "animationend",
+    () => els.dropTarget.classList.remove("is-rejected"),
+    { once: true }
+  );
 }
 
 function hideError() {
@@ -332,14 +341,18 @@ async function handleFile(file) {
   } catch (err) {
     if (err instanceof UnsupportedFormatError) {
       showError(
-        `That file type isn't supported yet. Works today: <code>.ipynb</code> · <code>.docx</code> · <code>.pptx</code> · <code>.xlsx</code> · <code>.csv</code> · <code>.json</code> · <code>.html</code> · <code>.pdf</code> · <code>.eml</code> · <code>.srt</code> · <code>.md</code> · <code>.txt</code>.`
+        `That file type isn't supported yet. Works today: <code>.ipynb</code> · <code>.docx</code> · <code>.pptx</code> · <code>.xlsx</code> · <code>.csv</code> · <code>.json</code> · <code>.html</code> · <code>.pdf</code> · <code>.tex</code> · <code>.eml</code> · <code>.mbox</code> · <code>.srt</code> · <code>.md</code> · <code>.txt</code>. ` +
+          `<a href="/blog/llm-file-upload-errors.html">Why files get rejected — and the workarounds →</a>`
       );
     } else if (NOT_READY.test(err.message ?? "")) {
       showError(
         `That format's parser isn't wired up yet — drop one of the supported types listed under the target.`
       );
     } else {
-      showError(`Couldn't read that file: ${escapeText(err.message ?? "unknown error")}`);
+      showError(
+        `Couldn't read that file: ${escapeText(err.message ?? "unknown error")}. ` +
+          `<a href="/blog/#g5">Common fixes →</a>`
+      );
     }
   } finally {
     clearBusy();

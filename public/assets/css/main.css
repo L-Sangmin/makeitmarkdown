@@ -477,6 +477,23 @@ kbd {
   to { transform: rotate(360deg); }
 }
 
+/* Rejected file: a brief head-shake "no" on the target itself. */
+@keyframes drop-shake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(3px); }
+  30%, 50%, 70% { transform: translateX(-5px); }
+  40%, 60% { transform: translateX(5px); }
+}
+
+.drop-target.is-rejected {
+  animation: drop-shake 480ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  border-color: color-mix(in srgb, var(--warn) 55%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drop-target.is-rejected { animation: none; }
+}
+
 .drop-error {
   margin: 1rem 0 0;
   max-width: 40rem;
@@ -491,6 +508,13 @@ kbd {
 .drop-error code {
   font-family: var(--font-mono);
   font-size: 0.8125rem;
+}
+
+.drop-error a {
+  color: inherit;
+  font-weight: 550;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 /* --- Recent conversions ----------------------------------------------------------- */
