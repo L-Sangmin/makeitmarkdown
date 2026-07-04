@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://makeitmarkdown.pages.dev/sitemap.xml
