@@ -134,6 +134,7 @@ function sizeNote(md) {
 // --- ① original preview ------------------------------------------------------
 
 let lastObjectUrl = null;
+let slideObjectUrls = [];
 
 function renderOriginal(container, payload) {
   container.textContent = "";
@@ -141,6 +142,8 @@ function renderOriginal(container, payload) {
     URL.revokeObjectURL(lastObjectUrl);
     lastObjectUrl = null;
   }
+  for (const url of slideObjectUrls) URL.revokeObjectURL(url);
+  slideObjectUrls = [];
   const format = payload.result.meta?.sourceFormat;
 
   if (!payload.fileBuffer) {
@@ -200,21 +203,16 @@ function renderOriginal(container, payload) {
   }
 
   if (format === "pptx") {
-    // Slide-card preview rebuilt from the parsed sections — the binary
-    // itself has no cheap visual rendering in a browser.
-    const wrap = document.createElement("div");
-    wrap.className = "slide-preview";
-    for (const sec of payload.result.sections ?? []) {
-      const card = document.createElement("div");
-      card.className = "slide-card";
-      const h = document.createElement("h3");
-      h.textContent = sec.heading;
-      const pre = document.createElement("pre");
-      pre.textContent = sec.content;
-      card.append(h, pre);
-      wrap.appendChild(card);
-    }
-    container.appendChild(wrap);
+    // Real slide rendering: shapes and pictures are placed at their true
+    // XML coordinates (EMU) inside cards with the deck's real aspect
+    // ratio. Falls back to the text slide-cards if the geometry pass fails.
+    const note = document.createElement("p");
+    note.className = "original-note";
+    note.textContent = "Rendering slides…";
+    container.appendChild(note);
+    renderPptxSlides(payload.fileBuffer)
+      .then((el) => container.replaceChildren(el))
+      .catch(() => container.replaceChildren(textSlideCards(payload.result)));
     return "rich";
   }
 
@@ -236,6 +234,272 @@ function renderOriginal(container, payload) {
 
 const sanitized = (html) =>
   globalThis.DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+
+// --- pptx: geometry-faithful slide rendering --------------------------------
+//
+// A .pptx stores every shape's position and size in EMUs (914,400 per
+// inch). Re-reading the slide XML here lets the original panel show real
+// slides: true aspect ratio, text boxes and pictures where they actually
+// sit, run-level size/weight/color. Fonts and theme fills are approximated
+// (slides render on a white canvas like PowerPoint's default), autofit and
+// exotic geometry are ignored — the fidelity report stays the source of
+// truth for what was detected.
+
+const EMU_PER_PT = 12700;
+
+function slideByLocal(root, name) {
+  const out = [];
+  for (const el of root.getElementsByTagName("*")) {
+    if (el.localName === name) out.push(el);
+  }
+  return out;
+}
+
+function slideXfrm(el) {
+  const xfrm = slideByLocal(el, "xfrm")[0];
+  if (!xfrm) return null;
+  const off = slideByLocal(xfrm, "off")[0];
+  const ext = slideByLocal(xfrm, "ext")[0];
+  if (!off || !ext) return null;
+  return {
+    x: +off.getAttribute("x"), y: +off.getAttribute("y"),
+    cx: +ext.getAttribute("cx"), cy: +ext.getAttribute("cy"),
+  };
+}
+
+function slideSolidFill(scope) {
+  const fill = slideByLocal(scope, "solidFill")[0];
+  const rgb = fill && slideByLocal(fill, "srgbClr")[0];
+  return rgb ? `#${rgb.getAttribute("val")}` : null;
+}
+
+const SLIDE_MIME = { png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg", gif: "image/gif", svg: "image/svg+xml", bmp: "image/bmp" };
+
+// Placeholder shapes usually inherit their box from the slide layout (or
+// the master); collect those boxes keyed by placeholder type/idx.
+async function placeholderGeom(zip, rels, parseXml) {
+  const geom = new Map();
+  const layoutTarget = [...rels.values()].find((t) => /slideLayout\d+\.xml$/.test(t));
+  if (!layoutTarget) return geom;
+  const layoutPath = layoutTarget.replace(/^(\.\.\/)+/, "ppt/");
+  const layoutEntry = zip.file(layoutPath);
+  if (!layoutEntry) return geom;
+  const layoutXml = parseXml(await layoutEntry.async("text"));
+
+  let masterXml = null;
+  const layoutRelsEntry = zip.file(
+    layoutPath.replace(/slideLayouts\/(slideLayout\d+\.xml)$/, "slideLayouts/_rels/$1.rels"),
+  );
+  if (layoutRelsEntry) {
+    const relsXml = parseXml(await layoutRelsEntry.async("text"));
+    const masterTarget = slideByLocal(relsXml, "Relationship")
+      .map((r) => r.getAttribute("Target"))
+      .find((t) => /slideMaster\d+\.xml$/.test(t ?? ""));
+    const masterEntry = masterTarget && zip.file(masterTarget.replace(/^(\.\.\/)+/, "ppt/"));
+    if (masterEntry) masterXml = parseXml(await masterEntry.async("text"));
+  }
+
+  for (const src of [masterXml, layoutXml]) { // layout wins over master
+    if (!src) continue;
+    for (const sp of slideByLocal(src, "sp")) {
+      const ph = slideByLocal(sp, "ph")[0];
+      const box = slideXfrm(sp);
+      if (!ph || !box) continue;
+      geom.set(`${ph.getAttribute("type") ?? "body"}|${ph.getAttribute("idx") ?? ""}`, box);
+      geom.set(`${ph.getAttribute("type") ?? "body"}|*`, box);
+    }
+  }
+  return geom;
+}
+
+function lookupPlaceholder(geomMap, sp) {
+  const ph = slideByLocal(sp, "ph")[0];
+  if (!ph) return null;
+  const type = ph.getAttribute("type") ?? "body";
+  const idx = ph.getAttribute("idx") ?? "";
+  return (
+    geomMap.get(`${type}|${idx}`) ??
+    geomMap.get(`${type}|*`) ??
+    (type === "ctrTitle" ? geomMap.get("title|*") : null) ??
+    (type === "body" || idx ? geomMap.get(`body|${idx}`) ?? geomMap.get("body|*") : null)
+  );
+}
+
+async function renderPptxSlides(fileBuffer) {
+  const zip = await globalThis.JSZip.loadAsync(fileBuffer.slice(0));
+  const parseXml = (text) => new DOMParser().parseFromString(text, "text/xml");
+
+  const pres = parseXml(await zip.file("ppt/presentation.xml").async("text"));
+  const sldSz = slideByLocal(pres, "sldSz")[0];
+  // Modern PowerPoint 16:9 default when the part omits an explicit size.
+  const W = sldSz ? +sldSz.getAttribute("cx") : 12192000;
+  const H = sldSz ? +sldSz.getAttribute("cy") : 6858000;
+  const slideWidthPt = W / EMU_PER_PT;
+  // 1pt of slide text as a percentage of the slide's width — with
+  // container queries this keeps text proportional at any panel size.
+  const ptToCqw = (pt) => `${((pt / slideWidthPt) * 100).toFixed(3)}cqw`;
+
+  const entries = zip
+    .file(/^ppt\/slides\/slide\d+\.xml$/)
+    .sort((a, b) => Number(a.name.match(/(\d+)/)[1]) - Number(b.name.match(/(\d+)/)[1]));
+  if (!entries.length) throw new Error("no slides");
+
+  const wrap = document.createElement("div");
+  wrap.className = "pptx-slides";
+
+  for (const entry of entries) {
+    const xml = parseXml(await entry.async("text"));
+    const relsEntry = zip.file(entry.name.replace(/slides\/(slide\d+\.xml)$/, "slides/_rels/$1.rels"));
+    const rels = new Map();
+    if (relsEntry) {
+      for (const rel of slideByLocal(parseXml(await relsEntry.async("text")), "Relationship")) {
+        rels.set(rel.getAttribute("Id"), rel.getAttribute("Target"));
+      }
+    }
+
+    const slide = document.createElement("div");
+    slide.className = "pptx-slide";
+    slide.style.aspectRatio = `${W} / ${H}`;
+    const bg = slideByLocal(xml, "bg")[0];
+    const bgColor = bg && slideSolidFill(bg);
+    if (bgColor) slide.style.background = bgColor;
+
+    const phGeom = await placeholderGeom(zip, rels, parseXml);
+    const tree = slideByLocal(xml, "spTree")[0];
+    if (tree) await renderShapeTree(tree, slide, { W, H, zip, rels, entry, ptToCqw, phGeom });
+
+    const n = Number(entry.name.match(/slide(\d+)\.xml$/)[1]);
+    const label = document.createElement("p");
+    label.className = "pptx-slide-num";
+    label.textContent = `Slide ${n}`;
+    const item = document.createElement("figure");
+    item.className = "pptx-slide-item";
+    item.append(slide, label);
+    wrap.appendChild(item);
+  }
+  return wrap;
+}
+
+async function renderShapeTree(tree, slide, ctx) {
+  const { W, H } = ctx;
+  const pct = (v, total) => `${((v / total) * 100).toFixed(3)}%`;
+  let flow = null; // shapes with no resolvable box stack here instead of vanishing
+  for (const el of tree.children) {
+    if (el.localName === "sp") {
+      const geo = slideXfrm(el) ?? lookupPlaceholder(ctx.phGeom, el);
+      const box = document.createElement("div");
+      box.className = "pptx-shape";
+      if (geo) {
+        box.style.left = pct(geo.x, W);
+        box.style.top = pct(geo.y, H);
+        box.style.width = pct(geo.cx, W);
+        box.style.height = pct(geo.cy, H);
+      }
+      const spPr = slideByLocal(el, "spPr")[0];
+      const fill = spPr && slideSolidFill(spPr);
+      if (fill) box.style.background = fill;
+      const geom = spPr && slideByLocal(spPr, "prstGeom")[0]?.getAttribute("prst");
+      if (geom === "ellipse") box.style.borderRadius = "50%";
+      else if (geom === "roundRect") box.style.borderRadius = "6%";
+      renderShapeText(el, box, ctx);
+      if (geo) {
+        slide.appendChild(box);
+      } else if (box.childNodes.length) {
+        box.classList.add("pptx-shape-flow");
+        if (!flow) {
+          flow = document.createElement("div");
+          flow.className = "pptx-flow";
+          slide.appendChild(flow);
+        }
+        flow.appendChild(box);
+      }
+    } else if (el.localName === "pic") {
+      const geo = slideXfrm(el);
+      const blip = slideByLocal(el, "blip")[0];
+      const target = blip && ctx.rels.get(blip.getAttribute("r:embed") ?? blip.getAttributeNS("http://schemas.openxmlformats.org/officeDocument/2006/relationships", "embed"));
+      if (!target) continue;
+      const mediaPath = target.replace(/^(\.\.\/)+/, "ppt/");
+      const media = ctx.zip.file(mediaPath);
+      if (!media) continue;
+      const ext = mediaPath.split(".").pop().toLowerCase();
+      if (!SLIDE_MIME[ext]) continue; // wmf/emf etc. have no browser rendering
+      const blob = new Blob([await media.async("arraybuffer")], { type: SLIDE_MIME[ext] });
+      const url = URL.createObjectURL(blob);
+      slideObjectUrls.push(url);
+      const img = document.createElement("img");
+      img.className = "pptx-pic";
+      img.src = url;
+      img.alt = "";
+      if (geo) {
+        img.style.left = pct(geo.x, W);
+        img.style.top = pct(geo.y, H);
+        img.style.width = pct(geo.cx, W);
+        img.style.height = pct(geo.cy, H);
+        slide.appendChild(img);
+      } else {
+        img.classList.add("pptx-pic-flow");
+        if (!flow) {
+          flow = document.createElement("div");
+          flow.className = "pptx-flow";
+          slide.appendChild(flow);
+        }
+        flow.appendChild(img);
+      }
+    }
+    // group shapes (grpSp) and charts keep their space unrendered — the
+    // fidelity report counts them; inventing layout would be dishonest.
+  }
+}
+
+function renderShapeText(sp, box, ctx) {
+  for (const p of slideByLocal(sp, "p")) {
+    const par = document.createElement("p");
+    par.className = "pptx-par";
+    const pPr = slideByLocal(p, "pPr")[0];
+    const algn = pPr?.getAttribute("algn");
+    if (algn === "ctr") par.style.textAlign = "center";
+    else if (algn === "r") par.style.textAlign = "right";
+    const lvl = Number(pPr?.getAttribute("lvl") ?? 0);
+    if (lvl > 0) par.style.paddingLeft = `${lvl * 1.25}em`;
+    for (const node of p.children) {
+      if (node.localName === "br") {
+        par.appendChild(document.createElement("br"));
+        continue;
+      }
+      if (node.localName !== "r") continue;
+      const t = slideByLocal(node, "t").map((x) => x.textContent).join("");
+      if (!t) continue;
+      const run = document.createElement("span");
+      run.textContent = t;
+      const rPr = slideByLocal(node, "rPr")[0];
+      const sz = rPr?.getAttribute("sz");
+      run.style.fontSize = ctx.ptToCqw(sz ? +sz / 100 : 18);
+      if (rPr?.getAttribute("b") === "1") run.style.fontWeight = "650";
+      if (rPr?.getAttribute("i") === "1") run.style.fontStyle = "italic";
+      const color = rPr && slideSolidFill(rPr);
+      if (color) run.style.color = color;
+      par.appendChild(run);
+    }
+    if (par.childNodes.length) box.appendChild(par);
+  }
+}
+
+// Fallback when the geometry pass fails: text cards from parsed sections.
+function textSlideCards(result) {
+  const wrap = document.createElement("div");
+  wrap.className = "slide-preview";
+  for (const sec of result.sections ?? []) {
+    const card = document.createElement("div");
+    card.className = "slide-card";
+    const h = document.createElement("h3");
+    h.textContent = sec.heading;
+    const pre = document.createElement("pre");
+    pre.textContent = sec.content;
+    card.append(h, pre);
+    wrap.appendChild(card);
+  }
+  return wrap;
+}
 
 // Async viewers show a placeholder, then swap in the rendered preview.
 function fillAsync(container, render) {
