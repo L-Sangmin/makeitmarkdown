@@ -1,0 +1,17 @@
+# Security headers for every route (Cloudflare Pages format).
+#
+# Every script, style, font and library is self-hosted, so the CSP allows
+# no external origins at all. The non-'self' allowances are what the
+# in-browser parsers genuinely use:
+#   img-src data:/blob:   — extracted figures, pptx slide images, favicon
+#   object-src blob:      — the PDF original-panel <embed>
+#   worker/script blob:   — tesseract OCR runs its worker from a blob URL
+#   'wasm-unsafe-eval'    — tesseract's wasm core
+#   'unsafe-inline'       — the tiny theme-boot snippet in every <head>
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' blob: 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' blob: data:; worker-src 'self' blob:; object-src blob:; frame-src 'self'; media-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
