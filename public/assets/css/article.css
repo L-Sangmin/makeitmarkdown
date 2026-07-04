@@ -399,13 +399,17 @@ article a:hover { text-decoration: underline; }
   color: var(--fg-faint);
 }
 .ad-slot.ad-demo::after {
-  content: "demo placeholder — a 336×280 / responsive in-article unit renders here after approval";
+  content: "demo placeholder — a responsive " attr(data-unit) " unit renders here after approval";
   margin-top: 0.5rem;
   font-size: 0.75rem;
   color: var(--fg-faint);
   max-width: 24rem;
   text-align: center;
 }
+
+/* in-feed demo card in the gallery grid — native list unit, one per group max */
+.gallery-grid .ad-card { list-style: none; }
+.ad-infeed { margin: 0; height: 100%; min-height: 16rem; }
 
 /* emphasis components ------------------------------------------------------- */
 

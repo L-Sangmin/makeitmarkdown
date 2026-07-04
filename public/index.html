@@ -93,7 +93,8 @@
     </section>
 
     <section class="strip" id="how" aria-label="How it works">
-      <div class="strip-inner">
+      <div class="strip-inner has-rail">
+        <div>
         <h2 class="strip-title">Drop. Inspect. Export.</h2>
         <div class="steps">
           <div class="step">
@@ -112,13 +113,9 @@
             <p>Token-lean chat paste, RAG chunks with stable anchors, Obsidian callouts, or a faithful archive &mdash; with exact token counts on demand.</p>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="strip" aria-label="Advertisement">
-      <div class="strip-inner" style="padding-top:2rem;padding-bottom:2rem">
-        <!-- AD SLOT (landing, below the fold — never near the drop target) -->
-        <div class="ad-slot ad-demo" aria-label="Advertisement placeholder"></div>
+        </div>
+        <!-- AD SLOT (landing rail, ≥1100px only — media-query hiding is supported for responsive units) -->
+        <div class="ad-slot ad-demo ad-rail" data-unit="display (300×600)" aria-label="Advertisement placeholder"></div>
       </div>
     </section>
 
@@ -139,6 +136,13 @@
           <a href="/formats/subtitles.html">.srt</a>
           <a href="/formats/markdown.html">.md</a>
         </p>
+      </div>
+    </section>
+
+    <section class="strip" aria-label="Advertisement">
+      <div class="strip-inner" style="padding-top:2rem;padding-bottom:2rem">
+        <!-- AD SLOT (landing, below the fold — never near the drop target) -->
+        <div class="ad-slot ad-demo" data-unit="display" aria-label="Advertisement placeholder"></div>
       </div>
     </section>
 

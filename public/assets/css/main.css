@@ -1160,10 +1160,26 @@ kbd {
   color: var(--fg-faint);
 }
 .ad-slot.ad-demo::after {
-  content: "demo placeholder — a responsive unit renders here after approval";
+  content: "demo placeholder — a responsive " attr(data-unit) " unit renders here after approval";
   margin-top: 0.5rem;
   font-size: 0.75rem;
   color: var(--fg-faint);
   max-width: 24rem;
   text-align: center;
+}
+
+/* How-it-works rail: steps + a 300×600 display unit on wide screens only.
+   Hiding a responsive unit's container via media query is AdSense-supported. */
+.strip-inner.has-rail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.ad-rail { display: none; }
+
+@media (min-width: 1100px) {
+  .strip-inner.has-rail { grid-template-columns: minmax(0, 1fr) 300px; }
+  .ad-rail { display: grid; min-height: 600px; }
 }
