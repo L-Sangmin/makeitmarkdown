@@ -44,17 +44,19 @@
 
       <figure class="fig-panel">
         <svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: an uploader site sends the file to its own disk, while this site loops the file inside the browser tab.">
+          <defs>
+            <marker id="voc-head-w" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0 0.5 L7.5 4 L0 7.5 Z" fill="var(--warn)"/></marker>
+            <marker id="voc-head-k" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0 0.5 L7.5 4 L0 7.5 Z" fill="var(--ok)"/></marker>
+          </defs>
           <g font-family="ui-monospace,monospace" font-size="10">
-            <rect x="36" y="40" width="150" height="100" rx="10" fill="none" stroke="var(--warn)" stroke-width="1.5"/>
-            <text x="111" y="62" text-anchor="middle" fill="var(--fg-muted)">"free converter"</text>
-            <path d="M76 100 q35 -30 70 0" fill="none" stroke="var(--warn)" stroke-width="1.5"/>
-            <path d="M141 93 l8 8 -11 2z" fill="var(--warn)"/>
-            <text x="111" y="126" text-anchor="middle" fill="var(--warn)">their disk — how long?</text>
-            <rect x="294" y="40" width="150" height="100" rx="10" fill="none" stroke="var(--ok)" stroke-width="1.5"/>
-            <text x="369" y="62" text-anchor="middle" fill="var(--fg-muted)">this site</text>
-            <path d="M334 104 a 22 22 0 1 1 44 0" fill="none" stroke="var(--ok)" stroke-width="1.5"/>
-            <path d="M372 97 l8 8 -12 1z" fill="var(--ok)"/>
-            <text x="369" y="126" text-anchor="middle" fill="var(--ok)">never leaves the tab</text>
+            <rect x="28" y="40" width="168" height="100" rx="10" fill="none" stroke="var(--warn)" stroke-width="1.5"/>
+            <text x="112" y="62" text-anchor="middle" fill="var(--fg-muted)">"free converter"</text>
+            <path d="M112 74 v30" fill="none" stroke="var(--warn)" stroke-width="1.5" marker-end="url(#voc-head-w)"/>
+            <text x="112" y="126" text-anchor="middle" fill="var(--warn)">their disk — how long?</text>
+            <rect x="284" y="40" width="168" height="100" rx="10" fill="none" stroke="var(--ok)" stroke-width="1.5"/>
+            <text x="368" y="62" text-anchor="middle" fill="var(--fg-muted)">this site</text>
+            <path d="M 360.5 105.7 A 16 16 0 1 1 375.5 105.7" fill="none" stroke="var(--ok)" stroke-width="1.5" marker-end="url(#voc-head-k)"/>
+            <text x="368" y="126" text-anchor="middle" fill="var(--ok)">never leaves the tab</text>
             <text x="240" y="170" text-anchor="middle" fill="var(--fg-faint)">checkable: open the network tab — zero upload requests</text>
           </g>
         </svg>

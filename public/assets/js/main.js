@@ -124,6 +124,28 @@ function rawText(buffer) {
   }
 }
 
+// The raw side never changes when the preset does — cache it per buffer, or
+// every preset click re-tokenizes the whole file and the UI feels stuck.
+let rawTokCache = { buffer: null, count: 0, exact: false };
+
+function rawTokens(buffer) {
+  if (rawTokCache.buffer !== buffer) {
+    const text = rawText(buffer);
+    rawTokCache = {
+      buffer,
+      count: text !== null ? countTokensExact(text) : Math.round(buffer.byteLength / 4),
+      exact: text !== null,
+    };
+  }
+  return rawTokCache;
+}
+
+// Resolves after the browser has painted once — lets the ≈ estimate and its
+// counting pulse reach the screen before the synchronous tokenizer pass blocks.
+function afterPaint() {
+  return new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
+}
+
 function renderTokSave({ before, after, beforeExact, afterExact }) {
   const reduction = 1 - after / before;
   const secSaved = (before - after) / 1000;
@@ -173,27 +195,34 @@ function updateTokSave() {
     afterExact: false,
   });
 
+  tokSaveBox.classList.add("is-counting");
   const markdown = current.markdown;
   const buffer = current.fileBuffer;
   ensureTokenizer()
+    .then(afterPaint)
     .then(() => {
       if (seq !== tokSaveSeq || current?.markdown !== markdown) return;
-      const text = rawText(buffer);
+      const raw = rawTokens(buffer);
+      const after = countTokensExact(markdown);
       renderTokSave({
-        before: text !== null ? countTokensExact(text) : Math.round(buffer.byteLength / 4),
-        after: countTokensExact(markdown),
-        beforeExact: text !== null,
+        before: raw.count,
+        after,
+        beforeExact: raw.exact,
         afterExact: true,
       });
-      applyExactSizeNote(markdown);
+      tokSaveBox.classList.remove("is-counting");
+      applyExactSizeNote(markdown, after);
     })
-    .catch(() => {}); // offline before the tokenizer was cached — estimates stand
+    .catch(() => {
+      // offline before the tokenizer was cached — estimates stand
+      tokSaveBox.classList.remove("is-counting");
+    });
 }
 
 // Shared by the "count exactly" button and the automatic pass above.
-function applyExactSizeNote(markdown) {
+function applyExactSizeNote(markdown, n = null) {
   if (current?.markdown !== markdown) return;
-  const n = countTokensExact(markdown);
+  if (n === null) n = countTokensExact(markdown);
   els.mdSize.textContent =
     `${markdown.length.toLocaleString("en-US")} chars · ${n.toLocaleString("en-US")} tokens (o200k)`;
   btnExact.hidden = true;

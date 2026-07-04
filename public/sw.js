@@ -8,7 +8,7 @@
 //
 // DEPLOY NOTE: bump VERSION on every deploy — it invalidates old caches.
 
-const VERSION = "v15";
+const VERSION = "v16";
 const CACHE = `mim-${VERSION}`;
 
 const CORE = [
