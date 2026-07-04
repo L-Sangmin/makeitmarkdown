@@ -43,7 +43,6 @@ for (const rel of collectPages(pub)) {
   const ogType = rel.startsWith("blog/") && rel !== "blog/index.html"
     ? "article"
     : "website";
-  const isOffline = rel === "offline.html";
 
   if (!existsSync(join(pub, "assets/og", slugFor(rel) + ".png"))) {
     console.warn(`warn (no og image yet): ${rel}`);
@@ -61,7 +60,6 @@ for (const rel of collectPages(pub)) {
     `  <meta property="og:image:width" content="1200" />`,
     `  <meta property="og:image:height" content="630" />`,
     `  <meta name="twitter:card" content="summary_large_image" />`,
-    isOffline ? `  <meta name="robots" content="noindex" />` : null,
     END,
   ].filter(Boolean);
 
