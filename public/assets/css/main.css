@@ -400,7 +400,7 @@ kbd {
 .drop-formats {
   font-family: var(--font-mono);
   font-size: 0.8125rem;
-  color: var(--fg-faint);
+  color: var(--fg-muted); /* AA contrast, incl. on the tinted article CTA */
   letter-spacing: 0.01em;
 }
 
