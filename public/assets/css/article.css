@@ -310,6 +310,12 @@ article p a, article li a, article td a, article figcaption a {
   text-decoration: none;
 }
 
+/* thumb glyph lifts a hair on hover — gated by the global reduced-motion rule */
+@media (prefers-reduced-motion: no-preference) {
+  .card-thumb svg { transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .gallery-card:hover .card-thumb svg { transform: translateY(-2px); }
+}
+
 .card-thumb {
   aspect-ratio: 16 / 8;
   background: light-dark(
@@ -381,6 +387,7 @@ article p a, article li a, article td a, article figcaption a {
 
 /* format guides: before/after sample pair */
 .ba { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 0 0 1.1rem; }
+.ba > * { min-width: 0; } /* wide <pre> scrolls inside its column instead of blowing out the grid */
 .ba-label {
   margin: 0 0 0.375rem;
   font-family: var(--font-mono);
