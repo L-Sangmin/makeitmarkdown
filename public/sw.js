@@ -109,9 +109,15 @@ self.addEventListener("fetch", (e) => {
       .catch(async () => {
         const hit = await caches.match(e.request);
         if (hit) return hit;
-        // Never silently swap in the homepage for an uncached article —
-        // an explicit offline notice is honest; the wrong page is not.
-        if (e.request.mode === "navigate") return caches.match("/offline.html");
+        if (e.request.mode === "navigate") {
+          // Deep links carry query strings (?preset=, ?theme=) — the cached
+          // page is the same document, so match without the search part.
+          const pageHit = await caches.match(e.request, { ignoreSearch: true });
+          if (pageHit) return pageHit;
+          // Never silently swap in the homepage for an uncached article —
+          // an explicit offline notice is honest; the wrong page is not.
+          return caches.match("/offline.html");
+        }
         return Response.error();
       })
   );
