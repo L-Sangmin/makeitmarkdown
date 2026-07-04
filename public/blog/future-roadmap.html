@@ -6,14 +6,14 @@
   <meta name="color-scheme" content="light dark" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
   <title>Where this goes next: a CLI, agent skills, and stronger local OCR — MakeItMarkdown</title>
-  <meta name="description" content="The public roadmap: the same parsers as an installable CLI, packaged as an agent skill for Claude Code-class assistants, and OCR upgraded to local CPU/GPU models." />
+  <meta name="description" content="The public roadmap: the parsers as an installable CLI, an agent skill for Claude Code-class assistants, OCR on local CPU/GPU models, and more languages." />
   <!-- meta:managed (scripts/apply-meta.mjs) -->
   <link rel="canonical" href="https://makeitmarkdown.pages.dev/blog/future-roadmap.html" />
   <meta property="og:site_name" content="MakeItMarkdown" />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://makeitmarkdown.pages.dev/blog/future-roadmap.html" />
   <meta property="og:title" content="Where this goes next: a CLI, agent skills, and stronger local OCR — MakeItMarkdown" />
-  <meta property="og:description" content="The public roadmap: the same parsers as an installable CLI, packaged as an agent skill for Claude Code-class assistants, and OCR upgraded to local CPU/GPU models." />
+  <meta property="og:description" content="The public roadmap: the parsers as an installable CLI, an agent skill for Claude Code-class assistants, OCR on local CPU/GPU models, and more languages." />
   <meta property="og:image" content="https://makeitmarkdown.pages.dev/assets/og/blog-future-roadmap.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -129,7 +129,23 @@
       approximate</em>, opt-in, and QC-capped. Better eyes, same
       honesty.</p>
 
-      <h2><span class="sec-num">4 ·</span> What will never change</h2>
+      <h2><span class="sec-num">4 ·</span> More languages than English</h2>
+      <p>The interface and the Context Lab ship in English today. The
+      converter itself is already language-neutral &mdash; headings,
+      tables and code fences work the same in any script &mdash; but two
+      places still assume English, and both are on the roadmap:</p>
+      <ul>
+        <li><strong>The site.</strong> English stays the default; Korean
+        comes first after it (the maintainer's mother tongue), further
+        languages as demand shows up.</li>
+        <li><strong>OCR.</strong> The opt-in pass currently loads the
+        English model only. The plan: detect the document's script, fetch
+        the matching tesseract language pack, and record which language
+        was used in the fidelity report &mdash; so a Korean scan isn't
+        read with English eyes and quietly garbled.</li>
+      </ul>
+
+      <h2><span class="sec-num">5 ·</span> What will never change</h2>
       <ul>
         <li><strong>Local first.</strong> Files don't leave your machine —
         browser, CLI or agent alike.</li>
