@@ -1003,7 +1003,15 @@ kbd {
 .qc-checks strong { color: var(--fg); font-weight: 550; }
 .qc-checks .qc-mark { flex: none; font-family: var(--font-mono); }
 .qc-pass .qc-mark { color: var(--ok); }
+.qc-part .qc-mark { color: var(--warn); }
 .qc-fail .qc-mark { color: var(--warn); }
+
+.qc-weight {
+  margin-left: 0.3em;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--fg-faint);
+}
 
 .qc-score {
   font-family: var(--font-mono);

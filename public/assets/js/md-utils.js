@@ -70,41 +70,97 @@ export function extractMdTables(markdown) {
   return tables;
 }
 
-// The five structural QC checks, individually labelled so the fidelity
-// panel can show which ones passed. qcScore stays the same fraction.
+// The structural QC checks, individually labelled so the fidelity panel
+// can show which ones passed. Each check scores 0..1 (partial credit) and
+// carries a weight; qcScore is the weighted mean. Structure and element
+// recovery weigh double — they are what "fidelity" means here.
+
+// Warnings that describe actual content loss (vs. purely informational
+// notes). Each one costs a quarter of the "No loss reported" check.
+const LOSS_WARNING =
+  /not extracted|not expanded|truncat|skipp|flatten|approximate|no text|showing the first|could not|failed/i;
+
 export function qcChecks(r) {
-  return [
+  const sections = r.sections ?? [];
+  const figures = r.figures ?? [];
+  const tables = r.tables ?? [];
+  const d = r.fidelity?.detected ?? {};
+  const rec = r.fidelity?.recovered ?? {};
+
+  const detectedTotal =
+    (d.tables ?? 0) + (d.figures ?? 0) + (d.equations ?? 0) + (d.codeCells ?? 0);
+  const recoveredTotal =
+    (rec.tables ?? 0) + (rec.figures ?? 0) + (rec.equations ?? 0) + (rec.codeCells ?? 0);
+
+  const frac = (num, den) => (den === 0 ? 1 : Math.min(1, num / den));
+  const lossCount = (r.fidelity?.warnings ?? []).filter((w) => LOSS_WARNING.test(w)).length;
+  const nonEmpty = sections.filter((s) => (s.content ?? "").trim().length > 0).length;
+  const clean = sections.filter((s) => !/\?\?|□□|�/.test(s.content ?? "")).length;
+
+  const checks = [
     {
       label: "Title recovered",
-      pass: (r.title?.length ?? 0) > 0,
+      weight: 1,
+      score: (r.title?.length ?? 0) > 0 ? 1 : 0,
       note: "a real document title was found",
     },
     {
       label: "Sectioned structure",
-      pass: (r.sections?.length ?? 0) >= 3,
-      note: "at least three sections with headings",
+      weight: 2,
+      score: sections.length >= 3 ? 1 : sections.length === 2 ? 0.6 : sections.length === 1 ? 0.3 : 0,
+      note: "headings split the document into addressable sections",
+    },
+    {
+      label: "Sections carry content",
+      weight: 1,
+      score: sections.length ? nonEmpty / sections.length : 0,
+      note: `${nonEmpty} of ${sections.length} section(s) are non-empty`,
+    },
+    {
+      label: "Elements recovered",
+      weight: 2,
+      score: frac(recoveredTotal, detectedTotal),
+      note:
+        detectedTotal === 0
+          ? "no tables, figures, equations or code cells to lose"
+          : `${recoveredTotal} of ${detectedTotal} detected element(s) made it into the output`,
     },
     {
       label: "Figures addressable",
-      pass: (r.figures ?? []).every((f) => f.url && f.caption),
+      weight: 1,
+      score: figures.length ? figures.filter((f) => f.url && f.caption).length / figures.length : 1,
       note: "every detected figure has a file and a caption",
     },
     {
       label: "Tables intact",
-      pass: (r.tables ?? []).every((t) => t.markdown),
+      weight: 1,
+      score: tables.length ? tables.filter((t) => t.markdown).length / tables.length : 1,
       note: "every detected table produced Markdown markup",
     },
     {
       label: "No extraction noise",
-      pass: !r.sections?.some((s) => /\?\?|□□/.test(s.content)),
-      note: "no ??/□□ replacement-character debris in the text",
+      weight: 1,
+      score: sections.length ? clean / sections.length : 1,
+      note: "no ??/□□/� replacement-character debris in the text",
+    },
+    {
+      label: "No loss reported",
+      weight: 1,
+      score: Math.max(0, 1 - lossCount / 4),
+      note: lossCount
+        ? `${lossCount} warning(s) report dropped or truncated content`
+        : "no warning reports dropped or truncated content",
     },
   ];
+  for (const c of checks) c.pass = c.score >= 0.995;
+  return checks;
 }
 
 export function qcScore(r) {
   const checks = qcChecks(r);
-  return checks.filter((c) => c.pass).length / checks.length;
+  const total = checks.reduce((s, c) => s + c.weight, 0);
+  const got = checks.reduce((s, c) => s + c.weight * c.score, 0);
+  return Math.round((got / total) * 100) / 100;
 }
 
 // Exact token count via the lazily-loaded o200k tokenizer (loader.js

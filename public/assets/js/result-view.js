@@ -264,21 +264,25 @@ function renderFidelity(container, result) {
 
   const checks = qcChecks(result);
   const checksHtml = checks
-    .map(
-      (c) => `
-      <li class="${c.pass ? "qc-pass" : "qc-fail"}">
-        <span class="qc-mark">${c.pass ? "✓" : "✗"}</span>
-        <span><strong>${escapeHtml(c.label)}</strong> — ${escapeHtml(c.note)}</span>
-      </li>`
-    )
+    .map((c) => {
+      const kind = c.pass ? "qc-pass" : c.score > 0 ? "qc-part" : "qc-fail";
+      const mark = c.pass ? "✓" : c.score > 0 ? "△" : "✗";
+      const pct = c.pass || c.score === 0 ? "" : ` (${Math.round(c.score * 100)}%)`;
+      const wt = c.weight > 1 ? `<span class="qc-weight">×${c.weight}</span>` : "";
+      return `
+      <li class="${kind}">
+        <span class="qc-mark">${mark}</span>
+        <span><strong>${escapeHtml(c.label)}</strong>${wt} — ${escapeHtml(c.note)}${pct}</span>
+      </li>`;
+    })
     .join("");
 
   container.innerHTML = `
     <p class="sr-only">${escapeHtml(srSummary)}</p>
     <button type="button" class="qc qc-toggle" aria-expanded="false"
-      aria-label="QC score ${score} percent — show the five structural checks">
+      aria-label="QC score ${score} percent — show the ${checks.length} weighted structural checks">
       <div class="qc-score" aria-hidden="true"><span class="count-num" data-n="${score}">0</span><span class="qc-pct">%</span></div>
-      <div class="qc-label" aria-hidden="true">QC score<span>5-point structural check · details</span></div>
+      <div class="qc-label" aria-hidden="true">QC score<span>${checks.length} weighted structural checks · details</span></div>
       <svg class="qc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
     </button>
     <ul class="qc-checks" hidden>${checksHtml}</ul>
