@@ -66,6 +66,8 @@ article h2 .sec-num {
 
 .related-head a { font-size: 0.8125rem; }
 
+.related-links { display: flex; gap: 1.25rem; align-items: baseline; }
+
 .related-kicker {
   margin: 0;
   font-size: 0.9375rem;
@@ -423,6 +425,23 @@ article a:hover { text-decoration: underline; }
 /* in-feed demo card in the gallery grid — native list unit, one per group max */
 .gallery-grid .ad-card { list-style: none; }
 .ad-infeed { margin: 0; height: 100%; min-height: 16rem; }
+
+/* Fixed side rails on wide screens — the 42rem content column is untouched;
+   rails ride the empty margins (hidden below 1240px, AdSense-supported). */
+.ad-rail-fixed {
+  display: none;
+  position: fixed;
+  top: 5.5rem;
+  width: 160px;
+  min-height: 600px;
+  margin: 0;
+}
+
+@media (min-width: 1240px) {
+  .ad-rail-fixed { display: grid; }
+  .ad-rail-fixed.rail-left { left: calc(50vw - 21rem - 13rem); }
+  .ad-rail-fixed.rail-right { right: calc(50vw - 21rem - 13rem); }
+}
 
 /* emphasis components ------------------------------------------------------- */
 

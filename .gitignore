@@ -1,5 +1,13 @@
 .DS_Store
 node_modules/
 *.log
+
+# Work-based, local-only documents — session context, plans, media requests.
+# Repo users need the code and public docs, not our working notes.
 .claude/
 drafts/
+CLAUDE.md
+DESIGN.md
+HANDOFF*.md
+NOTES*.md
+shots*/
