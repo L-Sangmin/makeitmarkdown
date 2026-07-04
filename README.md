@@ -92,6 +92,6 @@ deploy).
 
 ## Licenses
 
-Third-party libraries are MIT / BSD / Apache-2.0 only — full notices in
-[THIRD_PARTY_LICENSES.txt](THIRD_PARTY_LICENSES.txt). License for this
-project's own code: not chosen yet (open-sourcing planned for a later phase).
+This project is [MIT-licensed](LICENSE). Third-party libraries are
+MIT / BSD / Apache-2.0 only — full notices in
+[THIRD_PARTY_LICENSES.txt](THIRD_PARTY_LICENSES.txt).
