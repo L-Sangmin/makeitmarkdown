@@ -1615,3 +1615,11 @@ kbd {
 .ad-slot.ad-demo,
 .ad-card,
 .ad-rail-fixed { display: none !important; }
+
+/* with the side rails display:none, the hero grid must not keep its
+   180px rail tracks — the content child would auto-place into the
+   first, narrow one. Collapse the row to a single full-width track. */
+.hero-row {
+  grid-template-columns: minmax(0, 1fr) !important;
+  padding: 0 !important;
+}
