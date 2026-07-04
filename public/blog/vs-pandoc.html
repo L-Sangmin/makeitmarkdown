@@ -42,7 +42,7 @@
       different task than "convert this file" — and the differences are
       exactly where the two tools diverge.</p>
 
-      <h2>Where pandoc is simply better</h2>
+      <h2><span class="sec-num">1 ·</span> Where pandoc is simply better</h2>
       <ul>
         <li><strong>Format breadth</strong> — LaTeX, EPUB, DocBook, org,
         reStructuredText, and everything between, in and out.</li>
@@ -53,7 +53,7 @@
         converter.</li>
       </ul>
 
-      <h2>Where the LLM task diverges</h2>
+      <h2><span class="sec-num">2 ·</span> Where the LLM task diverges</h2>
       <ul>
         <li><strong>The fidelity report.</strong> pandoc's contract is
         "convert what's convertible"; loss is silent by design. Our
@@ -78,13 +78,39 @@
         right shape for that moment.</li>
       </ul>
 
-      <h2>Privacy is a tie</h2>
+      <h2><span class="sec-num">3 ·</span> Privacy is a tie</h2>
       <p>Both run entirely on your machine — pandoc as a local binary,
       MakeItMarkdown as local JavaScript (verify it: load once, go
       offline, convert). Both beat any upload-based service for
       confidential files.</p>
 
-      <h2>The honest recommendation</h2>
+      <figure class="fig-panel">
+        <svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: pandoc fans out to many output formats, while this tool aims only at LLM context with a fidelity report.">
+          <g font-family="ui-monospace,monospace" font-size="10">
+            <rect x="36" y="76" width="80" height="38" rx="7" fill="none" stroke="var(--fg-muted)" stroke-width="1.5"/>
+            <text x="76" y="99" text-anchor="middle" fill="var(--fg)">pandoc</text>
+            <g stroke="var(--fg-faint)" stroke-width="1.25" fill="none">
+              <path d="M122 88 q40 -34 78 -42 M122 92 q44 -14 80 -16 M122 96 q44 14 80 16 M122 100 q40 34 78 42"/>
+            </g>
+            <g fill="var(--fg-muted)">
+              <text x="210" y="46">.epub</text>
+              <text x="212" y="80">.html</text>
+              <text x="212" y="118">.docx</text>
+              <text x="210" y="148">.pdf …</text>
+            </g>
+            <rect x="300" y="76" width="94" height="38" rx="7" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+            <text x="347" y="99" text-anchor="middle" fill="var(--accent)">this tool</text>
+            <path d="M400 95 h28" stroke="var(--accent)" stroke-width="1.5"/>
+            <path d="M422 89 l10 6 -10 6z" fill="var(--accent)"/>
+            <text x="440" y="90" fill="var(--fg)">LLM</text>
+            <text x="436" y="104" fill="var(--fg)">context</text>
+            <text x="347" y="140" text-anchor="middle" fill="var(--fg-faint)">one destination + fidelity report</text>
+          </g>
+        </svg>
+        <figcaption>pandoc is a universal translator; this is a preflight check for exactly one destination.</figcaption>
+      </figure>
+
+      <h2><span class="sec-num">4 ·</span> The honest recommendation</h2>
       <table>
         <tr><th>Task</th><th>Use</th></tr>
         <tr><td>Batch-convert a repository of docs in CI</td><td>pandoc</td></tr>

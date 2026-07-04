@@ -31,6 +31,8 @@
         <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><text x="122" y="78" font-family="ui-monospace,monospace" font-size="22" fill="var(--fg)">1,204</text><text x="196" y="78" font-family="ui-monospace,monospace" font-size="22" fill="var(--warn)">?</text><path d="M118 94 q14 10 28 0 t28 0 t28 0" fill="none" stroke="var(--warn)" stroke-width="1.75" stroke-linecap="round"/><text x="122" y="122" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">not in your data</text></svg>
       </div>
 
+      <p class="takeaway"><strong>The point:</strong> models don't confess to missing rows — silent truncation and headerless values invite confident invention.</p>
+
       <p>You ask for the total, the model gives one — and it's wrong. Not
       wildly wrong, which would be easy to catch, but plausibly wrong:
       close to the real figure, confidently stated, sometimes with a fake
@@ -38,13 +40,39 @@
       what it was actually shown. Two input defects cause most invented
       numbers.</p>
 
-      <h2>Defect 1: silent truncation</h2>
+      <h2><span class="sec-num">1 ·</span> Silent truncation</h2>
       <p>Upload paths and extractors cap what they pass to the model —
       by characters, rows, or pages — and rarely say so. The model
       receives 400 of your 4,812 rows with no marker that anything is
       missing, so when you ask for "total revenue" it sums what it has,
       or worse, senses the data looks partial and <em>extrapolates</em>.
       Both produce a specific, wrong number.</p>
+
+      <figure class="fig-panel">
+        <svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: a table fades out after row 40 with rows 41 to 5,000 never seen, while the model confidently reports a total.">
+          <g font-family="ui-monospace,monospace" font-size="10">
+            <g stroke="var(--fg-faint)" fill="none" stroke-width="1">
+              <rect x="30" y="30" width="180" height="16" rx="2"/>
+              <rect x="30" y="50" width="180" height="16" rx="2"/>
+              <rect x="30" y="70" width="180" height="16" rx="2"/>
+            </g>
+            <rect x="30" y="90" width="180" height="16" rx="2" fill="none" stroke="var(--fg-faint)" stroke-width="1" opacity="0.55"/>
+            <rect x="30" y="110" width="180" height="16" rx="2" fill="none" stroke="var(--fg-faint)" stroke-width="1" opacity="0.25"/>
+            <text x="40" y="42" fill="var(--fg-muted)">row 1 · 118</text>
+            <text x="40" y="62" fill="var(--fg-muted)">row 2 · 340</text>
+            <text x="40" y="82" fill="var(--fg-muted)">row 3 · 205</text>
+            <text x="40" y="102" fill="var(--fg-muted)" opacity="0.6">row 40 · 91</text>
+            <text x="120" y="146" text-anchor="middle" fill="var(--warn)">rows 41–5,000 · never seen</text>
+            <path d="M28 132 h184" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="6 4"/>
+            <path d="M258 92 h40" stroke="var(--fg-faint)" stroke-width="1.5"/>
+            <path d="M292 86 l10 6 -10 6z" fill="var(--fg-faint)"/>
+            <rect x="316" y="62" width="140" height="58" rx="10" fill="none" stroke="var(--warn)" stroke-width="1.5"/>
+            <text x="386" y="87" text-anchor="middle" fill="var(--fg)" font-size="13">"Total: 1,204"</text>
+            <text x="386" y="106" text-anchor="middle" fill="var(--warn)">from 40 of 5,000 rows</text>
+          </g>
+        </svg>
+        <figcaption>The sum is real arithmetic — over the fraction of rows that survived the paste.</figcaption>
+      </figure>
       <p>The cure is stating the cut in the text itself:</p>
       <pre><code>Showing the first 50 of 4,812 rows.</code></pre>
       <p>A model that knows it has a sample answers like it has a sample:
@@ -53,7 +81,7 @@
       properly. Every table MakeItMarkdown truncates carries this
       sentence automatically.</p>
 
-      <h2>Defect 2: values with no header context</h2>
+      <h2><span class="sec-num">2 ·</span> Values with no header context</h2>
       <p>When a paste or extraction drops the header row (merged title
       cells are a common cause — see <a
       href="/blog/pasted-table-garbage.html">why tables mangle in
@@ -65,7 +93,7 @@
       <p>Typed headers close the gap:</p>
       <pre><code>| month (date) | units (int) | revenue (float) |</code></pre>
 
-      <h2>The two-minute audit</h2>
+      <h2><span class="sec-num">3 ·</span> The two-minute audit</h2>
       <ol>
         <li>Convert the actual file with <a href="/?sample=sales-csv">the
         converter</a> and look at the Markdown pane: is every table
@@ -79,7 +107,7 @@
         the rows it used.</li>
       </ol>
 
-      <h2>What this can't fix</h2>
+      <h2><span class="sec-num">4 ·</span> What this can't fix</h2>
       <p>Clean input removes the <em>induced</em> hallucinations. Models
       still make genuine arithmetic slips on long columns — for real
       computation, ask for the method ("write the pandas expression")

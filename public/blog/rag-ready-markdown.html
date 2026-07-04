@@ -60,20 +60,22 @@
       <h1>RAG-ready Markdown: chunk boundaries, stable anchors, honest citations</h1>
       <p class="article-byline">MakeItMarkdown · July 2026 · 8 min read</p>
 
+      <p class="takeaway"><strong>The point:</strong> most RAG quality problems are chunking problems, and chunking problems start at the source format — fix them before embedding.</p>
+
       <p>Most RAG quality problems are chunking problems. And most chunking
       problems are input problems: the chunker was handed a flat wall of
       extracted text and told to find topic boundaries with a ruler. This
       article is about fixing retrieval at the source — before the
       embedding model ever runs.</p>
 
-      <h2>Thirty seconds of background</h2>
+      <h2><span class="sec-num">1 ·</span> Thirty seconds of background</h2>
       <p>A retrieval-augmented pipeline ingests documents by splitting them
       into chunks, embedding each chunk as a vector, and — at question time
       — pulling the closest chunks into the model's context. Everything
       downstream (answer accuracy, citations, hallucination rate) inherits
       from one early decision: <em>where the splits fall</em>.</p>
 
-      <h2>What a ruler does to a document</h2>
+      <h2><span class="sec-num">2 ·</span> What a ruler does to a document</h2>
       <p>The default strategy — fixed windows of N characters with overlap —
       knows nothing about your document. On raw PDF extractions it
       reliably produces the three classic failure chunks:</p>
@@ -93,7 +95,7 @@
       and duplicated retrievals. The real fix is upstream: give the chunker
       boundaries that mean something.</p>
 
-      <h2>Headings are free chunk boundaries</h2>
+      <h2><span class="sec-num">3 ·</span> Headings are free chunk boundaries</h2>
       <p>A well-structured Markdown document already contains the splits a
       chunker wishes it could infer: section headings are topic boundaries,
       written by the one entity that knew the topics — the author. Chunk at
@@ -102,7 +104,7 @@
       section; "as shown above" mostly refers to text within the same
       chunk.</p>
 
-      <h2>What the RAG preset emits</h2>
+      <h2><span class="sec-num">4 ·</span> What the RAG preset emits</h2>
       <p>MakeItMarkdown's <em>RAG</em> preset makes those boundaries
       machine-obvious instead of implicit. Two additions to the standard
       output, both inert in any Markdown renderer:</p>
@@ -133,7 +135,7 @@
         anchors every time.</li>
       </ul>
 
-      <h2>Stable anchors are what make citations honest</h2>
+      <h2><span class="sec-num">5 ·</span> Stable anchors are what make citations honest</h2>
       <p>The quiet failure of RAG systems is the citation that can't be
       followed — "source: document.pdf, page ~14" pointing into a file
       whose extraction changed since indexing. Anchors fix the contract:
@@ -144,7 +146,26 @@
       Deduplicated slugs double as chunk IDs for deduping retrievals and
       tracking chunk-level metrics.</p>
 
-      <h2>Keep the fidelity signals in the index</h2>
+      <figure class="fig-panel">
+        <svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: a Markdown chunk with a stable anchor feeding an answer that cites that anchor as its source.">
+          <g font-family="ui-monospace,monospace" font-size="10">
+            <rect x="36" y="48" width="180" height="94" rx="8" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+            <text x="52" y="72" fill="var(--accent)">## Results</text>
+            <text x="52" y="90" fill="var(--fg-faint)">&lt;!-- chunk: results --&gt;</text>
+            <text x="52" y="112" fill="var(--fg-muted)">the cached path wins</text>
+            <text x="52" y="128" fill="var(--fg-muted)">on every measured run</text>
+            <path d="M224 95 h44" stroke="var(--fg-faint)" stroke-width="1.5"/>
+            <path d="M262 89 l10 6 -10 6z" fill="var(--fg-faint)"/>
+            <rect x="282" y="58" width="166" height="74" rx="8" fill="none" stroke="var(--ok)" stroke-width="1.5"/>
+            <text x="298" y="84" fill="var(--fg)">"…wins on every run"</text>
+            <text x="298" y="106" fill="var(--ok)">source: report.md#results</text>
+            <text x="240" y="170" text-anchor="middle" fill="var(--fg-faint)">an answer that must cite an anchor can be audited at that anchor</text>
+          </g>
+        </svg>
+        <figcaption>The chunk carries its own address; the answer cites it; you can open the address and check.</figcaption>
+      </figure>
+
+      <h2><span class="sec-num">6 ·</span> Keep the fidelity signals in the index</h2>
       <p>Two more properties of the converted output matter specifically
       for pipelines:</p>
       <ul>
@@ -163,7 +184,7 @@
       <a href="/blog/not-a-file-converter.html">fidelity report</a>:
       never let loss be silent.</p>
 
-      <h2>Recipe: files to chunks in three steps</h2>
+      <h2><span class="sec-num">7 ·</span> Recipe: files to chunks in three steps</h2>
       <ol>
         <li>Convert with the <strong>RAG</strong> preset (batch drop works;
         everything runs in your browser).</li>
@@ -176,7 +197,7 @@
         survive re-indexing.</li>
       </ol>
 
-      <h2>Where this is heading</h2>
+      <h2><span class="sec-num">8 ·</span> Where this is heading</h2>
       <p>The same properties that help retrieval — addressable sections,
       explicit structure, honest truncation — are what agentic workflows
       need: an assistant that can be told "read <code>report.md</code>,

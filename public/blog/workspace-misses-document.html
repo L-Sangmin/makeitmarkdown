@@ -38,7 +38,7 @@
       retrieval returning the wrong chunks, and it has three usual
       causes.</p>
 
-      <h2>Cause 1: chunks that don't align with topics</h2>
+      <h2><span class="sec-num">1 ·</span> Chunks that don't align with topics</h2>
       <p>Workspaces split each file into chunks and search those, not the
       whole document. When the text arrives structureless (a PDF
       extraction, a headingless wall of prose), the splitter cuts by
@@ -46,13 +46,36 @@
       fragment that starts halfway through the relevant idea. The model
       answers from the fragment; the rest of the topic sits in a
       neighboring chunk that didn't score high enough to be fetched.</p>
+
+      <figure class="fig-panel">
+        <svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: topic bands of a document overlaid with offset fixed-size chunk windows, one chunk containing half of two topics.">
+          <g font-family="ui-monospace,monospace" font-size="10">
+            <text x="30" y="40" fill="var(--fg-muted)">the document, by topic</text>
+            <rect x="30" y="52" width="150" height="26" rx="4" fill="color-mix(in srgb, var(--accent) 18%, transparent)"/>
+            <rect x="180" y="52" width="120" height="26" rx="4" fill="color-mix(in srgb, var(--ok) 18%, transparent)"/>
+            <rect x="300" y="52" width="150" height="26" rx="4" fill="color-mix(in srgb, var(--warn) 18%, transparent)"/>
+            <text x="105" y="69" text-anchor="middle" fill="var(--fg-muted)">setup</text>
+            <text x="240" y="69" text-anchor="middle" fill="var(--fg-muted)">deployment</text>
+            <text x="375" y="69" text-anchor="middle" fill="var(--fg-muted)">rollback</text>
+            <text x="30" y="112" fill="var(--fg-muted)">fixed-size chunks</text>
+            <g fill="none" stroke="var(--warn)" stroke-width="1.5">
+              <rect x="30" y="122" width="126" height="24" rx="4"/>
+              <rect x="162" y="122" width="126" height="24" rx="4"/>
+              <rect x="294" y="122" width="126" height="24" rx="4"/>
+            </g>
+            <text x="225" y="139" text-anchor="middle" fill="var(--warn)">½ setup + ½ deployment</text>
+            <text x="240" y="174" text-anchor="middle" fill="var(--fg-faint)">"how do we deploy?" retrieves a chunk that answers neither question</text>
+          </g>
+        </svg>
+        <figcaption>Chunk windows that straddle topic boundaries return halves of two topics — neither answers the question.</figcaption>
+      </figure>
       <p><strong>Fix:</strong> give the splitter boundaries. Converted
       Markdown carries the document's own headings, and heading-aligned
       chunks are whole topics with searchable names. (Full mechanics: <a
       href="/blog/rag-ready-markdown.html">RAG-ready Markdown</a> — the
       same logic applies inside hosted workspaces.)</p>
 
-      <h2>Cause 2: the duplicate-copy trap</h2>
+      <h2><span class="sec-num">2 ·</span> The duplicate-copy trap</h2>
       <p>You uploaded the PDF, later added a cleaner version, and never
       deleted the original. Now retrieval draws from both — and the
       glyph-soup copy sometimes outranks the clean one for exactly the
@@ -61,7 +84,7 @@
       convert, <em>replace</em> — upload the .md, remove the source file
       from the workspace (keep it in your own archive, of course).</p>
 
-      <h2>Cause 3: ambiguous file identity</h2>
+      <h2><span class="sec-num">3 ·</span> Ambiguous file identity</h2>
       <p>Ten files named <code>notes.pdf</code>, <code>notes(1).pdf</code>,
       <code>final_v2.pdf</code> give retrieval no way to respect "in the
       week-5 notes…" instructions, and citations come back
@@ -71,7 +94,7 @@
       MakeItMarkdown keeps each output named after its source, so a
       disciplined source folder produces a disciplined workspace.</p>
 
-      <h2>The five-minute overhaul</h2>
+      <h2><span class="sec-num">4 ·</span> The five-minute overhaul</h2>
       <ol>
         <li>Batch-drop the workspace's documents into
         <a href="/">the converter</a> (multiple files at once; all

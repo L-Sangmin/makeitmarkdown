@@ -66,7 +66,7 @@
       <p>MakeItMarkdown is built around that difference. Here's what
       changes, element by element.</p>
 
-      <h2>Headings: semantics from styles, not from font size</h2>
+      <h2><span class="sec-num">1 ·</span> Headings: semantics from styles, not from font size</h2>
       <p>In a .docx, "Heading 2" is a style object, and we map style names
       directly to <code>##</code> levels. Converters that render the page
       visually and then transcribe it tend to emit big bold paragraphs —
@@ -75,7 +75,14 @@
       mapping keeps it: your section tree arrives as a real
       <code>#/##/###</code> hierarchy.</p>
 
-      <h2>Tables: kept rectangular, typed, and honest about truncation</h2>
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">What Word stores</p><pre><code>"Results"
+  style: Heading 2
+  (bold · 14 pt · spacing before)</code></pre></div>
+        <div class="ba-col ba-after"><p class="ba-label">What the model needs</p><pre><code>## Results</code></pre></div>
+      </div>
+
+      <h2><span class="sec-num">2 ·</span> Tables: kept rectangular, typed, and honest about truncation</h2>
       <p>Tables are where converted documents lie most. Merged cells,
       header rows demoted to data, thousands of rows silently clipped. Our
       table handling does three unusual things:</p>
@@ -94,7 +101,7 @@
         padded to rectangular, with a warning in the fidelity report.</li>
       </ul>
 
-      <h2>Figures: placeholders, never base64 walls</h2>
+      <h2><span class="sec-num">3 ·</span> Figures: placeholders, never base64 walls</h2>
       <p>Embedded images are the silent token bomb. One notebook we tested
       carried a 515 KB base64 screenshot <em>inside a markdown cell</em> —
       pasted into a chat window, that's roughly 130,000 tokens of pure
@@ -106,7 +113,7 @@
       document, and can refer to it by name. Your token budget goes to
       words.</p>
 
-      <h2>Notebooks: cells you can point at</h2>
+      <h2><span class="sec-num">4 ·</span> Notebooks: cells you can point at</h2>
       <p>A .ipynb is JSON wrapping code, outputs, images and metadata. Our
       notebook parser gives every cell a stable address
       (<code>Cell [7]</code>), flags execution-order anomalies — the
@@ -118,7 +125,7 @@
       <a href="/blog/notebook-cell-dependencies.html">Making Jupyter
       notebooks LLM-addressable</a>.</p>
 
-      <h2>The fidelity report: "detected", never "preserved"</h2>
+      <h2><span class="sec-num">5 ·</span> The fidelity report: "detected", never "preserved"</h2>
       <p>This is the part we consider non-negotiable, and the part most
       converters simply don't have. Every conversion here returns three
       panels: the original, the Markdown, and a <strong>fidelity
@@ -145,7 +152,7 @@
       up and a warning appears. Muted, looping. This box is replaced by
       the clip once the file lands.</div>
 
-      <h2>What we refuse to do</h2>
+      <h2><span class="sec-num">6 ·</span> What we refuse to do</h2>
       <ul>
         <li><strong>Invent text for scanned pages.</strong> A PDF with no
         text layer gets a clear flag and a suggested next step — not
@@ -158,7 +165,7 @@
         because nothing is uploaded. See <a href="/privacy.html">privacy</a>.</li>
       </ul>
 
-      <h2>One structure, many targets</h2>
+      <h2><span class="sec-num">7 ·</span> One structure, many targets</h2>
       <p>Because every parser emits the same internal structure, the output
       presets are cheap and consistent: token-lean <em>Chat paste</em>,
       <em>RAG</em> with chunk boundaries and stable anchors, <em>Obsidian</em>

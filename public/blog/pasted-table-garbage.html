@@ -31,13 +31,15 @@
         <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><rect x="88" y="42" width="90" height="66" rx="4" fill="none" stroke="var(--fg-faint)" stroke-width="1.25"/><path d="M88 64 h90 M88 86 h90 M118 42 v66 M148 42 v66" stroke="var(--fg-faint)" stroke-width="0.9"/><g fill="var(--warn)"><circle cx="204" cy="58" r="2.2"/><circle cx="216" cy="72" r="2.2"/><circle cx="200" cy="88" r="2.2"/><circle cx="224" cy="100" r="2.2"/><circle cx="210" cy="112" r="2.2"/></g><text x="204" y="40" font-family="ui-monospace,monospace" font-size="9" fill="var(--warn)">paste…</text></svg>
       </div>
 
+      <p class="takeaway"><strong>The point:</strong> pasting a spreadsheet destroys its grid before the model ever sees it — a typed GFM table survives the trip.</p>
+
       <p>You copy a range in Excel, paste it into a chat window, and the
       neat grid arrives as a run-on line of values — or as columns
       separated by nothing the eye or the model can rely on. The model
       then answers questions about "the third column" of a table that no
       longer has columns.</p>
 
-      <h2>The four classic manglings</h2>
+      <h2><span class="sec-num">1 ·</span> The four classic manglings</h2>
       <ul>
         <li><strong>Whitespace collapse.</strong> Spreadsheet copies are
         tab-separated; chat inputs and web forms routinely normalize
@@ -58,7 +60,7 @@
         computed.</li>
       </ul>
 
-      <h2>What a model-readable table looks like</h2>
+      <h2><span class="sec-num">2 ·</span> What a model-readable table looks like</h2>
       <pre><code>| month (date) | region (str) | units (int) | revenue (float) |
 | --- | --- | --- | --- |
 | 2025-01-31 | North | 12 | 1200.00 |
@@ -71,7 +73,18 @@ Showing the first 50 of 4,812 rows.</code></pre>
       The full reasoning: <a href="/blog/tables-llms-can-read.html">Tables
       LLMs can actually read</a>.</p>
 
-      <h2>The fix</h2>
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">What paste produced</p><pre><code>region  Q1 Q2   Q3
+North 1204   998 1105
+South 872 914
+45922  45923</code></pre></div>
+        <div class="ba-col ba-after"><p class="ba-label">What survives</p><pre><code>| region (str) | Q1 (int) | Q2 (int) | Q3 (int) |
+| --- | --- | --- | --- |
+| North | 1204 | 998 | 1105 |
+| South | 872 | 914 |  |</code></pre></div>
+      </div>
+
+      <h2><span class="sec-num">3 ·</span> The fix</h2>
       <ol>
         <li>Don't paste from the spreadsheet UI. Drop the
         <code>.xlsx</code> or <code>.csv</code> file itself into

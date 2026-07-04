@@ -36,11 +36,30 @@
       they convert — it's about what "upload" means, and about what kind
       of Markdown comes back.</p>
 
-      <h2>Where your file goes</h2>
+      <h2><span class="sec-num">1 ·</span> Where your file goes</h2>
       <p>An upload-based converter, by architecture, receives your
       document on its servers, converts it there, and serves the result
       back. That's not an accusation of bad faith — it's just what the
       design requires. The consequences are structural:</p>
+
+      <figure class="fig-panel">
+        <svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: an uploader site sends the file to its own disk, while this site loops the file inside the browser tab.">
+          <g font-family="ui-monospace,monospace" font-size="10">
+            <rect x="36" y="40" width="150" height="100" rx="10" fill="none" stroke="var(--warn)" stroke-width="1.5"/>
+            <text x="111" y="62" text-anchor="middle" fill="var(--fg-muted)">"free converter"</text>
+            <path d="M76 100 q35 -30 70 0" fill="none" stroke="var(--warn)" stroke-width="1.5"/>
+            <path d="M141 93 l8 8 -11 2z" fill="var(--warn)"/>
+            <text x="111" y="126" text-anchor="middle" fill="var(--warn)">their disk — how long?</text>
+            <rect x="294" y="40" width="150" height="100" rx="10" fill="none" stroke="var(--ok)" stroke-width="1.5"/>
+            <text x="369" y="62" text-anchor="middle" fill="var(--fg-muted)">this site</text>
+            <path d="M334 104 a 22 22 0 1 1 44 0" fill="none" stroke="var(--ok)" stroke-width="1.5"/>
+            <path d="M372 97 l8 8 -12 1z" fill="var(--ok)"/>
+            <text x="369" y="126" text-anchor="middle" fill="var(--ok)">never leaves the tab</text>
+            <text x="240" y="170" text-anchor="middle" fill="var(--fg-faint)">checkable: open the network tab — zero upload requests</text>
+          </g>
+        </svg>
+        <figcaption>"Upload" is a physical claim — bytes leave. Local conversion is verifiable in your own network tab.</figcaption>
+      </figure>
       <ul>
         <li>Your file <em>transits and lands</em> on infrastructure you
         don't control, under a privacy policy you probably didn't
@@ -63,7 +82,7 @@
       file successfully. The single most persuasive privacy asset on the
       site. Muted, loopable.</div>
 
-      <h2>What kind of Markdown comes back</h2>
+      <h2><span class="sec-num">2 ·</span> What kind of Markdown comes back</h2>
       <p>Generic converters aim at "a valid .md file". Feeding a model
       raises the bar in specific ways:</p>
       <table>
@@ -76,7 +95,7 @@
         <tr><td>Cost model</td><td>Free tier + size/paywall upsells</td><td>Static site; no accounts, no caps</td></tr>
       </table>
 
-      <h2>When an uploader site is fine</h2>
+      <h2><span class="sec-num">3 ·</span> When an uploader site is fine</h2>
       <p>Public documents, no confidentiality stakes, a format we don't
       cover yet — use whatever works. The architecture argument matters
       in proportion to what's in the file.</p>

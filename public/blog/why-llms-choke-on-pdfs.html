@@ -47,12 +47,14 @@
       <h1>Why PDFs are hostile input for LLMs</h1>
       <p class="article-byline">MakeItMarkdown · July 2026 · 6 min read</p>
 
+      <p class="takeaway"><strong>The point:</strong> a PDF is a painting of a document — the model reads a guess at the text, and every downstream error starts there.</p>
+
       <p>Paste a PDF into a chat model and it usually answers something. That
       is the problem: it answers from a degraded copy of your document, and
       neither of you can see what was lost. The failure isn't the model.
       It's the format.</p>
 
-      <h2>A PDF is a painting of a document</h2>
+      <h2><span class="sec-num">1 ·</span> A PDF is a painting of a document</h2>
       <p>PDF was designed in 1993 to make documents print identically
       everywhere. It succeeds by storing <em>drawing instructions</em>: put
       this glyph at x=72.4, y=310.2; move right 4.1 points; draw a line
@@ -60,6 +62,18 @@
       real-world files no table object. The visual structure your eye
       reconstructs — columns, headers, captions under figures — exists only
       as coordinates.</p>
+
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">What the PDF stores</p><pre><code>Tj (R) 72.0 404.2
+Tj (e) 78.4 404.2
+Tj (s) 83.9 404.2
+Tj (u) 88.7 404.2  …
+(glyphs at coordinates)</code></pre></div>
+        <div class="ba-col ba-after"><p class="ba-label">What a model needs</p><pre><code>## Results
+
+The cached path wins on
+every measured run…</code></pre></div>
+      </div>
 
       <p>Text extraction therefore has to guess. Which glyph runs form a
       line? Which lines form a paragraph? Does that vertical gap mean a new
@@ -83,7 +97,7 @@
         receives nothing, or worse, OCR noise presented as fact.</li>
       </ul>
 
-      <h2>What this does to model output</h2>
+      <h2><span class="sec-num">2 ·</span> What this does to model output</h2>
       <p>The damage is quiet. A model given interleaved columns rarely says
       "this text is garbled" — it produces fluent summaries of sentences
       that never existed. A collapsed table doesn't yield "I can't read
@@ -96,7 +110,7 @@
       not refusal. It is confident output built on silently corrupted
       input.</blockquote>
 
-      <h2>Measure it yourself</h2>
+      <h2><span class="sec-num">3 ·</span> Measure it yourself</h2>
       <p>Take any two-column paper or a financial report. Extract its text
       with any tool, then check three things: does any sentence splice into
       an unrelated one; does any table row survive with its header
@@ -111,7 +125,7 @@
       version and show the right one. Cursor-follow, muted, loopable.
       This box is replaced by the clip once the file lands.</div>
 
-      <h2>What to feed the model instead</h2>
+      <h2><span class="sec-num">4 ·</span> What to feed the model instead</h2>
       <p>The practical fix is to move the document into a format where
       structure is explicit — Markdown is the current lingua franca because
       headings, lists, tables and code fences survive tokenization and are

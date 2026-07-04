@@ -37,10 +37,40 @@
       <em>who controls the extraction</em>, because an extraction always
       happens; attaching just hides it.</p>
 
-      <h2>The hidden converter</h2>
+      <h2><span class="sec-num">1 ·</span> The hidden converter</h2>
       <p>When you attach a document, the platform runs its own extractor
       and pastes the result into the model's context. You never see that
       output. Which means you can't know:</p>
+
+      <figure class="fig-panel">
+        <svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: attaching a file passes it through an unknown converter, while converting first produces Markdown you can inspect before pasting.">
+          <g font-family="ui-monospace,monospace" font-size="10">
+            <text x="30" y="44" fill="var(--fg-muted)">attach:</text>
+            <rect x="96" y="28" width="70" height="30" rx="6" fill="none" stroke="var(--fg-muted)" stroke-width="1.5"/>
+            <text x="131" y="47" text-anchor="middle" fill="var(--fg)">.docx</text>
+            <path d="M174 43 h30" stroke="var(--fg-faint)" stroke-width="1.5"/>
+            <path d="M198 37 l10 6 -10 6z" fill="var(--fg-faint)"/>
+            <rect x="216" y="24" width="96" height="38" rx="6" fill="none" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="5 4"/>
+            <text x="264" y="47" text-anchor="middle" fill="var(--warn)" font-size="14">?</text>
+            <path d="M320 43 h30" stroke="var(--fg-faint)" stroke-width="1.5"/>
+            <path d="M344 37 l10 6 -10 6z" fill="var(--fg-faint)"/>
+            <text x="362" y="47" fill="var(--fg-muted)">…whatever it made</text>
+            <text x="30" y="118" fill="var(--fg-muted)">convert first:</text>
+            <rect x="130" y="102" width="70" height="30" rx="6" fill="none" stroke="var(--fg-muted)" stroke-width="1.5"/>
+            <text x="165" y="121" text-anchor="middle" fill="var(--fg)">.docx</text>
+            <path d="M208 117 h30" stroke="var(--fg-faint)" stroke-width="1.5"/>
+            <path d="M232 111 l10 6 -10 6z" fill="var(--fg-faint)"/>
+            <rect x="250" y="98" width="96" height="38" rx="6" fill="none" stroke="var(--ok)" stroke-width="1.5"/>
+            <text x="298" y="115" text-anchor="middle" fill="var(--ok)">.md you</text>
+            <text x="298" y="128" text-anchor="middle" fill="var(--ok)">can read</text>
+            <path d="M354 117 h30" stroke="var(--fg-faint)" stroke-width="1.5"/>
+            <path d="M378 111 l10 6 -10 6z" fill="var(--fg-faint)"/>
+            <text x="396" y="121" fill="var(--ok)">paste it</text>
+            <text x="240" y="170" text-anchor="middle" fill="var(--fg-faint)">same model — but now you saw the middle step</text>
+          </g>
+        </svg>
+        <figcaption>Attaching delegates conversion to a box you can't open; converting first lets you read what the model will read.</figcaption>
+      </figure>
       <ul>
         <li><strong>what was truncated</strong> — length caps are applied
         without a marker, and the model won't announce it saw 40% of your
@@ -57,7 +87,7 @@
       model or its hidden input failed — and the debugging loop is
       guesswork.</p>
 
-      <h2>Converting first inverts the control</h2>
+      <h2><span class="sec-num">2 ·</span> Converting first inverts the control</h2>
       <p>You see the exact Markdown (raw and <em>rendered, as the chat
       would show it</em>), a <a
       href="/blog/not-a-file-converter.html">fidelity report</a> of what
@@ -67,7 +97,7 @@
       into. When something's off, you know which side of the pipe to
       fix.</p>
 
-      <h2>When attaching is genuinely fine</h2>
+      <h2><span class="sec-num">3 ·</span> When attaching is genuinely fine</h2>
       <ul>
         <li>Short, clean, born-digital files — a two-page memo survives
         anyone's extractor;</li>
@@ -78,7 +108,7 @@
         document's section list — the gaps show immediately).</li>
       </ul>
 
-      <h2>When it predictably isn't</h2>
+      <h2><span class="sec-num">4 ·</span> When it predictably isn't</h2>
       <p>Notebooks (<a href="/blog/notebook-too-big-for-llm.html">token
       bombs</a>), spreadsheets (<a
       href="/blog/pasted-table-garbage.html">type loss</a>), long PDFs

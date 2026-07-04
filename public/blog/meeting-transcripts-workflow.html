@@ -48,13 +48,13 @@
       timing apparatus. Ten minutes of workflow turns that dead file into
       minutes with receipts and a searchable meeting archive.</p>
 
-      <h2>Step 1: get the captions out</h2>
+      <h2><span class="sec-num">1 ·</span> Get the captions out</h2>
       <p>Meeting and video platforms export captions as
       <code>.srt</code> or <code>.vtt</code> (usually under the
       recording's download or accessibility options). That file is the
       whole meeting, timestamped to the second.</p>
 
-      <h2>Step 2: convert</h2>
+      <h2><span class="sec-num">2 ·</span> Convert</h2>
       <p><a href="/">Drop it here</a>. The
       <a href="/formats/subtitles.html">subtitle mapping</a> strips
       sequence numbers and styling tags, flows caption fragments into
@@ -63,7 +63,22 @@
       quotable. A one-hour meeting typically lands well under a
       chat-paste budget once the apparatus is gone.</p>
 
-      <h2>Step 3: minutes with receipts</h2>
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">In the .srt</p><pre><code>147
+00:23:14,200 --> 00:23:17,900
+so the vendor shortlist is
+approved by everyone? great
+
+148
+00:23:18,100 --> 00:23:21,400
+then Sam owns the contract
+draft by Friday</code></pre></div>
+        <div class="ba-col ba-after"><p class="ba-label">In the Markdown</p><pre><code>[23:14] so the vendor shortlist is
+approved by everyone? great then Sam
+owns the contract draft by Friday</code></pre></div>
+      </div>
+
+      <h2><span class="sec-num">3 ·</span> Minutes with receipts</h2>
       <p>Paste the converted transcript and ask for exactly the minutes
       you wish someone had written:</p>
       <pre><code>From this transcript, produce:
@@ -76,7 +91,7 @@ Quote the transcript for anything ambiguous.</code></pre>
       the model honest — an answer that must cite <code>[41:30]</code>
       can't drift far from what was said at 41:30.</p>
 
-      <h2>Step 4: the meeting archive</h2>
+      <h2><span class="sec-num">4 ·</span> The meeting archive</h2>
       <p>Converted transcripts are ideal workspace citizens: name them
       <code>2026-07-03-vendor-sync.md</code>, upload to your Project or
       Space, and "what did we decide about the shortlist?" becomes
@@ -85,7 +100,7 @@ Quote the transcript for anything ambiguous.</code></pre>
       <a href="/blog/ai-workspaces-markdown.html">the workspace
       guide</a>.)</p>
 
-      <h2>Honest limits</h2>
+      <h2><span class="sec-num">5 ·</span> Honest limits</h2>
       <ul>
         <li>Auto-captions mishear names and jargon — minutes inherit the
         captioner's errors; the markers make spot-checking cheap.</li>

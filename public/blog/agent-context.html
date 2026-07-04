@@ -31,13 +31,15 @@
         <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><rect x="88" y="44" width="84" height="72" rx="7" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/><text x="100" y="70" font-family="ui-monospace,monospace" font-size="11" fill="var(--accent)">&gt;_</text><text x="100" y="92" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-muted)">grep -n</text><rect x="198" y="46" width="60" height="48" rx="6" fill="none" stroke="var(--ok)" stroke-width="1.5"/><text x="228" y="66" text-anchor="middle" font-family="ui-monospace,monospace" font-size="8.5" fill="var(--fg-muted)">#anchor</text><text x="228" y="82" text-anchor="middle" font-family="ui-monospace,monospace" font-size="8.5" fill="var(--fg-muted)">Cell[12]</text><path d="M174 70 h14" stroke="var(--fg-faint)" stroke-width="1.5"/><path d="M184 64 l8 6 -8 6z" fill="var(--fg-faint)"/></svg>
       </div>
 
+      <p class="takeaway"><strong>The point:</strong> an agent re-reads your documents dozens of times per task — addresses, grep-ability and honest gaps pay compound interest.</p>
+
       <p>Chat use reads a document once. An agent — a coding assistant
       grinding through a task with tools — comes back to the same
       material again and again: greps it, quotes it, re-opens it after
       compaction, cites it in a commit message. That access pattern
       changes what "good input" means, in three specific ways.</p>
 
-      <h2>1. Addresses beat descriptions</h2>
+      <h2><span class="sec-num">1 ·</span> Addresses beat descriptions</h2>
       <p>An agent that can say "per <code>analysis.md</code>, Cell [12]"
       doesn't need to re-establish context each time — it navigates. This
       is why converted notebooks keep stable cell addresses and why the
@@ -47,7 +49,33 @@
       in <code>#configuration</code>" is unambiguous; "the settings part
       of the doc" is a dice roll).</p>
 
-      <h2>2. Grep-ability is a real requirement</h2>
+      <figure class="fig-panel">
+        <svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: a vague quoted request needs a search, while an anchor plus cell address points straight at one highlighted line in the document.">
+          <g font-family="ui-monospace,monospace" font-size="11">
+            <rect x="24" y="36" width="212" height="34" rx="8" fill="none" stroke="var(--warn)" stroke-width="1.5"/>
+            <text x="40" y="57" fill="var(--warn)">"the latency part…?"</text>
+            <path d="M244 53 h52" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="4 3"/>
+            <text x="262" y="45" fill="var(--warn)" font-size="15">?</text>
+            <rect x="24" y="120" width="212" height="34" rx="8" fill="none" stroke="var(--ok)" stroke-width="1.5"/>
+            <text x="40" y="141" fill="var(--ok)">#latency · Cell[12]</text>
+            <path d="M244 137 h46" stroke="var(--ok)" stroke-width="1.5"/>
+            <path d="M286 131 l10 6 -10 6z" fill="var(--ok)"/>
+          </g>
+          <rect x="312" y="28" width="140" height="134" rx="8" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/>
+          <g fill="var(--fg-faint)" opacity="0.55">
+            <rect x="326" y="44" width="96" height="7" rx="2"/>
+            <rect x="326" y="60" width="112" height="7" rx="2"/>
+            <rect x="326" y="76" width="88" height="7" rx="2"/>
+            <rect x="326" y="92" width="104" height="7" rx="2"/>
+            <rect x="326" y="108" width="96" height="7" rx="2"/>
+          </g>
+          <rect x="322" y="128" width="120" height="15" rx="3" fill="color-mix(in srgb, var(--ok) 22%, transparent)"/>
+          <rect x="326" y="132" width="104" height="7" rx="2" fill="var(--ok)" opacity="0.8"/>
+        </svg>
+        <figcaption>A description sends the agent re-reading the whole file; an address lands on the line.</figcaption>
+      </figure>
+
+      <h2><span class="sec-num">2 ·</span> Grep-ability is a real requirement</h2>
       <p>Agents search files with literal tools before reading them. A
       <code>.docx</code> is a ZIP — ungreppable; a PDF greps as glyph
       soup; a notebook greps through JSON escapes. The same content as
@@ -57,7 +85,7 @@
       notebooks), a <code>docs-md/</code> mirror of converted copies is
       cheap infrastructure: one batch drop here produces it.</p>
 
-      <h2>3. Token discipline compounds</h2>
+      <h2><span class="sec-num">3 ·</span> Token discipline compounds</h2>
       <p>A human pays a document's token cost once; an agent pays it on
       every re-read across a long session, competing with its own working
       memory. The conversion properties that were nice-to-have in chat —
@@ -66,7 +94,7 @@
       ~64K tokens) is the difference between "the agent can consult the
       analysis" and "the analysis evicts the agent's plan".</p>
 
-      <h2>The honest-gaps rule matters most for agents</h2>
+      <h2><span class="sec-num">4 ·</span> The honest-gaps rule matters most for agents</h2>
       <p>A human notices when quoted text looks thin. An agent takes its
       input as ground truth and <em>acts</em> — writes code against it,
       asserts facts from it. That's why explicit markers
@@ -77,7 +105,7 @@
       one that hard-codes a wrong total. Silent loss turns into wrong
       commits with surprising efficiency.</p>
 
-      <h2>A working recipe</h2>
+      <h2><span class="sec-num">5 ·</span> A working recipe</h2>
       <ol>
         <li>Batch-convert reference documents with the <strong>RAG</strong>
         preset (anchors + chunk comments double as agent navigation).</li>

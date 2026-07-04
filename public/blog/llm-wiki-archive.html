@@ -38,7 +38,7 @@
       Markdown</strong>, one document per file, browsable by humans
       (GitHub renders it), retrievable by models, auditable by diff.</p>
 
-      <h2>Why the Archive preset is the wiki format</h2>
+      <h2><span class="sec-num">1 ·</span> Why the Archive preset is the wiki format</h2>
       <p>The <em>Archive</em> preset optimizes for faithfulness and
       provenance rather than paste budget:</p>
       <pre><code>---
@@ -59,7 +59,7 @@ format: "docx"
         in any Markdown viewer.</li>
       </ul>
 
-      <h2>Conventions that turn a folder into a wiki</h2>
+      <h2><span class="sec-num">2 ·</span> Conventions that turn a folder into a wiki</h2>
       <ol>
         <li><strong>Stable, descriptive filenames</strong> —
         <code>2026-03-vendor-consolidation-review.md</code>. Filenames
@@ -79,7 +79,7 @@ format: "docx"
         knowledge of all.</li>
       </ol>
 
-      <h2>What each consumer gets</h2>
+      <h2><span class="sec-num">3 ·</span> What each consumer gets</h2>
       <table>
         <tr><th>Consumer</th><th>What the wiki gives it</th></tr>
         <tr><td>Humans</td><td>Rendered pages, working search, one canonical copy</td></tr>
@@ -88,12 +88,32 @@ format: "docx"
         <tr><td>Agents</td><td>A greppable corpus with addresses — <a href="/blog/agent-context.html">the docs-md/ pattern</a>, promoted to team scale</td></tr>
       </table>
 
-      <h2>Starting today, with what you have</h2>
+      <h2><span class="sec-num">4 ·</span> Starting today, with what you have</h2>
       <p>Batch-drop one project's documents into <a href="/">the
       converter</a> with the Archive preset, commit the .zip's contents
       to a fresh repo, write ten lines of README index. That's the whole
       bootstrap — the discipline (convert on arrival, stable names,
       re-convert on update) is what compounds.</p>
+
+      <figure class="fig-panel">
+        <svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: a docs-md folder whose index file links to each note, serving human browsing, model grep and git diffs.">
+          <g font-family="ui-monospace,monospace" font-size="11">
+            <rect x="36" y="30" width="180" height="130" rx="8" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+            <text x="52" y="52" fill="var(--accent)">docs-md/</text>
+            <text x="66" y="76" fill="var(--fg)">index.md</text>
+            <text x="66" y="98" fill="var(--fg-muted)">2026-06-review.md</text>
+            <text x="66" y="120" fill="var(--fg-muted)">spec-v2.md</text>
+            <text x="66" y="142" fill="var(--fg-muted)">vendor-notes.md</text>
+            <path d="M126 80 q44 8 0 14 M126 82 q64 18 -4 34 M126 84 q78 30 -8 54" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.6"/>
+            <g font-size="10">
+              <text x="268" y="62" fill="var(--fg-muted)">→ humans browse it</text>
+              <text x="268" y="92" fill="var(--fg-muted)">→ models grep it</text>
+              <text x="268" y="122" fill="var(--fg-muted)">→ git diffs audit it</text>
+            </g>
+          </g>
+        </svg>
+        <figcaption>One flat folder, one index note that links the rest — three consumers, zero infrastructure.</figcaption>
+      </figure>
 
       <div class="article-cta">
         <p>Convert the first ten pages of your future wiki in one drop.</p>

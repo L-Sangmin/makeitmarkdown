@@ -58,7 +58,7 @@
       what a notebook really contains, what LLMs need from it, and two
       things we got wrong before measuring.</p>
 
-      <h2>What a .ipynb actually is</h2>
+      <h2><span class="sec-num">1 ·</span> What a .ipynb actually is</h2>
       <p>A notebook is JSON: a list of cells, each with a type (code,
       markdown), a source, outputs, and — critically — an
       <code>execution_count</code>, the <code>In[n]</code> number you see
@@ -85,7 +85,7 @@ summary = df.describe()
       built code. Honesty about the method matters more than the method:
       an LLM told "hints, not dataflow" treats them accordingly.</p>
 
-      <h2>Two things measurement changed</h2>
+      <h2><span class="sec-num">2 ·</span> Two things measurement changed</h2>
       <p><strong>1. Imports are ambient, not dataflow.</strong> Our first
       pass drew a dependency edge for every name — which meant the import
       cell pointed at nearly every other cell. A real 110-cell notebook
@@ -114,7 +114,7 @@ summary = df.describe()
         </tbody>
       </table>
 
-      <h2>The dependency mini-map</h2>
+      <h2><span class="sec-num">3 ·</span> The dependency mini-map</h2>
       <p>Cell dependencies also render as a small SVG arc diagram — nodes
       are cells in notebook order labeled with their execution counts, arcs
       carry the variable names, and out-of-order cells get an amber mark.
@@ -127,7 +127,7 @@ summary = df.describe()
         <figcaption>The fidelity panel on an out-of-order notebook: In[2] flagged amber, variables riding the dependency arcs.</figcaption>
       </figure>
 
-      <h2>Checklist for feeding notebooks to a model</h2>
+      <h2><span class="sec-num">4 ·</span> Checklist for feeding notebooks to a model</h2>
       <ul>
         <li>Keep cell addresses (<code>Cell [n]</code>) so instructions and
         answers can point somewhere.</li>

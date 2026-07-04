@@ -31,6 +31,8 @@
         <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><rect x="84" y="30" width="96" height="100" rx="8" fill="none" stroke="var(--fg-faint)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="132" y="85" text-anchor="middle" font-family="ui-monospace,monospace" font-size="10" fill="var(--fg-faint)">3.5 MB</text><path d="M190 80 h26" stroke="var(--fg-faint)" stroke-width="1.5"/><path d="M210 74 l10 6 -10 6z" fill="var(--fg-faint)"/><rect x="228" y="56" width="46" height="48" rx="6" fill="none" stroke="var(--ok)" stroke-width="1.5"/><text x="251" y="84" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--ok)">64K tok</text></svg>
       </div>
 
+      <p class="takeaway"><strong>The point:</strong> your notebook isn't too big — its embedded output images are; the text a model can actually use fits comfortably.</p>
+
       <p>"Message exceeds the maximum length." "File too large." Or the
       upload works and the model clearly saw only the first third. Jupyter
       notebooks hit input limits far before their <em>content</em>
@@ -43,7 +45,7 @@
       </div>
 
 
-      <h2>Where the megabytes live</h2>
+      <h2><span class="sec-num">1 ·</span> Where the megabytes live</h2>
       <p>A notebook file is JSON wrapping four things: your code, your
       prose, <em>every output the cells ever produced</em>, and metadata.
       The killers are outputs: each rendered chart is a base64-encoded PNG
@@ -52,6 +54,22 @@
       widget state and execution bookkeeping the model has no use for. In
       the notebook we use as a stress test, the meaningful text is about
       7% of the bytes:</p>
+
+      <figure class="fig-panel">
+        <svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: a 3.5 megabyte notebook bar almost entirely base64 images, next to the small 261 kilobyte Markdown that remains.">
+          <g font-family="ui-monospace,monospace" font-size="10">
+            <text x="30" y="52" fill="var(--fg-muted)">3.5 MB .ipynb</text>
+            <rect x="30" y="62" width="392" height="30" rx="5" fill="color-mix(in srgb, var(--warn) 22%, transparent)" stroke="var(--warn)" stroke-width="1.25"/>
+            <rect x="422" y="62" width="18" height="30" fill="color-mix(in srgb, var(--accent) 30%, transparent)" stroke="var(--accent)" stroke-width="1.25"/>
+            <rect x="440" y="62" width="10" height="30" rx="2" fill="color-mix(in srgb, var(--ok) 35%, transparent)" stroke="var(--ok)" stroke-width="1.25"/>
+            <text x="226" y="81" text-anchor="middle" fill="var(--warn)">base64 output images · ~93%</text>
+            <text x="30" y="118" fill="var(--fg-muted)">what the model can use</text>
+            <rect x="30" y="128" width="28" height="30" rx="5" fill="color-mix(in srgb, var(--ok) 30%, transparent)" stroke="var(--ok)" stroke-width="1.25"/>
+            <text x="70" y="147" fill="var(--ok)">261 KB as Markdown — code + text, addresses intact</text>
+          </g>
+        </svg>
+        <figcaption>The bar is the file; the sliver is what a model can read. Conversion keeps the sliver and the addresses.</figcaption>
+      </figure>
 
       <table>
         <tr><th></th><th>Raw .ipynb</th><th>Converted Markdown</th></tr>
@@ -66,7 +84,7 @@
       context window, spent on characters no model can even decode back
       into an image.</p>
 
-      <h2>What conversion keeps (this is the part that matters)</h2>
+      <h2><span class="sec-num">2 ·</span> What conversion keeps (this is the part that matters)</h2>
       <p>Shrinking is easy — <code>jupyter nbconvert --to script</code>
       strips outputs too, and loses everything else you care about. The
       point is what survives:</p>
@@ -88,7 +106,7 @@
         Jupyter notebooks LLM-addressable</a>.</li>
       </ul>
 
-      <h2>The fix</h2>
+      <h2><span class="sec-num">3 ·</span> The fix</h2>
       <ol>
         <li><a href="/?sample=sales-analysis">Drop the .ipynb here</a> —
         conversion is local, your unpublished analysis stays on your

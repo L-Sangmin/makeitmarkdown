@@ -76,7 +76,7 @@
       <p class="takeaway"><strong>The point:</strong> storage caps, token budgets, retrieval accuracy — three bottlenecks, one format change, all three measured below.</p>
 
 
-      <h2>Win 1: storage — same knowledge, a fraction of the cap</h2>
+      <h2><span class="sec-num">1 ·</span> Storage — same knowledge, a fraction of the cap</h2>
       <p>Workspace storage is capped (per-file limits, per-project totals).
       PDFs and Office files spend most of their bytes on things retrieval
       can't use: embedded fonts, themes, XML plumbing, image previews.
@@ -88,6 +88,12 @@
         <tr><td>Operations review (.docx)</td><td>36.4 KB</td><td>0.9 KB</td><td>~40&#215;</td></tr>
         <tr><td>Data-analysis notebook (.ipynb, 100+ cells)</td><td>3,465 KB</td><td>261 KB</td><td>~13&#215;</td></tr>
       </table>
+
+      <div class="pull-stats" aria-hidden="true">
+        <div class="pull-stat"><span class="n">30×</span><span class="l">.pdf → .md</span></div>
+        <div class="pull-stat"><span class="n">40×</span><span class="l">.docx → .md</span></div>
+        <div class="pull-stat"><span class="n">13×</span><span class="l">.ipynb → .md</span></div>
+      </div>
 
       <p>Tiny office files exaggerate the ratio — container overhead is
       fixed — but the direction holds at every size we've measured, because
@@ -102,7 +108,7 @@
       converted .md files. This box is replaced by the image once the
       file lands.</div>
 
-      <h2>Win 2: tokens — denser chunks, more of them</h2>
+      <h2><span class="sec-num">2 ·</span> Tokens — denser chunks, more of them</h2>
       <p>When the workspace answers a question, it can only afford to stuff
       a limited number of tokens of retrieved context into the prompt.
       Every token spent on formatting debris — reconstructed line breaks,
@@ -116,7 +122,7 @@
       simply can't be attached to most chats; as Markdown it's ~64,000
       tokens — large but usable, with cell addresses intact.</p>
 
-      <h2>Win 3: retrieval — headings are search handles</h2>
+      <h2><span class="sec-num">3 ·</span> Retrieval — headings are search handles</h2>
       <p>Chunk quality decides answer quality. Retrieval works best when
       each chunk is a coherent topic with a descriptive label — and that is
       precisely what Markdown headings produce. A chunk that begins
@@ -138,7 +144,7 @@
       file (source popover or inline citation visible), showing it pulled
       the right section.</div>
 
-      <h2>The recipe</h2>
+      <h2><span class="sec-num">4 ·</span> The recipe</h2>
       <ol>
         <li><strong>Convert:</strong> drag your files — multiple at once —
         into <a href="/">MakeItMarkdown</a>. Conversion runs in your
@@ -154,7 +160,7 @@
         sometimes surfaces the bad one.</li>
       </ol>
 
-      <h2>When to leave a format alone</h2>
+      <h2><span class="sec-num">5 ·</span> When to leave a format alone</h2>
       <p>Structured data your assistant should <em>compute</em> over —
       spreadsheets it will run code on, JSON an integration consumes —
       can stay native; convert a Markdown copy only for the

@@ -39,13 +39,13 @@
       teaser headlines from the sidebar as if they were part of the
       text.</p>
 
-      <h2>Why paste picks up the chrome</h2>
+      <h2><span class="sec-num">1 ·</span> Why paste picks up the chrome</h2>
       <p>The clipboard copies what the page <em>renders</em>, not what
       the article <em>is</em>. Modern pages are 80–95% scaffolding by
       markup weight; the article body is one branch of a very noisy tree.
       Your eye filters the chrome instantly. A paste doesn't.</p>
 
-      <h2>What article extraction does</h2>
+      <h2><span class="sec-num">2 ·</span> What article extraction does</h2>
       <p>The fix is a readability pass — the same family of algorithm
       behind your browser's Reader View. It scores the DOM for the
       densest coherent text block, keeps the article with its headings,
@@ -53,6 +53,19 @@
       boilerplate. MakeItMarkdown runs exactly that (Mozilla's
       Readability, in your browser), then converts the surviving article
       to clean Markdown:</p>
+
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">Raw paste</p><pre><code>Home Products Pricing Blog
+Accept all cookies?
+Subscribe to our newsletter →
+The measured results held across
+every configuration we tried…
+RELATED: 10 stories like this</code></pre></div>
+        <div class="ba-col ba-after"><p class="ba-label">Article extraction</p><pre><code># The measured results
+
+The measured results held across
+every configuration we tried…</code></pre></div>
+      </div>
       <ul>
         <li>headings arrive as a real <code>##</code> outline;</li>
         <li>the article's tables survive as GFM (they're usually the
@@ -68,7 +81,7 @@
       side-by-side: raw select-all paste of a news article (menus/banners
       visible) vs the converted Markdown pane. One image, two panes.</div>
 
-      <h2>The fix, two ways</h2>
+      <h2><span class="sec-num">3 ·</span> The fix, two ways</h2>
       <ol>
         <li><strong>Save the page</strong> (Ctrl/Cmd-S → "HTML only"),
         then drop the <code>.html</code> file into
@@ -82,7 +95,7 @@
       the wrong main block — it happens on unusual layouts, and the
       report makes it visible instead of silent.</p>
 
-      <h2>When raw paste is fine</h2>
+      <h2><span class="sec-num">4 ·</span> When raw paste is fine</h2>
       <p>Short, plain pages — documentation without heavy chrome, a
       gist, a plain-text mail archive — paste fine. The extraction pass
       earns its keep on anything with a menu bar and a business

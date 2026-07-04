@@ -37,7 +37,7 @@
       to think. Most people budget with folklore. Here's the practical
       version.</p>
 
-      <h2>The estimate, and how it lies</h2>
+      <h2><span class="sec-num">1 ·</span> The estimate, and how it lies</h2>
       <p>The folk rule — one token ≈ 4 characters of English — is a fine
       starting estimate, and it's what our size line shows by default
       (<code>≈ 438 tokens</code>). But technical text tokenizes
@@ -71,7 +71,7 @@
       </div>
 
 
-      <h2>Where document tokens actually hide</h2>
+      <h2><span class="sec-num">2 ·</span> Where document tokens actually hide</h2>
       <table>
         <tr><th>Hiding place</th><th>Typical cost</th><th>Cure</th></tr>
         <tr><td>Base64 images in notebooks</td><td>100K+ tokens each</td><td>Extracted to <code>[Figure: …]</code> automatically</td></tr>
@@ -82,7 +82,7 @@
         <tr><td>JSON key repetition (JSONL)</td><td>15–40% of the data</td><td>Records table</td></tr>
       </table>
 
-      <h2>Budgets by destination</h2>
+      <h2><span class="sec-num">3 ·</span> Budgets by destination</h2>
       <ul>
         <li><strong>One-shot chat paste:</strong> spend at most ~half the
         window on the document — the model needs the rest for your
@@ -103,7 +103,7 @@
         href="/blog/agent-context.html">the agent-context guide</a>.</li>
       </ul>
 
-      <h2>A five-minute budgeting routine</h2>
+      <h2><span class="sec-num">4 ·</span> A five-minute budgeting routine</h2>
       <ol>
         <li>Convert the document; read the size line.</li>
         <li>Click <em>count exactly</em> if the number matters.</li>

@@ -41,6 +41,34 @@ article h2 {
   letter-spacing: -0.015em;
 }
 
+/* Section numbers — the scannable spine of every article. */
+article h2 .sec-num {
+  margin-right: 0.4em;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* fig-panel — inline concept diagrams, same visual language as the hero. */
+.fig-panel {
+  margin: 1.25rem 0 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: light-dark(
+    color-mix(in srgb, var(--accent) 6%, #f0f1f7),
+    color-mix(in srgb, var(--accent) 5%, var(--bg-raised))
+  );
+}
+.fig-panel svg { display: block; width: 100%; height: auto; }
+.fig-panel figcaption {
+  padding: 0 1rem 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  text-align: center;
+}
+
 article p, article li {
   font-size: 1rem;
   line-height: 1.75;

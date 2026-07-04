@@ -37,7 +37,7 @@
       why. There are only four real causes, and they're easy to tell
       apart.</p>
 
-      <h2>What happens to an upload</h2>
+      <h2><span class="sec-num">1 ·</span> What happens to an upload</h2>
       <p>No chat model reads your file directly. The platform runs an
       extractor first — a converter you can't see, configure, or get a
       quality report from — and pastes its output into the model's
@@ -51,7 +51,7 @@
       </figure>
 
 
-      <h2>1. The extension isn't supported at all</h2>
+      <h2><span class="sec-num">2 ·</span> The extension isn't supported at all</h2>
       <p>Every platform supports a different list, and the lists change.
       Subtitle files, JSONL logs, notebook exports and odd spreadsheet
       variants are common casualties: the upload is simply rejected, or
@@ -61,7 +61,7 @@
       MakeItMarkdown handles <code>.ipynb .docx .xlsx .csv .json .jsonl
       .html .pdf .srt .vtt .md .txt</code> in the browser.</p>
 
-      <h2>2. The PDF has no text layer</h2>
+      <h2><span class="sec-num">3 ·</span> The PDF has no text layer</h2>
       <p>Scanned pages are photographs of text. The extractor finds
       nothing, and the assistant either says so or answers from the few
       fragments it got (page numbers, a header). Self-test: try selecting
@@ -69,7 +69,7 @@
       options: <a href="/blog/scanned-pdf-cant-convert.html">Scanned
       PDFs</a>.</p>
 
-      <h2>3. The file is too big for the context window</h2>
+      <h2><span class="sec-num">4 ·</span> The file is too big for the context window</h2>
       <p>A file can be perfectly readable and still fail: extracted, it
       exceeds the model's input limit, so the platform truncates it
       (usually silently) or refuses. Notebooks are the classic case — our
@@ -78,7 +78,7 @@
       breakdown: <a href="/blog/notebook-too-big-for-llm.html">Your
       notebook is too big to paste</a>.</p>
 
-      <h2>4. The container drowned the content</h2>
+      <h2><span class="sec-num">5 ·</span> The container drowned the content</h2>
       <p>Office formats are ZIP archives of XML, media and themes. A
       mediocre extractor surfaces style junk, drops tables, or loses
       heading structure — the assistant "reads" the file and still answers
@@ -88,7 +88,7 @@
       what it detected and warns about what's shaky</a> instead of
       pretending.</p>
 
-      <h2>The general fix</h2>
+      <h2><span class="sec-num">6 ·</span> The general fix</h2>
       <ol>
         <li>Convert the file to Markdown locally — <a href="/">drop it
         here</a>; nothing uploads.</li>

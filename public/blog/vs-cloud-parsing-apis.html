@@ -38,7 +38,7 @@
       harder problem than ours, and the honest comparison is about which
       problem you actually have.</p>
 
-      <h2>What the APIs genuinely add</h2>
+      <h2><span class="sec-num">1 ·</span> What the APIs genuinely add</h2>
       <ul>
         <li><strong>OCR and layout models.</strong> Scanned pages,
         photographed documents, complex multi-column layouts, visual
@@ -50,7 +50,7 @@
         ingestion service; a browser tab doesn't.</li>
       </ul>
 
-      <h2>What you trade for it</h2>
+      <h2><span class="sec-num">2 ·</span> What you trade for it</h2>
       <ul>
         <li><strong>Custody.</strong> Every document transits and is
         processed on the provider's infrastructure — fine for public
@@ -65,7 +65,7 @@
         latency.</li>
       </ul>
 
-      <h2>The decision, plainly</h2>
+      <h2><span class="sec-num">3 ·</span> The decision, plainly</h2>
       <table>
         <tr><th>Your situation</th><th>Right tool</th></tr>
         <tr><td>Scanned/photographed documents at volume</td><td>Cloud parsing API (that's the OCR you're paying for)</td></tr>
@@ -80,6 +80,26 @@
       and reserve the paid API for the scanned residue it's actually
       built for. The fidelity report tells you which pile each file
       belongs to — scans get flagged at drop time.</p>
+
+      <figure class="fig-panel">
+        <svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: a file crossing from your machine to a cloud OCR service with per-page pricing, versus staying in the local tab for free.">
+          <g font-family="ui-monospace,monospace" font-size="10">
+            <path d="M240 24 v148" stroke="var(--fg-faint)" stroke-width="1" stroke-dasharray="5 5"/>
+            <text x="120" y="38" text-anchor="middle" fill="var(--fg-muted)">your machine</text>
+            <text x="360" y="38" text-anchor="middle" fill="var(--fg-muted)">their servers</text>
+            <rect x="48" y="70" width="90" height="44" rx="7" fill="none" stroke="var(--fg-muted)" stroke-width="1.5"/>
+            <text x="93" y="96" text-anchor="middle" fill="var(--fg)">file.pdf</text>
+            <path d="M146 92 H 330" stroke="var(--warn)" stroke-width="1.5"/>
+            <path d="M324 86 l10 6 -10 6z" fill="var(--warn)"/>
+            <text x="238" y="82" text-anchor="middle" fill="var(--warn)">upload · $ per page</text>
+            <rect x="338" y="70" width="96" height="44" rx="7" fill="none" stroke="var(--warn)" stroke-width="1.5"/>
+            <text x="386" y="96" text-anchor="middle" fill="var(--warn)">their OCR</text>
+            <rect x="48" y="132" width="110" height="40" rx="7" fill="none" stroke="var(--ok)" stroke-width="1.5"/>
+            <text x="103" y="156" text-anchor="middle" fill="var(--ok)">this tab · $0</text>
+          </g>
+        </svg>
+        <figcaption>The APIs' OCR is real — the trade is that your file crosses the line, and the meter runs per page.</figcaption>
+      </figure>
 
       <div class="article-cta">
         <p>Sort your corpus in one batch drop: clean files convert now,

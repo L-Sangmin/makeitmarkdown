@@ -49,7 +49,7 @@
       <p class="takeaway"><strong>The point:</strong> workspaces retrieve chunks, and PDF chunks are glyph soup with no headings — fix the input and the same model finds and quotes correctly.</p>
 
 
-      <h2>What's actually happening</h2>
+      <h2><span class="sec-num">1 ·</span> What's actually happening</h2>
       <p>A workspace doesn't hand the model your PDF. It extracts text,
       splits it into chunks, and at question time retrieves the
       best-matching chunks into the model's context. PDFs sabotage every
@@ -62,13 +62,38 @@
       the classic lecture-notes case, are the worst offenders because
       their visual layout carries most of the meaning.</p>
 
+      <figure class="fig-panel">
+        <svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: a PDF flows through a dashed box labelled hidden extractor into text chunks before reaching the model.">
+          <g font-family="ui-monospace,monospace" font-size="11">
+            <rect x="20" y="70" width="92" height="50" rx="8" fill="none" stroke="var(--fg-muted)" stroke-width="1.5"/>
+            <text x="41" y="99" fill="var(--fg)">.pdf</text>
+            <path d="M120 95 h34" stroke="var(--fg-faint)" stroke-width="1.5"/>
+            <path d="M148 89 l10 6 -10 6z" fill="var(--fg-faint)"/>
+            <rect x="166" y="58" width="128" height="74" rx="8" fill="none" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="6 4"/>
+            <text x="230" y="90" text-anchor="middle" fill="var(--warn)">hidden</text>
+            <text x="230" y="106" text-anchor="middle" fill="var(--warn)">extractor</text>
+            <path d="M302 95 h34" stroke="var(--fg-faint)" stroke-width="1.5"/>
+            <path d="M330 89 l10 6 -10 6z" fill="var(--fg-faint)"/>
+            <g stroke="var(--fg-muted)" fill="none" stroke-width="1.5">
+              <rect x="354" y="52" width="102" height="22" rx="5"/>
+              <rect x="354" y="84" width="102" height="22" rx="5"/>
+              <rect x="354" y="116" width="102" height="22" rx="5"/>
+            </g>
+            <text x="405" y="67" text-anchor="middle" fill="var(--fg-muted)" font-size="10">chunk 1</text>
+            <text x="405" y="99" text-anchor="middle" fill="var(--fg-muted)" font-size="10">chunk 2 ⚠</text>
+            <text x="405" y="131" text-anchor="middle" fill="var(--fg-muted)" font-size="10">chunk 3</text>
+          </g>
+        </svg>
+        <figcaption>The model never sees your PDF — it sees whatever a hidden extractor made of it, chunk by chunk.</figcaption>
+      </figure>
+
       <div class="shot-note">📸 <strong>Media slot</strong> — save as
       <code>/assets/media/blog/fixes/01-project-pdf-fail.png</code> ·
       screenshot of a real workspace failing on a PDF (refusal or vague
       answer). May reuse the case study's "before" capture. This box is
       replaced by the image once the file lands.</div>
 
-      <h2>The fix</h2>
+      <h2><span class="sec-num">2 ·</span> The fix</h2>
       <ol>
         <li>Drag your PDFs into <a href="/">MakeItMarkdown</a> — several
         at once works. Conversion runs in your browser; nothing is
@@ -92,7 +117,7 @@
       <!-- AD SLOT (in-article, after the fix section — the natural pause) -->
       <div class="ad-slot ad-demo" aria-label="Advertisement placeholder"></div>
 
-      <h2>The one case this won't fix</h2>
+      <h2><span class="sec-num">3 ·</span> The one case this won't fix</h2>
       <p>If the fidelity report says the PDF looks <strong>scanned</strong>
       (image-only, no text layer), there is no text for any converter to
       extract — that's a different problem with different options, covered
@@ -100,7 +125,7 @@
       no text converter can read them</a>. A quick self-test: if you can't
       select text in the PDF viewer, it's a scan.</p>
 
-      <h2>Why this also makes the workspace cheaper to run</h2>
+      <h2><span class="sec-num">4 ·</span> Why this also makes the workspace cheaper to run</h2>
       <p>The Markdown versions are typically a fraction of the size (our
       measured samples: a 26.6&nbsp;KB PDF became 0.9&nbsp;KB), so the
       storage cap stops being a constraint, and each retrieved chunk

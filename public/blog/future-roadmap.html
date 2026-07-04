@@ -46,7 +46,29 @@
       surfaces are your terminal, your agent, and better eyes for
       scans.</p>
 
-      <h2>1 · An installable CLI</h2>
+      <figure class="fig-panel">
+        <svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Timeline: today the browser tab, next an installable CLI, later agent skills and local OCR models.">
+          <g font-family="ui-monospace,monospace" font-size="10">
+            <path d="M40 96 h400" stroke="var(--fg-faint)" stroke-width="1.5"/>
+            <circle cx="90" cy="96" r="6" fill="var(--ok)"/>
+            <text x="90" y="76" text-anchor="middle" fill="var(--ok)">today</text>
+            <text x="90" y="124" text-anchor="middle" fill="var(--fg-muted)">browser tab</text>
+            <text x="90" y="140" text-anchor="middle" fill="var(--fg-muted)">+ tesseract OCR</text>
+            <circle cx="240" cy="96" r="6" fill="none" stroke="var(--accent)" stroke-width="1.75"/>
+            <text x="240" y="76" text-anchor="middle" fill="var(--accent)">next</text>
+            <text x="240" y="124" text-anchor="middle" fill="var(--fg-muted)">CLI · npx / pip</text>
+            <text x="240" y="140" text-anchor="middle" fill="var(--fg-muted)">fidelity JSON in CI</text>
+            <circle cx="390" cy="96" r="6" fill="none" stroke="var(--fg-muted)" stroke-width="1.75" stroke-dasharray="3 2"/>
+            <text x="390" y="76" text-anchor="middle" fill="var(--fg-muted)">later</text>
+            <text x="390" y="124" text-anchor="middle" fill="var(--fg-muted)">agent skill · local</text>
+            <text x="390" y="140" text-anchor="middle" fill="var(--fg-muted)">OCR models CPU/GPU</text>
+            <text x="240" y="172" text-anchor="middle" fill="var(--fg-faint)">same parsers, same honesty rules at every step</text>
+          </g>
+        </svg>
+        <figcaption>The order of operations — each surface reuses the parsers the tests already run in Node.</figcaption>
+      </figure>
+
+      <h2><span class="sec-num">1 ·</span> An installable CLI</h2>
       <p>Every parser in this site runs in Node today (that's how the 97
       tests work). Packaging them as a command-line tool is mostly
       plumbing, and it unlocks the batch cases a browser tab shouldn't
@@ -63,7 +85,7 @@
         truncation, no network calls.</li>
       </ul>
 
-      <h2>2 · An agent skill</h2>
+      <h2><span class="sec-num">2 ·</span> An agent skill</h2>
       <p>Coding agents (Claude Code, Codex-class assistants) hit
       unreadable files mid-task constantly — a .docx spec, a .xlsx of
       test cases, a PDF datasheet. A packaged <em>skill</em> lets the
@@ -78,7 +100,7 @@
         diff-stable across sessions.</li>
       </ul>
 
-      <h2>3 · OCR beyond tesseract: local models, CPU and GPU</h2>
+      <h2><span class="sec-num">3 ·</span> OCR beyond tesseract: local models, CPU and GPU</h2>
       <p>Today's <a href="/blog/scanned-pdf-cant-convert.html">opt-in
       OCR</a> is tesseract — honest, local, decent on clean print. The
       ceiling above it is model-based recognition, and it can stay
@@ -93,7 +115,7 @@
       approximate</em>, opt-in, and QC-capped. Better eyes, same
       honesty.</p>
 
-      <h2>What will never change</h2>
+      <h2><span class="sec-num">4 ·</span> What will never change</h2>
       <ul>
         <li><strong>Local first.</strong> Files don't leave your machine —
         browser, CLI or agent alike.</li>

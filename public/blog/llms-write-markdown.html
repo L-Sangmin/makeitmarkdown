@@ -62,9 +62,23 @@
       <p class="takeaway"><strong>The point:</strong> the format you paste in is not neutral — Markdown lands in the model’s native register; everything else costs a translation step first.</p>
 
 
-      <h2>Why Markdown is the native register</h2>
+      <h2><span class="sec-num">1 ·</span> Why Markdown is the native register</h2>
 
       <p>Three forces, all pointing the same direction:</p>
+
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">What your chat renders</p>
+          <p style="margin:0 0 0.5rem"><strong>Trade-offs</strong></p>
+          <ul style="margin:0">
+            <li><strong>Speed</strong> — the cached path wins</li>
+            <li><strong>Cost</strong> — batch where possible</li>
+          </ul>
+        </div>
+        <div class="ba-col ba-after"><p class="ba-label">What the model actually streamed</p><pre><code>## Trade-offs
+
+- **Speed** — the cached path wins
+- **Cost** — batch where possible</code></pre></div>
+      </div>
 
       <ul>
         <li><strong>The training corpus is soaked in it.</strong> README
@@ -90,7 +104,7 @@
       first-class token pattern the model has an extremely strong prior
       about.</p>
 
-      <h2>What other formats make the model do first</h2>
+      <h2><span class="sec-num">2 ·</span> What other formats make the model do first</h2>
 
       <p>Here is the same document arriving two ways, as a pipeline:</p>
 
@@ -144,7 +158,7 @@
       the model's home notation. Reading comprehension starts at
       sentence one.</p>
 
-      <h2>The token bill</h2>
+      <h2><span class="sec-num">3 ·</span> The token bill</h2>
 
       <p>Structure has a price in tokens, and Markdown's price is close to
       the minimum. The same three-row table, three ways:</p>
@@ -179,7 +193,7 @@
       container overhead dominates — but the direction never flips:
       Markdown is the text, minus the plumbing.)</p>
 
-      <h2>Where Markdown is <em>not</em> the answer</h2>
+      <h2><span class="sec-num">4 ·</span> Where Markdown is <em>not</em> the answer</h2>
 
       <p>Fairness requires one caveat. Deeply nested, machine-generated
       data — API payloads, config trees — is often better left as JSON,
@@ -189,7 +203,7 @@
       That is exactly the shape of lecture notes, reports, articles and
       notebooks — the things people actually paste into chat windows.</p>
 
-      <h2>The takeaway</h2>
+      <h2><span class="sec-num">5 ·</span> The takeaway</h2>
 
       <p>Models answer from what they can parse, in a register they were
       trained to think in. Markdown is that register. Convert once, and
