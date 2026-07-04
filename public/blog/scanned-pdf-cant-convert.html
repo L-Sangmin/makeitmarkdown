@@ -73,8 +73,16 @@
 
       
       <figure class="ui-shot">
-        <img src="/assets/media/product/ocr-offer.png" alt="What a detected scan offers: opt-in, local, and labelled approximate before you click." loading="lazy" />
-        <figcaption>What a detected scan offers: opt-in, local, and labelled approximate before you click.</figcaption>
+        <div class="ui-demo" inert aria-hidden="true">
+          <div class="ocr-offer">
+            <p><strong>Scanned PDF?</strong> You can try OCR — it runs locally
+            (~8&nbsp;MB engine, downloaded once) and takes a few seconds per page.
+            Output is <em>approximate</em>: fine for reading, risky for exact
+            numbers and tables.</p>
+            <button type="button" class="btn btn-solid ocr-btn" tabindex="-1">Try OCR (experimental)</button>
+          </div>
+        </div>
+        <figcaption>What a detected scan offers — the element itself, rebuilt live: opt-in, local, and labelled approximate before you click.</figcaption>
       </figure>
       <h2>Why we flag scans instead of "handling" them</h2>
       <p>A converter that silently OCRs would hand you plausible text
