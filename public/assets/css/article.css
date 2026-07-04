@@ -219,6 +219,12 @@ article blockquote {
   border-radius: var(--radius-md);
 }
 
+/* file paths inside the marker: darker/lighter amber so the chip passes contrast */
+.shot-note code {
+  color: light-dark(#7c3d00, #fcd34d);
+  background: color-mix(in srgb, var(--warn) 12%, transparent);
+}
+
 .article-cta {
   margin: 2.5rem 0 0;
   padding: 1.25rem 1.5rem;
