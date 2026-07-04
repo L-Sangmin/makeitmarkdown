@@ -417,6 +417,16 @@ kbd {
 
 .privacy svg { color: var(--fg-faint); }
 
+.privacy-link {
+  color: var(--fg-muted);
+  text-decoration: underline;
+  text-decoration-color: var(--fg-faint);
+  text-underline-offset: 2px;
+  transition: color var(--ease);
+}
+
+.privacy-link:hover { color: var(--accent); }
+
 .sample {
   margin-top: 2.25rem;
   font-size: 0.875rem;
