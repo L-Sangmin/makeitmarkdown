@@ -254,3 +254,16 @@ article a:hover { text-decoration: underline; }
 .ba pre { margin: 0; height: calc(100% - 1.4rem); }
 .ba-after pre { border-color: color-mix(in srgb, var(--ok) 35%, var(--border)); }
 @media (max-width: 720px) { .ba { grid-template-columns: 1fr; } .ba pre { height: auto; } }
+
+/* icon hero — the article's gallery glyph, promoted */
+.icon-hero {
+  max-width: 24rem;
+  margin: 0.25rem auto 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: light-dark(
+    color-mix(in srgb, var(--accent) 6%, #f0f1f7),
+    color-mix(in srgb, var(--accent) 5%, var(--bg-raised))
+  );
+}
+.icon-hero svg { display: block; width: 100%; height: auto; }

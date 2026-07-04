@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Feeding LaTeX sources (.tex) to an LLM — format guide — MakeItMarkdown</title>
+  <meta name="description" content="The .tex is the structure the PDF destroys. Sections, fenced math, GFM tables, keyed citations — and honest limits: no macro expansion, no TeX engine." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <span class="bar-spacer"></span>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/formats/">Formats</a>
+    <button class="theme-toggle" type="button" aria-label="Toggle color theme" onclick="(function(){var r=document.documentElement,c=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=c==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('mim-theme',n)}catch(e){}})()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+    </button>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Format guide · .tex</p>
+    <article>
+      <h1>Feeding LaTeX sources (.tex) to an LLM</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026</p>
+
+      <p>LaTeX sources are the native format of papers, theses and course
+      notes — and the best possible input when you have it, because the
+      structure a PDF destroys is still explicit in the <code>.tex</code>.
+      Converting the source beats OCR-ing its output every time.</p>
+
+      <h2>The element mapping</h2>
+      <table>
+        <tr><th>In the .tex</th><th>In the Markdown</th></tr>
+        <tr><td><code>\section / \subsection</code></td><td><code>## / ###</code> outline</td></tr>
+        <tr><td><code>\title, \author, abstract</code></td><td>Document title, authors, an Abstract section</td></tr>
+        <tr><td><code>equation / align</code> environments</td><td><code>$$ … $$</code> fences, math body verbatim</td></tr>
+        <tr><td><code>tabular</code></td><td>GFM pipe tables</td></tr>
+        <tr><td><code>\includegraphics + \caption</code></td><td><code>[Figure: name.png]</code> placeholder with caption</td></tr>
+        <tr><td><code>\cite / \ref</code></td><td><code>[key]</code> / <code>(ref: label)</code> — readable citation anchors</td></tr>
+        <tr><td><code>thebibliography</code></td><td>A References section, keyed</td></tr>
+        <tr><td>Preamble (packages, macros)</td><td>Dropped, with a macro-count warning</td></tr>
+      </table>
+
+      <h2>Before → after</h2>
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">In the file</p><pre><code>\section{Method}\label{sec:method}
+Throughput $T$ follows
+\begin{equation}
+T = \frac{U}{\Delta t} \cdot \eta
+\end{equation}
+as shown in~\cite{lee2024}.</code></pre></div>
+        <div class="ba-col ba-after"><p class="ba-label">In the Markdown</p><pre><code>## Method
+
+Throughput $T$ follows
+
+$$
+T = \frac{U}{\Delta t} \cdot \eta
+$$
+
+as shown in [lee2024].</code></pre></div>
+      </div>
+
+      <h2>Honest limits</h2>
+      <ul>
+        <li><strong>Not a TeX engine.</strong> Custom macros
+        (<code>\newcommand</code>) are not expanded — text using them
+        converts literally, and the fidelity report counts the
+        definitions it saw.</li>
+        <li><strong>Math is preserved, not rendered</strong> — bodies stay
+        verbatim inside <code>$$</code> fences, which is exactly what
+        LLMs read best anyway.</li>
+        <li><strong>Figure images are referenced by path</strong>, not
+        extracted — the .tex doesn't contain them.</li>
+        <li>Multi-file projects (<code>\input/\include</code>) convert
+        one file at a time — batch-drop the parts.</li>
+      </ul>
+
+      <h2>FAQ</h2>
+      <p><strong>Why not just paste the PDF?</strong>
+      <a href="/blog/why-llms-choke-on-pdfs.html">Because the PDF is the
+      painted output</a>; the .tex is the structure itself.</p>
+      <p><strong>BibTeX .bib files?</strong> Not yet —
+      <code>thebibliography</code> environments convert;
+      <a href="/contact.html">request .bib</a> with a sample.</p>
+
+      <div class="article-cta">
+        <p>Drop a .tex and check the outline, fenced math and keyed
+        references.</p>
+        <a href="/">Convert a .tex →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/formats/pdf.html">the PDF guide</a> ·
+      <a href="/blog/token-budgeting.html">token budgeting</a> ·
+      <a href="/formats/">all format guides</a></p>
+    </article>
+  </div>
+</body>
+</html>

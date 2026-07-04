@@ -36,9 +36,11 @@ import html from './html.js';
 import pdf from './pdf.js';
 import { pptx } from "./pptx.js";
 import { eml } from "./eml.js";
+import { tex } from "./tex.js";
+import { mbox } from "./mbox.js";
 
 // Order matters: first canHandle() match wins.
-const parsers = [pptx, eml, ipynb, docx, csv, xlsx, json, subtitles, text, html, pdf];
+const parsers = [pptx, eml, tex, mbox, ipynb, docx, csv, xlsx, json, subtitles, text, html, pdf];
 
 export function findParser(url, doc, filename) {
   return parsers.find((p) => p.canHandle(url, doc, filename)) ?? null;

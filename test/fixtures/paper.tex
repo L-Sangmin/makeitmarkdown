@@ -1,0 +1,53 @@
+% A neutral sample paper
+\documentclass{article}
+\newcommand{\dataset}{the Q1 dataset}
+\title{Throughput Analysis of Regional Fulfillment}
+\author{Jordan Lee \and Sam Park}
+\begin{document}
+\maketitle
+\begin{abstract}
+We measure fulfillment throughput across three regions and find a
+\textbf{4\%} cost increase driven by carrier surcharges.
+\end{abstract}
+
+\section{Introduction}
+Prior work~\cite{lee2024} modeled throughput as linear. We revisit this
+using \dataset{} and show the assumption fails at peak load (see
+Section~\ref{sec:results}).
+
+\section{Method}
+\label{sec:method}
+Throughput $T$ follows
+\begin{equation}
+T = \frac{U}{\Delta t} \cdot \eta
+\end{equation}
+where $\eta$ denotes carrier efficiency.
+
+\begin{itemize}
+\item Collect unit counts per region
+\item Normalize by \textit{delivery window}
+\end{itemize}
+
+\section{Results}
+\label{sec:results}
+\begin{table}[h]
+\begin{tabular}{lrr}
+\hline
+Region & Units & Avg days \\
+\hline
+North & 18420 & 2.1 \\
+South & 15876 & 2.6 \\
+\hline
+\end{tabular}
+\caption{Regional throughput.}
+\end{table}
+
+\begin{figure}[t]
+\includegraphics[width=\linewidth]{plots/throughput.png}
+\caption{Throughput by region over the quarter.}
+\end{figure}
+
+\begin{thebibliography}{9}
+\bibitem{lee2024} Lee, J. \emph{Linear Throughput Models}. 2024.
+\end{thebibliography}
+\end{document}

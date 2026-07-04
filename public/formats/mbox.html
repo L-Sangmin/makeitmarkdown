@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%234f46e5%22%2F%3E%3Ctext%20x%3D%2213%22%20y%3D%2222.5%22%20font-family%3D%22ui-monospace%2CMenlo%2Cmonospace%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3Cpath%20d%3D%22M24%2012v7.5m0%200l-3.4-3.4m3.4%203.4l3.4-3.4%22%20stroke%3D%22white%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E" />
+  <title>Feeding mailbox archives (.mbox) to an LLM — format guide — MakeItMarkdown</title>
+  <meta name="description" content="A whole mailbox becomes an addressable thread outline — per-message headers decoded, quote pyramids truncated, attachments listed. First 50 messages, cut stated." />
+  <script>try{var t=localStorage.getItem("mim-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+    <span class="bar-spacer"></span>
+    <a class="wordmark" style="font-weight:500;color:var(--fg-muted)" href="/formats/">Formats</a>
+    <button class="theme-toggle" type="button" aria-label="Toggle color theme" onclick="(function(){var r=document.documentElement,c=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=c==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('mim-theme',n)}catch(e){}})()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+    </button>
+  </header>
+
+  <div class="article-wrap">
+    <p class="article-kicker">Format guide · .mbox</p>
+    <article>
+      <h1>Feeding mailbox archives (.mbox) to an LLM</h1>
+      <p class="article-byline">MakeItMarkdown · July 2026</p>
+
+      <p>An <code>.mbox</code> is a whole mailbox in one file — every
+      message concatenated, each with its own MIME plumbing and quoted
+      history. It's what "Export" gives you in many mail tools and what
+      Google Takeout produces. Ideal source material for "what did we
+      decide?" questions, unreadable as-is.</p>
+
+      <h2>The element mapping</h2>
+      <table>
+        <tr><th>In the .mbox</th><th>In the Markdown</th></tr>
+        <tr><td>Each message</td><td><code>## Message N · {subject}</code> — an addressable thread outline</td></tr>
+        <tr><td>Headers / encodings / quotes</td><td>Exactly the <a href="/formats/eml.html">.eml treatment</a>, per message</td></tr>
+        <tr><td>Archives beyond 50 messages</td><td>First 50 converted, the cut stated explicitly</td></tr>
+        <tr><td>Attachments across the archive</td><td>Counted and listed per message, not extracted</td></tr>
+      </table>
+
+      <h2>Before → after</h2>
+      <div class="ba">
+        <div class="ba-col"><p class="ba-label">In the file</p><pre><code>From jordan@… Thu Jul  2 09:14:22 2026
+Subject: Kickoff
+…
+From sam@… Thu Jul  2 17:02:10 2026
+Subject: Re: Kickoff
+&gt; (the whole thread again…)</code></pre></div>
+        <div class="ba-col ba-after"><p class="ba-label">In the Markdown</p><pre><code>## Message 1 · Kickoff
+- **From:** Jordan Lee …
+
+## Message 2 · Re: Kickoff
+Shortlist should be two vendors.
+&gt; … (9 more quoted lines truncated)</code></pre></div>
+      </div>
+
+      <h2>FAQ</h2>
+      <p><strong>How do I get an .mbox?</strong> Google Takeout (Gmail),
+      Thunderbird folder export, Apple Mail "Export Mailbox".</p>
+      <p><strong>Huge archives?</strong> Fifty messages per conversion —
+      split the file for more (the output tells you when it cut).</p>
+      <p><strong>Private mail?</strong> Local conversion, nothing
+      uploaded — <a href="/privacy.html">verifiably</a>.</p>
+
+      <div class="article-cta">
+        <p>Export a thread and see it become an addressable outline.</p>
+        <a href="/">Convert an .mbox →</a>
+      </div>
+
+      <p class="article-footer">Related:
+      <a href="/formats/eml.html">the .eml guide</a> ·
+      <a href="/blog/meeting-transcripts-workflow.html">meeting workflows</a> ·
+      <a href="/formats/">all format guides</a></p>
+    </article>
+  </div>
+</body>
+</html>

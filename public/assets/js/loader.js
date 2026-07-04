@@ -35,6 +35,9 @@ const LIBS_BY_EXT = {
   pdf: ["pdfjs"],
   pptx: [],
   eml: ["TurndownService", "turndownPluginGfm"],
+  mbox: ["TurndownService", "turndownPluginGfm"],
+  tex: [],
+  latex: [],
 };
 
 const scriptPromises = new Map();
