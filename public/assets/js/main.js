@@ -128,22 +128,51 @@ function rawText(buffer) {
 // every preset click re-tokenizes the whole file and the UI feels stuck.
 let rawTokCache = { buffer: null, count: 0, exact: false };
 
-function rawTokens(buffer) {
-  if (rawTokCache.buffer !== buffer) {
-    const text = rawText(buffer);
-    rawTokCache = {
-      buffer,
-      count: text !== null ? countTokensExact(text) : Math.round(buffer.byteLength / 4),
-      exact: text !== null,
-    };
-  }
-  return rawTokCache;
-}
-
 // Resolves after the browser has painted once — lets the ≈ estimate and its
-// counting pulse reach the screen before the synchronous tokenizer pass blocks.
+// counting pulse reach the screen before a synchronous tokenizer pass blocks.
 function afterPaint() {
   return new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
+}
+
+// Exact counts run in a worker so the result view stays scrollable and
+// clickable while they land. Falls back to the in-page tokenizer (after a
+// paint) if workers are unavailable. texts entries may be null (no count
+// wanted); the promise resolves to counts in the same positions.
+let tokWorker = null;
+let tokWorkerBroken = false;
+let tokJobId = 0;
+const tokJobs = new Map();
+
+function countTokensAsync(texts) {
+  if (!tokWorkerBroken && typeof Worker === "function") {
+    try {
+      if (!tokWorker) {
+        tokWorker = new Worker("/assets/js/tok-worker.js");
+        tokWorker.onmessage = ({ data }) => {
+          tokJobs.get(data.id)?.resolve(data.counts);
+          tokJobs.delete(data.id);
+        };
+        tokWorker.onerror = () => {
+          // e.g. first visit offline, vendor script unreachable
+          tokWorkerBroken = true;
+          for (const job of tokJobs.values()) job.reject(new Error("tok worker failed"));
+          tokJobs.clear();
+          tokWorker.terminate();
+          tokWorker = null;
+        };
+      }
+      const id = ++tokJobId;
+      return new Promise((resolve, reject) => {
+        tokJobs.set(id, { resolve, reject });
+        tokWorker.postMessage({ id, texts });
+      });
+    } catch {
+      tokWorkerBroken = true;
+    }
+  }
+  return ensureTokenizer()
+    .then(afterPaint)
+    .then(() => texts.map((t) => (t === null ? null : countTokensExact(t))));
 }
 
 function renderTokSave({ before, after, beforeExact, afterExact }) {
@@ -198,31 +227,34 @@ function updateTokSave() {
   tokSaveBox.classList.add("is-counting");
   const markdown = current.markdown;
   const buffer = current.fileBuffer;
-  ensureTokenizer()
-    .then(afterPaint)
-    .then(() => {
-      if (seq !== tokSaveSeq || current?.markdown !== markdown) return;
-      const raw = rawTokens(buffer);
-      const after = countTokensExact(markdown);
-      renderTokSave({
-        before: raw.count,
-        after,
-        beforeExact: raw.exact,
-        afterExact: true,
-      });
-      tokSaveBox.classList.remove("is-counting");
-      applyExactSizeNote(markdown, after);
-    })
-    .catch(() => {
-      // offline before the tokenizer was cached — estimates stand
-      tokSaveBox.classList.remove("is-counting");
+  (async () => {
+    const cached = rawTokCache.buffer === buffer ? rawTokCache : null;
+    const rawStr = cached ? null : rawText(buffer);
+    const [rawCount, after] = await countTokensAsync([rawStr, markdown]);
+    if (seq !== tokSaveSeq || current?.markdown !== markdown) return;
+    const raw = cached ?? {
+      buffer,
+      count: rawStr !== null ? rawCount : Math.round(buffer.byteLength / 4),
+      exact: rawStr !== null,
+    };
+    rawTokCache = raw;
+    renderTokSave({
+      before: raw.count,
+      after,
+      beforeExact: raw.exact,
+      afterExact: true,
     });
+    tokSaveBox.classList.remove("is-counting");
+    applyExactSizeNote(markdown, after);
+  })().catch(() => {
+    // offline before the tokenizer was cached — estimates stand
+    tokSaveBox.classList.remove("is-counting");
+  });
 }
 
 // Shared by the "count exactly" button and the automatic pass above.
-function applyExactSizeNote(markdown, n = null) {
+function applyExactSizeNote(markdown, n) {
   if (current?.markdown !== markdown) return;
-  if (n === null) n = countTokensExact(markdown);
   els.mdSize.textContent =
     `${markdown.length.toLocaleString("en-US")} chars · ${n.toLocaleString("en-US")} tokens (o200k)`;
   btnExact.hidden = true;
@@ -311,9 +343,10 @@ btnExact.addEventListener("click", async () => {
   if (!current) return;
   btnExact.disabled = true;
   btnExact.textContent = "counting…";
+  const markdown = current.markdown;
   try {
-    await ensureTokenizer();
-    applyExactSizeNote(current.markdown);
+    const [n] = await countTokensAsync([markdown]);
+    applyExactSizeNote(markdown, n);
   } catch {
     // Most likely offline before the tokenizer was ever cached.
     btnExact.textContent = "count unavailable";
