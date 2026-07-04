@@ -215,19 +215,36 @@
       <div class="article-cta">
         <p>Try it on the file your assistant struggles with most. The
         conversion runs in your browser — nothing is uploaded.</p>
-        <a href="/">Open MakeItMarkdown →</a>
+        <button type="button" class="drop-target drop-target-inline" data-href="/" aria-label="Drop a file to convert it, or click to open the converter">
+          <svg class="drop-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12" />
+            <path d="m7 11 5 5 5-5" />
+            <path d="M4 19h16" />
+          </svg>
+          <span class="drop-cta">Drop a file here &mdash; or click to open the converter</span>
+          <span class="drop-formats">.ipynb &middot; .docx &middot; .pptx &middot; .xlsx &middot; .csv &middot; .json &middot; .html &middot; .pdf &middot; .tex &middot; .eml &middot; .srt &middot; .md</span>
+        </button>
       </div>
 
       <nav class="related" aria-label="Keep reading">
         <div class="related-head"><p class="related-kicker">Keep reading</p><a href="/blog/">All articles →</a></div>
         <p class="related-label">Related</p>
         <ul class="related-grid">
-          <li><a class="related-card" href="/blog/ai-workspaces-markdown.html"><span class="related-group">Workflows</span><span class="related-title">Markdown is the best upload format for AI workspaces</span></a></li>
-          <li><a class="related-card" href="/blog/why-llms-choke-on-pdfs.html"><span class="related-group">Start here</span><span class="related-title">Why PDFs are hostile input for LLMs</span></a></li>
+          <li><a class="related-card" href="/blog/ai-workspaces-markdown.html">
+            <span class="related-thumb" aria-hidden="true"><svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"> <path d="M84 56 h44 l12 12 h96 a8 8 0 0 1 8 8 v40 a8 8 0 0 1 -8 8 h-152 a8 8 0 0 1 -8 -8 v-52 a8 8 0 0 1 8 -8 z" fill="none" stroke="var(--accent)" stroke-width="1.75"/> <g font-family="ui-monospace,monospace" font-size="10" fill="var(--fg-muted)"> <text x="104" y="96">a.md</text> <text x="150" y="96">b.md</text> <text x="196" y="96">c.md</text> </g> </svg></span>
+            <span class="related-body"><span class="related-group">Workflows</span><span class="related-title">Markdown is the best upload format for AI workspaces</span></span>
+          </a></li>
+          <li><a class="related-card" href="/blog/why-llms-choke-on-pdfs.html">
+            <span class="related-thumb" aria-hidden="true"><svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"> <rect x="112" y="26" width="76" height="102" rx="7" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/> <g fill="var(--fg-faint)" opacity="0.75"> <rect x="124" y="44" width="34" height="5" rx="2"/> <rect x="124" y="58" width="52" height="4" rx="2" transform="rotate(-1 150 60)"/> <rect x="124" y="70" width="46" height="4" rx="2" transform="rotate(1.5 147 72)"/> <rect x="124" y="82" width="52" height="4" rx="2" transform="rotate(-2 150 84)"/> <rect x="124" y="96" width="30" height="4" rx="2" transform="rotate(2 139 98)"/> </g> <path d="M212 98 l15 26 h-30 z" fill="none" stroke="var(--warn)" stroke-width="1.75" stroke-linejoin="round"/> <path d="M212 108 v8 M212 121 v0.5" stroke="var(--warn)" stroke-width="1.75" stroke-linecap="round"/> </svg></span>
+            <span class="related-body"><span class="related-group">Start here</span><span class="related-title">Why PDFs are hostile input for LLMs</span></span>
+          </a></li>
         </ul>
         <p class="related-label">More in Workflows</p>
         <ul class="related-grid">
-          <li><a class="related-card" href="/blog/meeting-transcripts-workflow.html"><span class="related-group">Workflows</span><span class="related-title">Meeting recordings → minutes your model can quote</span></a></li>
+          <li><a class="related-card" href="/blog/meeting-transcripts-workflow.html">
+            <span class="related-thumb" aria-hidden="true"><svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"> <rect x="92" y="46" width="60" height="42" rx="6" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/> <path d="M112 96 l10 10 10 -10" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/> <circle cx="122" cy="64" r="8" fill="none" stroke="var(--fg-muted)" stroke-width="1.5"/> <path d="M122 58 v6 l4 3" stroke="var(--fg-muted)" stroke-width="1.5" fill="none" stroke-linecap="round"/> <g font-family="ui-monospace,monospace" font-size="10" fill="var(--fg-muted)"> <text x="176" y="58" fill="var(--accent)">[23:14]</text> <text x="176" y="76">decision agreed</text> <text x="176" y="98" fill="var(--accent)">[41:30]</text> <text x="176" y="116">action item — Sam</text> </g> </svg></span>
+            <span class="related-body"><span class="related-group">Workflows</span><span class="related-title">Meeting recordings → minutes your model can quote</span></span>
+          </a></li>
         </ul>
       </nav>
     </article>

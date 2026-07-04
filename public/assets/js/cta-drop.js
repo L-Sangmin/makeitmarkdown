@@ -1,19 +1,19 @@
-// Article CTA drop relay.
+// Article drop target.
 //
 // Readers land on articles from a search for their problem, file in hand.
-// Dropping it on the CTA box stashes the File objects in IndexedDB and
-// jumps to the tool page, which picks them up and converts immediately
-// (main.js, consumeRelay). Nothing is uploaded — IndexedDB is local, and
-// the entry is deleted the moment it is read.
+// The CTA drop target mirrors the homepage one: dropping a file stashes
+// the File objects in IndexedDB and jumps to the tool page, which picks
+// them up and converts immediately (main.js, consumeRelay). Clicking just
+// opens the converter (keeping any sample deep-link). Nothing is uploaded —
+// IndexedDB is local, and the entry is deleted the moment it is read.
 (function () {
-  var cta = document.querySelector(".article-cta");
-  if (!cta || !("indexedDB" in window)) return;
+  var target = document.querySelector(".article-cta .drop-target");
+  if (!target) return;
 
-  cta.classList.add("cta-drop");
-  var hint = document.createElement("p");
-  hint.className = "cta-drop-hint";
-  hint.textContent = "…or drop your file right here — it opens straight in the converter.";
-  cta.appendChild(hint);
+  var href = target.dataset.href || "/";
+  target.addEventListener("click", function () { location.href = href; });
+
+  if (!("indexedDB" in window)) return;
 
   function openDb() {
     return new Promise(function (resolve, reject) {
@@ -29,16 +29,16 @@
   window.addEventListener("dragover", function (e) { e.preventDefault(); });
   window.addEventListener("drop", function (e) { e.preventDefault(); });
 
-  cta.addEventListener("dragover", function (e) {
+  target.addEventListener("dragover", function (e) {
     e.preventDefault();
-    cta.classList.add("is-dragover");
+    target.classList.add("is-dragover");
   });
-  cta.addEventListener("dragleave", function () {
-    cta.classList.remove("is-dragover");
+  target.addEventListener("dragleave", function () {
+    target.classList.remove("is-dragover");
   });
-  cta.addEventListener("drop", function (e) {
+  target.addEventListener("drop", function (e) {
     e.preventDefault();
-    cta.classList.remove("is-dragover");
+    target.classList.remove("is-dragover");
     var files = e.dataTransfer && e.dataTransfer.files;
     if (!files || !files.length) return;
     var list = [].slice.call(files);

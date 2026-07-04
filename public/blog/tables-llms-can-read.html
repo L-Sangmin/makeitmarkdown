@@ -137,21 +137,44 @@ South 872 914</code></pre></div>
       <div class="article-cta">
         <p>Drop a .csv or .xlsx and get exactly this shape — typed columns,
         honest truncation, per-sheet sections. Locally, in your browser.</p>
-        <a href="/?sample=sales-csv">See it on a sample CSV →</a>
+        <button type="button" class="drop-target drop-target-inline" data-href="/?sample=sales-csv" aria-label="Drop a file to convert it, or click to open the converter">
+          <svg class="drop-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12" />
+            <path d="m7 11 5 5 5-5" />
+            <path d="M4 19h16" />
+          </svg>
+          <span class="drop-cta">Drop a file here &mdash; or click to open the converter</span>
+          <span class="drop-formats">.ipynb &middot; .docx &middot; .pptx &middot; .xlsx &middot; .csv &middot; .json &middot; .html &middot; .pdf &middot; .tex &middot; .eml &middot; .srt &middot; .md</span>
+        </button>
       </div>
 
       <nav class="related" aria-label="Keep reading">
         <div class="related-head"><p class="related-kicker">Keep reading</p><a href="/blog/">All articles →</a></div>
         <p class="related-label">Related</p>
         <ul class="related-grid">
-          <li><a class="related-card" href="/blog/pasted-table-garbage.html"><span class="related-group">FAQ · Fixes</span><span class="related-title">Pasted a spreadsheet, got garbage</span></a></li>
-          <li><a class="related-card" href="/blog/llm-invents-numbers.html"><span class="related-group">FAQ · Fixes</span><span class="related-title">The model invents numbers from your data</span></a></li>
+          <li><a class="related-card" href="/blog/pasted-table-garbage.html">
+            <span class="related-thumb" aria-hidden="true"><svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><rect x="88" y="42" width="90" height="66" rx="4" fill="none" stroke="var(--fg-faint)" stroke-width="1.25"/><path d="M88 64 h90 M88 86 h90 M118 42 v66 M148 42 v66" stroke="var(--fg-faint)" stroke-width="0.9"/><g fill="var(--warn)"><circle cx="204" cy="58" r="2.2"/><circle cx="216" cy="72" r="2.2"/><circle cx="200" cy="88" r="2.2"/><circle cx="224" cy="100" r="2.2"/><circle cx="210" cy="112" r="2.2"/></g><text x="204" y="40" font-family="ui-monospace,monospace" font-size="9" fill="var(--warn)">paste…</text></svg></span>
+            <span class="related-body"><span class="related-group">FAQ · Fixes</span><span class="related-title">Pasted a spreadsheet, got garbage</span></span>
+          </a></li>
+          <li><a class="related-card" href="/blog/llm-invents-numbers.html">
+            <span class="related-thumb" aria-hidden="true"><svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><text x="122" y="78" font-family="ui-monospace,monospace" font-size="22" fill="var(--fg)">1,204</text><text x="196" y="78" font-family="ui-monospace,monospace" font-size="22" fill="var(--warn)">?</text><path d="M118 94 q14 10 28 0 t28 0 t28 0" fill="none" stroke="var(--warn)" stroke-width="1.75" stroke-linecap="round"/><text x="122" y="122" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">not in your data</text></svg></span>
+            <span class="related-body"><span class="related-group">FAQ · Fixes</span><span class="related-title">The model invents numbers from your data</span></span>
+          </a></li>
         </ul>
         <p class="related-label">More in Under the hood</p>
         <ul class="related-grid">
-          <li><a class="related-card" href="/blog/not-a-file-converter.html"><span class="related-group">Under the hood</span><span class="related-title">What a converter built for LLMs does differently</span></a></li>
-          <li><a class="related-card" href="/blog/notebook-cell-dependencies.html"><span class="related-group">Under the hood</span><span class="related-title">Making Jupyter notebooks LLM-addressable</span></a></li>
-          <li><a class="related-card" href="/blog/which-preset.html"><span class="related-group">Under the hood</span><span class="related-title">Which output preset should I use?</span></a></li>
+          <li><a class="related-card" href="/blog/not-a-file-converter.html">
+            <span class="related-thumb" aria-hidden="true"><svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"> <rect x="104" y="24" width="112" height="112" rx="8" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/> <rect x="118" y="38" width="56" height="9" rx="3" fill="var(--accent)"/> <rect x="118" y="56" width="84" height="4" rx="2" fill="var(--fg-faint)" opacity="0.5"/> <rect x="118" y="65" width="76" height="4" rx="2" fill="var(--fg-faint)" opacity="0.5"/> <rect x="118" y="78" width="84" height="26" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.5"/> <path d="M118 87 h84 M146 78 v26 M174 78 v26" stroke="var(--accent)" stroke-width="0.9" opacity="0.7"/> <rect x="118" y="112" width="38" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 3"/> </svg></span>
+            <span class="related-body"><span class="related-group">Under the hood</span><span class="related-title">What a converter built for LLMs does differently</span></span>
+          </a></li>
+          <li><a class="related-card" href="/blog/notebook-cell-dependencies.html">
+            <span class="related-thumb" aria-hidden="true"><svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"> <g font-family="ui-monospace,monospace" font-size="11" fill="var(--fg-muted)"> <rect x="72" y="88" width="48" height="26" rx="5" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/> <text x="96" y="105" text-anchor="middle">In[1]</text> <rect x="136" y="88" width="48" height="26" rx="5" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/> <text x="160" y="105" text-anchor="middle">In[2]</text> <rect x="200" y="88" width="48" height="26" rx="5" fill="none" stroke="var(--warn)" stroke-width="1.5"/> <text x="224" y="105" text-anchor="middle" fill="var(--warn)">In[9]</text> </g> <path d="M96 86 Q128 44 158 86" fill="none" stroke="var(--accent)" stroke-width="1.5"/> <path d="M160 86 Q192 52 222 86" fill="none" stroke="var(--accent)" stroke-width="1.5"/> <path d="M98 86 Q160 20 220 86" fill="none" stroke="var(--fg-faint)" stroke-width="1.25" stroke-dasharray="4 3"/> </svg></span>
+            <span class="related-body"><span class="related-group">Under the hood</span><span class="related-title">Making Jupyter notebooks LLM-addressable</span></span>
+          </a></li>
+          <li><a class="related-card" href="/blog/which-preset.html">
+            <span class="related-thumb" aria-hidden="true"><svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"> <rect x="86" y="62" width="148" height="30" rx="15" fill="none" stroke="var(--border)" stroke-width="1.5"/> <rect x="90" y="66" width="44" height="22" rx="11" fill="color-mix(in srgb, var(--accent) 22%, transparent)" stroke="var(--accent)" stroke-width="1.25"/> <text x="112" y="81" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg)">Chat</text> <text x="160" y="81" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">RAG</text> <text x="207" y="81" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">Obs.</text> <text x="160" y="116" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-muted)">pick by destination</text> </svg></span>
+            <span class="related-body"><span class="related-group">Under the hood</span><span class="related-title">Which output preset should I use?</span></span>
+          </a></li>
         </ul>
       </nav>
     </article>

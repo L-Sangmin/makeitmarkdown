@@ -125,21 +125,44 @@
       <div class="article-cta">
         <p>Try it on the sample notebook — or the giant one that keeps
         failing.</p>
-        <a href="/?sample=sales-analysis">Convert a notebook →</a>
+        <button type="button" class="drop-target drop-target-inline" data-href="/?sample=sales-analysis" aria-label="Drop a file to convert it, or click to open the converter">
+          <svg class="drop-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12" />
+            <path d="m7 11 5 5 5-5" />
+            <path d="M4 19h16" />
+          </svg>
+          <span class="drop-cta">Drop a file here &mdash; or click to open the converter</span>
+          <span class="drop-formats">.ipynb &middot; .docx &middot; .pptx &middot; .xlsx &middot; .csv &middot; .json &middot; .html &middot; .pdf &middot; .tex &middot; .eml &middot; .srt &middot; .md</span>
+        </button>
       </div>
 
       <nav class="related" aria-label="Keep reading">
         <div class="related-head"><p class="related-kicker">Keep reading</p><a href="/blog/">All articles →</a></div>
         <p class="related-label">Related</p>
         <ul class="related-grid">
-          <li><a class="related-card" href="/blog/notebook-cell-dependencies.html"><span class="related-group">Under the hood</span><span class="related-title">Making Jupyter notebooks LLM-addressable</span></a></li>
-          <li><a class="related-card" href="/blog/token-budgeting.html"><span class="related-group">Advanced</span><span class="related-title">Token budgeting 101</span></a></li>
+          <li><a class="related-card" href="/blog/notebook-cell-dependencies.html">
+            <span class="related-thumb" aria-hidden="true"><svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"> <g font-family="ui-monospace,monospace" font-size="11" fill="var(--fg-muted)"> <rect x="72" y="88" width="48" height="26" rx="5" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/> <text x="96" y="105" text-anchor="middle">In[1]</text> <rect x="136" y="88" width="48" height="26" rx="5" fill="none" stroke="var(--fg-faint)" stroke-width="1.5"/> <text x="160" y="105" text-anchor="middle">In[2]</text> <rect x="200" y="88" width="48" height="26" rx="5" fill="none" stroke="var(--warn)" stroke-width="1.5"/> <text x="224" y="105" text-anchor="middle" fill="var(--warn)">In[9]</text> </g> <path d="M96 86 Q128 44 158 86" fill="none" stroke="var(--accent)" stroke-width="1.5"/> <path d="M160 86 Q192 52 222 86" fill="none" stroke="var(--accent)" stroke-width="1.5"/> <path d="M98 86 Q160 20 220 86" fill="none" stroke="var(--fg-faint)" stroke-width="1.25" stroke-dasharray="4 3"/> </svg></span>
+            <span class="related-body"><span class="related-group">Under the hood</span><span class="related-title">Making Jupyter notebooks LLM-addressable</span></span>
+          </a></li>
+          <li><a class="related-card" href="/blog/token-budgeting.html">
+            <span class="related-thumb" aria-hidden="true"><svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><path d="M108 110 A52 52 0 0 1 212 110" fill="none" stroke="var(--fg-faint)" stroke-width="6" stroke-linecap="round" opacity="0.5"/><path d="M108 110 A52 52 0 0 1 173.5 59.8" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round"/><path d="M160 110 L171 68" stroke="var(--fg)" stroke-width="2" stroke-linecap="round"/><circle cx="160" cy="110" r="4" fill="var(--fg)"/><text x="160" y="132" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">≈438 → 542 exact</text></svg></span>
+            <span class="related-body"><span class="related-group">Advanced</span><span class="related-title">Token budgeting 101</span></span>
+          </a></li>
         </ul>
         <p class="related-label">More in FAQ · Fixes</p>
         <ul class="related-grid">
-          <li><a class="related-card" href="/blog/claude-projects-pdf-fix.html"><span class="related-group">FAQ · Fixes</span><span class="related-title">Claude Projects can't read your PDF?</span></a></li>
-          <li><a class="related-card" href="/blog/llm-file-upload-errors.html"><span class="related-group">FAQ · Fixes</span><span class="related-title">"I can't access this file"</span></a></li>
-          <li><a class="related-card" href="/blog/pasted-table-garbage.html"><span class="related-group">FAQ · Fixes</span><span class="related-title">Pasted a spreadsheet, got garbage</span></a></li>
+          <li><a class="related-card" href="/blog/claude-projects-pdf-fix.html">
+            <span class="related-thumb" aria-hidden="true"><svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><rect x="86" y="44" width="62" height="80" rx="6" fill="none" stroke="var(--warn)" stroke-width="1.5"/><text x="117" y="88" text-anchor="middle" font-family="ui-monospace,monospace" font-size="12" fill="var(--warn)">PDF</text><path d="M162 84 h30" stroke="var(--fg-faint)" stroke-width="1.5"/><path d="M186 78 l10 6 -10 6z" fill="var(--fg-faint)"/><path d="M206 62 h44 l12 12 v40 a6 6 0 0 1 -6 6 h-50 a6 6 0 0 1 -6 -6 v-46 a6 6 0 0 1 6 -6 z" fill="none" stroke="var(--ok)" stroke-width="1.5"/><path d="M216 98 l7 8 13 -16" fill="none" stroke="var(--ok)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="related-body"><span class="related-group">FAQ · Fixes</span><span class="related-title">Claude Projects can't read your PDF?</span></span>
+          </a></li>
+          <li><a class="related-card" href="/blog/llm-file-upload-errors.html">
+            <span class="related-thumb" aria-hidden="true"><svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><path d="M126 96 l34 -34 a16 16 0 0 1 23 23 l-40 40 a10 10 0 0 1 -15 -15 l36 -36" fill="none" stroke="var(--fg-muted)" stroke-width="2" stroke-linecap="round"/><circle cx="206" cy="60" r="17" fill="none" stroke="var(--warn)" stroke-width="1.75"/><path d="M199 53 l14 14 M213 53 l-14 14" stroke="var(--warn)" stroke-width="1.75" stroke-linecap="round"/></svg></span>
+            <span class="related-body"><span class="related-group">FAQ · Fixes</span><span class="related-title">"I can't access this file"</span></span>
+          </a></li>
+          <li><a class="related-card" href="/blog/pasted-table-garbage.html">
+            <span class="related-thumb" aria-hidden="true"><svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg"><rect x="88" y="42" width="90" height="66" rx="4" fill="none" stroke="var(--fg-faint)" stroke-width="1.25"/><path d="M88 64 h90 M88 86 h90 M118 42 v66 M148 42 v66" stroke="var(--fg-faint)" stroke-width="0.9"/><g fill="var(--warn)"><circle cx="204" cy="58" r="2.2"/><circle cx="216" cy="72" r="2.2"/><circle cx="200" cy="88" r="2.2"/><circle cx="224" cy="100" r="2.2"/><circle cx="210" cy="112" r="2.2"/></g><text x="204" y="40" font-family="ui-monospace,monospace" font-size="9" fill="var(--warn)">paste…</text></svg></span>
+            <span class="related-body"><span class="related-group">FAQ · Fixes</span><span class="related-title">Pasted a spreadsheet, got garbage</span></span>
+          </a></li>
         </ul>
       </nav>
     </article>
