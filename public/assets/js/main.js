@@ -534,6 +534,26 @@ if (presetParam && PRESETS.some((p) => p.id === presetParam)) {
 const sampleParam = params.get("sample");
 if (sampleParam) loadSample(sampleParam === "1" ? "sales-analysis" : sampleParam);
 
+// Files dropped on an article's CTA box arrive via IndexedDB (cta-drop.js).
+// Consume-once: the entry is deleted before conversion starts.
+(function consumeRelay() {
+  if (!("indexedDB" in window)) return;
+  const rq = indexedDB.open("mim-relay", 1);
+  rq.onupgradeneeded = () => rq.result.createObjectStore("files");
+  rq.onsuccess = () => {
+    const tx = rq.result.transaction("files", "readwrite");
+    const store = tx.objectStore("files");
+    const get = store.get("pending");
+    get.onsuccess = () => {
+      const entry = get.result;
+      store.delete("pending");
+      if (entry?.files?.length && Date.now() - entry.ts < 60_000) {
+        handleFiles(entry.files);
+      }
+    };
+  };
+})();
+
 // --- result actions ----------------------------------------------------------------------
 
 document.getElementById("btn-new")?.addEventListener("click", showLanding);

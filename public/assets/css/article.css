@@ -210,6 +210,20 @@ article blockquote {
 
 .article-cta p { margin: 0 0 0.75rem; font-size: 0.9375rem; }
 
+/* CTA as a live drop target (progressive: cta-drop.js adds the class) */
+.article-cta.cta-drop { border-style: dashed; }
+
+.article-cta.is-dragover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 5%, var(--bg-raised));
+}
+
+.cta-drop-hint {
+  margin: 0.75rem 0 0 !important;
+  font-size: 0.8125rem !important;
+  color: var(--fg-faint);
+}
+
 .article-cta a {
   display: inline-block;
   padding: 0.5rem 1rem;
