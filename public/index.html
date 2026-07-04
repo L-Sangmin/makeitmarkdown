@@ -48,7 +48,6 @@
         what was preserved.
       </p>
 
-      <!-- Single input target (HANDOFF §1.5.2) -->
       <button type="button" id="drop-target" class="drop-target" aria-label="Add a document: drop a file, paste, or click to browse">
         <svg class="drop-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 3v12" />
@@ -141,7 +140,6 @@
 
     <section class="strip" aria-label="Advertisement">
       <div class="strip-inner" style="padding-top:2rem;padding-bottom:2rem">
-        <!-- AD SLOT (landing, below the fold — never near the drop target) -->
         <div class="ad-slot ad-demo" data-unit="display" aria-label="Advertisement placeholder"></div>
       </div>
     </section>
@@ -183,13 +181,11 @@
     </footer>
   </main>
 
-  <!-- Result: 3-panel trust view (HANDOFF §1.5.3) -->
   <section id="view-result" class="result" hidden aria-label="Conversion result">
     <div class="result-bar">
       <button type="button" id="btn-new" class="btn btn-ghost" title="Start over (Esc)">&larr; New</button>
       <span id="result-meta" class="result-meta" role="status"></span>
       <span class="bar-spacer"></span>
-      <!-- populated from PRESETS (presets.js) -->
       <div class="seg" id="preset-seg" role="group" aria-label="Output preset"></div>
       <button type="button" id="btn-original" class="btn btn-ghost" aria-pressed="true">Hide original</button>
       <button type="button" id="btn-copy" class="btn btn-ghost">Copy</button>

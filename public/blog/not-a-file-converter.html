@@ -25,7 +25,6 @@
     <div class="article-hero" aria-hidden="true">
       <svg viewBox="0 0 680 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="">
         <rect width="680" height="210" fill="var(--bg-raised)"/>
-        <!-- document x-ray: structural elements lit up -->
         <rect x="60" y="26" width="230" height="160" rx="8" fill="none" stroke="var(--border)" stroke-width="1.25"/>
         <rect x="76" y="42" width="120" height="10" rx="3" fill="var(--accent)" opacity="0.9"/>
         <rect x="76" y="62" width="198" height="5" rx="2" fill="var(--fg-faint)" opacity="0.5"/>
@@ -101,7 +100,6 @@
         padded to rectangular, with a warning in the fidelity report.</li>
       </ul>
 
-      <!-- AD SLOT (in-article, after the main answer — the natural pause) -->
       <div class="ad-slot ad-demo" data-unit="in-article" aria-label="Advertisement placeholder"></div>
 
       <h2><span class="sec-num">3 ·</span> Figures: placeholders, never base64 walls</h2>
@@ -134,10 +132,27 @@
       panels: the original, the Markdown, and a <strong>fidelity
       report</strong> — counts of tables, figures, equations and code cells
       the parser <em>detected</em>, every warning it accumulated, and a
-      five-point structural quality score.</p>
+      weighted structural quality score.</p>
       <figure class="ui-shot">
-        <img src="/assets/media/product/fidelity-report.png" alt="The fidelity report on a clean notebook: QC breakdown expanded, detected counts below." loading="lazy" />
-        <figcaption>The fidelity report on a clean notebook: QC breakdown expanded, detected counts below.</figcaption>
+        <div class="ui-demo" inert aria-hidden="true">
+          <button type="button" class="qc qc-toggle is-open" tabindex="-1">
+            <div class="qc-score"><span class="count-num">98</span><span class="qc-pct">%</span></div>
+            <div class="qc-label">QC score<span>8 weighted structural checks · details</span></div>
+            <svg class="qc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <ul class="qc-checks">
+            <li class="qc-pass"><span class="qc-mark">✓</span><span><strong>Sectioned structure</strong><span class="qc-weight">×2</span> — headings split the document into addressable sections</span></li>
+            <li class="qc-pass"><span class="qc-mark">✓</span><span><strong>Elements recovered</strong><span class="qc-weight">×2</span> — 5 of 5 detected element(s) made it into the output</span></li>
+            <li class="qc-part"><span class="qc-mark">△</span><span><strong>No loss reported</strong> — 1 warning(s) report dropped or truncated content (75%)</span></li>
+          </ul>
+          <div class="counts">
+            <div class="count"><span class="count-num">5</span><span class="count-label">code cells detected</span></div>
+            <div class="count"><span class="count-num">0</span><span class="count-label">figures detected</span></div>
+            <div class="count"><span class="count-num">0</span><span class="count-label">tables detected</span></div>
+            <div class="count"><span class="count-num">0</span><span class="count-label">equations detected</span></div>
+          </div>
+        </div>
+        <figcaption>The fidelity report — the real element, rebuilt live: QC breakdown expanded, detected counts below.</figcaption>
       </figure>
 
       <p>The wording is deliberate. "Preserved" is a promise nobody
@@ -147,13 +162,6 @@
       the missing half. Silent loss becomes visible loss. That's the whole
       trust model of the product — and it's why the report sits on equal
       footing with the output itself.</p>
-
-      <div class="shot-note">🎬 <strong>Media slot</strong> — save as
-      <code>/assets/media/blog/not-a-converter/fidelity-zoom.mp4</code> ·
-      10–15&nbsp;s screen recording: drop the sample notebook, then zoom
-      (cursor-follow) onto the fidelity panel while the counters animate
-      up and a warning appears. Muted, looping. This box is replaced by
-      the clip once the file lands.</div>
 
       <h2><span class="sec-num">6 ·</span> What we refuse to do</h2>
       <ul>
@@ -219,6 +227,8 @@
           </a></li>
         </ul>
       </nav>
+
+      <div class="ad-slot ad-demo" data-unit="multiplex" aria-label="Advertisement placeholder"></div>
     </article>
   </div>
   <script defer src="/assets/js/cta-drop.js"></script>

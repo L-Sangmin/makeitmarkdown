@@ -25,7 +25,6 @@
     <div class="article-hero" aria-hidden="true">
       <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="">
         <rect width="680" height="200" fill="var(--bg-raised)"/>
-        <!-- workspace box -->
         <rect x="48" y="34" width="180" height="132" rx="10" fill="none" stroke="var(--border)" stroke-width="1.25"/>
         <text x="138" y="24" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">your workspace files</text>
         <g font-family="ui-monospace,monospace" font-size="10" fill="var(--fg-muted)">
@@ -34,10 +33,8 @@
           <text x="66" y="106">report.md</text>
           <text x="66" y="128">data-summary.md</text>
         </g>
-        <!-- chunking arrows -->
         <path d="M228 100 h40" stroke="var(--fg-faint)" stroke-width="1.25"/>
         <path d="M262 94 l10 6 -10 6z" fill="var(--fg-faint)"/>
-        <!-- chunks -->
         <g>
           <rect x="286" y="48" width="96" height="26" rx="5" fill="none" stroke="var(--accent)" stroke-width="1.25"/>
           <rect x="286" y="86" width="96" height="26" rx="5" fill="none" stroke="var(--accent)" stroke-width="1.25"/>
@@ -49,7 +46,6 @@
         <text x="334" y="180" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="var(--fg-faint)">chunks follow headings</text>
         <path d="M382 100 h40" stroke="var(--fg-faint)" stroke-width="1.25"/>
         <path d="M416 94 l10 6 -10 6z" fill="var(--fg-faint)"/>
-        <!-- answer -->
         <rect x="440" y="52" width="204" height="96" rx="10" fill="none" stroke="var(--ok)" stroke-width="1.5"/>
         <g font-family="ui-monospace,monospace" font-size="10" fill="var(--fg)">
           <text x="456" y="82">"Per **Week 5**, the</text>
@@ -74,7 +70,6 @@
       budgets, and retrieval accuracy. The format you upload in touches all
       three, and Markdown wins all three. Not by a little.</p>
       <p class="takeaway"><strong>The point:</strong> storage caps, token budgets, retrieval accuracy — three bottlenecks, one format change, all three measured below.</p>
-
 
       <h2><span class="sec-num">1 ·</span> Storage — same knowledge, a fraction of the cap</h2>
       <p>Workspace storage is capped (per-file limits, per-project totals).
@@ -101,13 +96,6 @@
       was straining its cap with PDFs drops to a few percent after
       conversion, with the identical textual content.</p>
 
-      <div class="shot-note">📸 <strong>Media slot</strong> — save as
-      <code>/assets/media/blog/workspaces/01-space-storage.png</code> ·
-      screenshot pair (or one combined image) of a real workspace's
-      storage/capacity indicator before and after replacing PDFs with the
-      converted .md files. This box is replaced by the image once the
-      file lands.</div>
-
       <h2><span class="sec-num">2 ·</span> Tokens — denser chunks, more of them</h2>
       <p>When the workspace answers a question, it can only afford to stuff
       a limited number of tokens of retrieved context into the prompt.
@@ -122,7 +110,6 @@
       simply can't be attached to most chats; as Markdown it's ~64,000
       tokens — large but usable, with cell addresses intact.</p>
 
-      <!-- AD SLOT (in-article, after the main answer — the natural pause) -->
       <div class="ad-slot ad-demo" data-unit="in-article" aria-label="Advertisement placeholder"></div>
 
       <h2><span class="sec-num">3 ·</span> Retrieval — headings are search handles</h2>
@@ -140,12 +127,6 @@
       out — we saw this shift a small model from vague to precise in
       <a href="/blog/lecture-notes-case-study.html">the lecture-notes case
       study</a>.</p>
-
-      <div class="shot-note">📸 <strong>Media slot</strong> — save as
-      <code>/assets/media/blog/workspaces/02-cited-answer.png</code> ·
-      screenshot of a workspace answer that cites/quotes a converted .md
-      file (source popover or inline citation visible), showing it pulled
-      the right section.</div>
 
       <h2><span class="sec-num">4 ·</span> The recipe</h2>
       <ol>
@@ -208,6 +189,8 @@
           </a></li>
         </ul>
       </nav>
+
+      <div class="ad-slot ad-demo" data-unit="multiplex" aria-label="Advertisement placeholder"></div>
     </article>
   </div>
   <script defer src="/assets/js/cta-drop.js"></script>

@@ -25,23 +25,19 @@
     <div class="article-hero" aria-hidden="true">
       <svg viewBox="0 0 680 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="">
         <rect width="680" height="210" fill="var(--bg-raised)"/>
-        <!-- naive chunking: fixed windows crossing a table -->
         <text x="48" y="34" font-family="ui-monospace,monospace" font-size="10" fill="var(--fg-faint)">fixed-window chunking</text>
         <g>
           <rect x="48" y="46" width="250" height="120" rx="8" fill="none" stroke="var(--border)" stroke-width="1.25"/>
           <rect x="62" y="60" width="150" height="7" rx="2" fill="var(--fg-faint)" opacity="0.6"/>
           <rect x="62" y="76" width="222" height="5" rx="2" fill="var(--fg-faint)" opacity="0.4"/>
           <rect x="62" y="88" width="210" height="5" rx="2" fill="var(--fg-faint)" opacity="0.4"/>
-          <!-- table -->
           <rect x="62" y="104" width="222" height="44" rx="3" fill="none" stroke="var(--fg-faint)" stroke-width="0.9"/>
           <path d="M62 118 h222 M136 104 v44 M210 104 v44" stroke="var(--fg-faint)" stroke-width="0.6"/>
-          <!-- chunk cut lines slicing through table -->
           <path d="M40 126 h268" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="6 4"/>
           <text x="52" y="140" font-family="ui-monospace,monospace" font-size="8.5" fill="var(--warn)">cut #2 — mid-table</text>
           <path d="M40 82 h268" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="6 4"/>
           <text x="52" y="96" font-family="ui-monospace,monospace" font-size="8.5" fill="var(--warn)">cut #1 — mid-sentence</text>
         </g>
-        <!-- structural chunking -->
         <text x="382" y="34" font-family="ui-monospace,monospace" font-size="10" fill="var(--fg-faint)">structure-aligned chunking</text>
         <g>
           <rect x="382" y="46" width="250" height="52" rx="8" fill="none" stroke="var(--ok)" stroke-width="1.25"/>
@@ -95,7 +91,6 @@
       and duplicated retrievals. The real fix is upstream: give the chunker
       boundaries that mean something.</p>
 
-      <!-- AD SLOT (in-article, after the main answer — the natural pause) -->
       <div class="ad-slot ad-demo" data-unit="in-article" aria-label="Advertisement placeholder"></div>
 
       <h2><span class="sec-num">3 ·</span> Headings are free chunk boundaries</h2>
@@ -253,6 +248,8 @@
           </a></li>
         </ul>
       </nav>
+
+      <div class="ad-slot ad-demo" data-unit="multiplex" aria-label="Advertisement placeholder"></div>
     </article>
   </div>
   <script defer src="/assets/js/cta-drop.js"></script>

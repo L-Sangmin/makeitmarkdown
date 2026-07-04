@@ -487,6 +487,19 @@ article a:hover { text-decoration: underline; }
 .ui-demo .pane-title { margin: 0; padding: 0; border: 0; }
 .ui-demo .drop-error { margin: 0; }
 .ui-demo .ocr-offer { margin: 0; padding: 0; border: 0; }
+.ui-demo .qc-checks { margin: 0; }
+.ui-demo .dag-wrap { width: 100%; }
+
+/* Dual-theme embeds of theme-baked SVG output (the dependency DAG) */
+.demo-dag-light, .demo-dag-dark { display: none; }
+:root[data-theme="light"] .demo-dag-light { display: block; }
+:root[data-theme="dark"] .demo-dag-dark { display: block; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .demo-dag-light { display: block; }
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .demo-dag-dark { display: block; }
+}
 
 /* ui-shot — real product screenshots embedded at the action point */
 .ui-shot { margin: 1.25rem 0 1.5rem; }
