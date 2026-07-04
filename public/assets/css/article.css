@@ -66,8 +66,6 @@ article h2 .sec-num {
 
 .related-head a { font-size: 0.8125rem; }
 
-.related-links { display: flex; gap: 1.25rem; align-items: baseline; }
-
 .related-kicker {
   margin: 0;
   font-size: 0.9375rem;
@@ -260,6 +258,13 @@ article blockquote {
 
 article a { color: var(--accent); text-decoration: none; }
 article a:hover { text-decoration: underline; }
+
+/* In-text links need a non-color cue (accent-on-body is 2.81:1) */
+article p a, article li a, article td a, article figcaption a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
 
 /* blog index — gallery view grouped by theme */
 .article-wrap.wide { max-width: 60rem; }

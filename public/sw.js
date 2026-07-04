@@ -8,7 +8,7 @@
 //
 // DEPLOY NOTE: bump VERSION on every deploy — it invalidates old caches.
 
-const VERSION = "v12";
+const VERSION = "v13";
 const CACHE = `mim-${VERSION}`;
 
 const CORE = [
@@ -46,6 +46,8 @@ const CORE = [
   "/assets/js/parsers/text.js",
   "/assets/js/parsers/html.js",
   "/assets/js/parsers/pdf.js",
+  "/assets/js/parsers/tex.js",
+  "/assets/js/parsers/mbox.js",
   "/assets/vendor/purify-3.4.11.min.js",
   "/assets/vendor/marked-18.0.5.min.js",
   "/assets/vendor/jszip-3.10.1.min.js",

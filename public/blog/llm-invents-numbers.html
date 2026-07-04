@@ -21,7 +21,7 @@
     </button>
   </header>
 
-  <div class="article-wrap">
+  <main class="article-wrap">
     <p class="article-kicker">Fixes · 05</p>
     <article>
       <h1>When the model invents numbers from your data</h1>
@@ -93,7 +93,7 @@
       <p>Typed headers close the gap:</p>
       <pre><code>| month (date) | units (int) | revenue (float) |</code></pre>
 
-      <div class="ad-slot ad-demo" data-unit="in-article" aria-label="Advertisement placeholder"></div>
+      <div class="ad-slot ad-demo" data-unit="in-article" aria-hidden="true"></div>
 
       <h2><span class="sec-num">3 ·</span> The two-minute audit</h2>
       <ol>
@@ -103,7 +103,7 @@
         <li>Check the fidelity report: <em>tables detected</em> should
         match what you know the document contains. A missing table means
         the model would have answered numeric questions from prose — a
-        classic invention source. The report's five-point breakdown shows
+        classic invention source. The report's weighted QC breakdown shows
         exactly which structural check failed.</li>
         <li>Re-ask with the Markdown as input, and ask the model to cite
         the rows it used.</li>
@@ -120,7 +120,7 @@
       <div class="article-cta">
         <p>Audit the file the model keeps misquoting — typed tables,
         explicit truncation, and a report of what was detected.</p>
-        <button type="button" class="drop-target drop-target-inline" data-href="/?sample=sales-csv" aria-label="Drop a file to convert it, or click to open the converter">
+        <button type="button" class="drop-target drop-target-inline" data-href="/?sample=sales-csv">
           <svg class="drop-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 3v12" />
             <path d="m7 11 5 5 5-5" />
@@ -132,7 +132,7 @@
       </div>
 
       <nav class="related" aria-label="Keep reading">
-        <div class="related-head"><p class="related-kicker">Keep reading</p><span class="related-links"><a href="/blog/">All articles →</a><a href="https://buymeacoffee.com/makeitmarkdown" rel="noopener">☕ Support this tool</a></span></div>
+        <div class="related-head"><p class="related-kicker">Keep reading</p><a href="/blog/">All articles →</a></div>
         <p class="related-label">Related</p>
         <ul class="related-grid">
           <li><a class="related-card" href="/blog/tables-llms-can-read.html">
@@ -161,11 +161,11 @@
         </ul>
       </nav>
 
-      <div class="ad-slot ad-demo" data-unit="multiplex" aria-label="Advertisement placeholder"></div>
+      <div class="ad-slot ad-demo" data-unit="multiplex" aria-hidden="true"></div>
     </article>
-  </div>
+  </main>
   <script defer src="/assets/js/cta-drop.js"></script>
-  <div class="ad-slot ad-demo ad-rail-fixed rail-left" data-unit="display (160×600)" aria-label="Advertisement placeholder"></div>
-  <div class="ad-slot ad-demo ad-rail-fixed rail-right" data-unit="display (160×600)" aria-label="Advertisement placeholder"></div>
+  <div class="ad-slot ad-demo ad-rail-fixed rail-left" data-unit="display (160×600)" aria-hidden="true"></div>
+  <div class="ad-slot ad-demo ad-rail-fixed rail-right" data-unit="display (160×600)" aria-hidden="true"></div>
 </body>
 </html>
