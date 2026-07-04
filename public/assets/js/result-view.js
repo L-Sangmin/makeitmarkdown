@@ -27,11 +27,54 @@ export function setMarkdown(els, markdown) {
 
 // Rendered view of the current Markdown — how a chat UI would display it.
 // marked + DOMPurify are static on the page (the notebook preview uses them).
+// Two preview-only affordances on top of plain rendering:
+// - a leading YAML frontmatter block (Obsidian/Archive presets) becomes a
+//   Properties box instead of stray horizontal rules;
+// - [Figure: …] placeholders and ![[…]] embeds render as labelled chips.
 export function renderPreview(els) {
-  els.preview.innerHTML = globalThis.DOMPurify.sanitize(
-    globalThis.marked.parse(els._markdown ?? ""),
-    { USE_PROFILES: { html: true } }
-  );
+  let md = els._markdown ?? "";
+  let fmHtml = "";
+  const fm = /^---\n([\s\S]*?)\n---\n?/.exec(md);
+  if (fm) {
+    fmHtml = frontmatterBox(fm[1]);
+    md = md.slice(fm[0].length);
+  }
+  const body = globalThis.DOMPurify.sanitize(globalThis.marked.parse(md), {
+    USE_PROFILES: { html: true },
+  });
+  els.preview.innerHTML = fmHtml + figureChips(body);
+}
+
+function frontmatterBox(yaml) {
+  const rows = yaml
+    .split("\n")
+    .filter((l) => l.trim())
+    .map((line) => {
+      const i = line.indexOf(":");
+      const key = i > 0 ? line.slice(0, i).trim() : "";
+      const val = i > 0 ? line.slice(i + 1).trim() : line.trim();
+      return key
+        ? `<div class="fm-row"><span class="fm-key">${escapeHtml(key)}</span><span class="fm-val">${escapeHtml(val)}</span></div>`
+        : `<div class="fm-row"><span class="fm-key"></span><span class="fm-val">${escapeHtml(val)}</span></div>`;
+    })
+    .join("");
+  return `<aside class="fm-props" aria-label="Frontmatter properties">
+    <p class="fm-kicker">Properties <span class="fm-note">frontmatter — shown as a panel here; travels as YAML</span></p>
+    ${rows}
+  </aside>`;
+}
+
+// The chips are injected into already-sanitized HTML; the placeholder text
+// inside them is escaped again on the way in.
+const FIG_SVG =
+  '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.5-3.5L6 23"/></svg>';
+
+function figureChips(html) {
+  return html
+    .replace(/\[Figure: ([^\]<]+)\]/g, (_, name) =>
+      `<span class="fig-ph" title="Extracted figure — included in the .zip's figures/ folder">${FIG_SVG}${escapeHtml(name)}</span>`)
+    .replace(/!\[\[([^\]<]+)\]\]/g, (_, name) =>
+      `<span class="fig-ph" title="Obsidian embed — resolves inside a vault">${FIG_SVG}${escapeHtml(name)}</span>`);
 }
 
 // The DAG bakes theme colors into its SVG — re-render it when the theme flips.

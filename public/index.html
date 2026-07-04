@@ -86,6 +86,15 @@
       <div class="ad-slot ad-demo ad-rail-side" data-unit="display (160×600)" aria-hidden="true"></div>
     </div>
 
+    <section class="strip" aria-label="Measured results">
+      <div class="strip-inner stats">
+        <div class="stat"><span class="stat-num">30&times;</span><span class="stat-label">smaller &mdash; a 26.6&nbsp;KB sample PDF becomes 0.9&nbsp;KB of the same text</span></div>
+        <div class="stat"><span class="stat-num">64K</span><span class="stat-label">tokens &mdash; a 3.5&nbsp;MB, 100-cell notebook made paste-able, cell addresses intact</span></div>
+        <div class="stat"><span class="stat-num">15</span><span class="stat-label">formats in, one shared structure, five output presets</span></div>
+        <div class="stat"><span class="stat-num">0</span><span class="stat-label">uploads &mdash; conversion runs in this tab and works offline</span></div>
+      </div>
+    </section>
+
     <section class="strip" aria-label="Product demo">
       <div class="strip-inner">
         <div class="media-slot" id="media-hero-demo">
@@ -95,15 +104,6 @@
           breakdown &rarr; Copy. Poster frame: the result view.</p>
           <code>/assets/media/home/hero-demo.mp4</code>
         </div>
-      </div>
-    </section>
-
-    <section class="strip" aria-label="Measured results">
-      <div class="strip-inner stats">
-        <div class="stat"><span class="stat-num">30&times;</span><span class="stat-label">smaller &mdash; a 26.6&nbsp;KB sample PDF becomes 0.9&nbsp;KB of the same text</span></div>
-        <div class="stat"><span class="stat-num">64K</span><span class="stat-label">tokens &mdash; a 3.5&nbsp;MB, 100-cell notebook made paste-able, cell addresses intact</span></div>
-        <div class="stat"><span class="stat-num">15</span><span class="stat-label">formats in, one shared structure, five output presets</span></div>
-        <div class="stat"><span class="stat-num">0</span><span class="stat-label">uploads &mdash; conversion runs in this tab and works offline</span></div>
       </div>
     </section>
 
@@ -207,16 +207,40 @@
       <span class="bar-spacer"></span>
       <div class="seg" id="preset-seg" role="group" aria-label="Output preset"></div>
       <div class="bar-actions">
-        <button type="button" id="btn-original" class="btn btn-ghost" aria-pressed="true">Hide original</button>
-        <button type="button" id="btn-copy" class="btn btn-ghost">Copy</button>
-        <button type="button" id="btn-md" class="btn btn-ghost" title="Markdown file only">.md</button>
-        <button type="button" id="btn-zip" class="btn btn-solid" title="Markdown + extracted figures">.zip</button>
+        <button type="button" id="btn-copy" class="btn btn-ghost btn-icon" aria-label="Copy Markdown" title="Copy Markdown to clipboard">
+          <svg class="ic-copy" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <svg class="ic-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M20 6 9 17l-5-5"/></svg>
+        </button>
+        <div class="dl-menu">
+          <button type="button" id="btn-download" class="btn btn-solid" aria-haspopup="menu" aria-expanded="false">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 19h16"/></svg>
+            Download
+            <svg class="dl-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="dl-pop" role="menu" aria-label="Download options" hidden>
+            <button type="button" id="btn-md" class="dl-item" role="menuitem">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9.5 17v-4l2 2 2-2v4" stroke-width="1.4"/></svg>
+              <span class="dl-item-text"><strong>.md</strong><small>Markdown file only</small></span>
+              <span class="info-dot" title="One .md file with the converted Markdown — figure placeholders reference files that stay in the source.">&#9432;</span>
+            </button>
+            <button type="button" id="btn-zip" class="dl-item" role="menuitem">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>
+              <span class="dl-item-text"><strong>.zip</strong><small>Markdown + extracted figures</small></span>
+              <span class="info-dot" title="A .zip with the Markdown and every extracted figure in a figures/ folder — placeholders resolve locally. Batch drops bundle one folder per file.">&#9432;</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="panes">
       <section class="pane pane-original" aria-label="Original preview">
-        <h2 class="pane-title">Original</h2>
+        <h2 class="pane-title pane-title-fold">
+          <button type="button" id="btn-original" class="pane-fold" aria-expanded="true" aria-label="Collapse the original panel">
+            <svg class="fold-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+            <span class="fold-text">Original</span>
+          </button>
+        </h2>
         <div class="pane-body" id="original-body"></div>
       </section>
       <section class="pane" aria-label="Converted Markdown">
@@ -234,7 +258,10 @@
       </section>
       <section class="pane" aria-label="Fidelity report">
         <h2 class="pane-title">Fidelity report</h2>
-        <div class="pane-body" id="fidelity-body"></div>
+        <div class="pane-body">
+          <div id="tok-save" class="tok-save" hidden></div>
+          <div id="fidelity-body"></div>
+        </div>
       </section>
     </div>
 

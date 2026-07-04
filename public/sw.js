@@ -8,11 +8,12 @@
 //
 // DEPLOY NOTE: bump VERSION on every deploy — it invalidates old caches.
 
-const VERSION = "v14";
+const VERSION = "v15";
 const CACHE = `mim-${VERSION}`;
 
 const CORE = [
   "/",
+  "/offline.html",
   "/about.html",
   "/privacy.html",
   "/contact.html",
@@ -107,7 +108,9 @@ self.addEventListener("fetch", (e) => {
       .catch(async () => {
         const hit = await caches.match(e.request);
         if (hit) return hit;
-        if (e.request.mode === "navigate") return caches.match("/");
+        // Never silently swap in the homepage for an uncached article —
+        // an explicit offline notice is honest; the wrong page is not.
+        if (e.request.mode === "navigate") return caches.match("/offline.html");
         return Response.error();
       })
   );

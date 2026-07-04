@@ -98,6 +98,57 @@ function applyPreset(id) {
   current.markdown = formatWithPreset(current.result, id);
   setMarkdown(els, current.markdown);
   resetExactCount();
+  updateTokSave();
+}
+
+// --- token savings strip (top of the fidelity pane) -------------------------------
+// Everything here is arithmetic on measured sizes: raw file bytes and Markdown
+// characters, both at the same ≈4 chars/token estimate the size note uses.
+// Prefill time uses a stated 1,000 tok/s reading rate — an assumption, labelled.
+
+const tokSaveBox = document.getElementById("tok-save");
+
+function fmtTok(n) {
+  return n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0 : 1)}K` : String(n);
+}
+
+function updateTokSave() {
+  if (!tokSaveBox) return;
+  const rawBytes = current?.fileBuffer?.byteLength;
+  if (!rawBytes || !current.markdown) {
+    tokSaveBox.hidden = true;
+    return;
+  }
+  const before = Math.round(rawBytes / 4);
+  const after = Math.round(current.markdown.length / 4);
+  const reduction = 1 - after / before;
+  const secSaved = (before - after) / 1000;
+
+  const pctLabel =
+    reduction >= 0.005
+      ? `&minus;${Math.round(reduction * 100)}%`
+      : `&plusmn;0%`;
+  const barPct = Math.max(2, Math.min(100, Math.round((after / before) * 100)));
+  const timeNote =
+    secSaved >= 0.1
+      ? `&approx;${secSaved >= 10 ? Math.round(secSaved) : secSaved.toFixed(1)}s less prefill at 1k tok/s`
+      : "about the same size";
+
+  tokSaveBox.title =
+    "Estimates: raw file bytes and Markdown characters, both at ≈4 chars per token; " +
+    "prefill time at an assumed 1,000 tokens/s. Use “count exactly” for the precise output count.";
+  tokSaveBox.innerHTML = `
+    <div class="tok-pct">
+      <span class="tok-pct-num">${pctLabel}</span>
+      <span class="tok-pct-label">token estimate vs raw</span>
+      <div class="tok-bar" role="presentation"><span style="width:${barPct}%"></span></div>
+    </div>
+    <div class="tok-nums">
+      <span class="tok-line"><span class="tok-k">raw file</span> &approx;${fmtTok(before)} tok</span>
+      <span class="tok-line"><span class="tok-k">Markdown</span> &approx;${fmtTok(after)} tok</span>
+      <span class="tok-time">${timeNote}</span>
+    </div>`;
+  tokSaveBox.hidden = false;
 }
 
 // --- markdown pane: raw/preview toggle + exact token count -----------------------
@@ -125,19 +176,48 @@ function resetExactCount() {
   btnExact.textContent = "count exactly";
 }
 
-// --- original pane: collapsible (auto-collapsed when there is no real viewer) --
+// --- original pane: header folds/expands it (auto-collapsed without a viewer) --
 
 function setOriginalCollapsed(collapsed) {
   els.panes.classList.toggle("orig-collapsed", collapsed);
-  els.btnOriginal.textContent = collapsed ? "Show original" : "Hide original";
-  els.btnOriginal.setAttribute("aria-pressed", String(!collapsed));
+  els.btnOriginal.setAttribute("aria-expanded", String(!collapsed));
+  els.btnOriginal.setAttribute(
+    "aria-label",
+    collapsed ? "Expand the original panel" : "Collapse the original panel"
+  );
 }
 
 els.btnOriginal.addEventListener("click", () => {
   setOriginalCollapsed(!els.panes.classList.contains("orig-collapsed"));
 });
 
-// --- downloads: markdown only, or the full zip -----------------------------------
+// --- downloads: one button, a small menu for .md vs .zip --------------------------
+
+const btnDownload = document.getElementById("btn-download");
+const dlPop = document.querySelector(".dl-pop");
+
+function setDlOpen(open) {
+  dlPop.hidden = !open;
+  btnDownload.setAttribute("aria-expanded", String(open));
+}
+
+btnDownload?.addEventListener("click", (e) => {
+  e.stopPropagation();
+  setDlOpen(dlPop.hidden);
+});
+document.addEventListener("click", (e) => {
+  if (!dlPop.hidden && !e.target.closest(".dl-menu")) setDlOpen(false);
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !dlPop.hidden) {
+    e.stopImmediatePropagation(); // closing the menu must not also exit the result view
+    setDlOpen(false);
+    btnDownload.focus();
+  }
+});
+dlPop?.addEventListener("click", (e) => {
+  if (e.target.closest(".dl-item")) setDlOpen(false);
+});
 
 els.btnMd.addEventListener("click", () => {
   if (!current) return;
@@ -243,6 +323,7 @@ async function runOcr(btn) {
     current.markdown = formatWithPreset(current.result, activePreset);
     setOriginalCollapsed(renderResult(current, els) === "note");
     resetExactCount();
+    updateTokSave();
     maybeOfferOcr(); // meta.ocr is set now — the offer removes itself
     saveToHistory(current, activePreset);
     renderHistoryList();
@@ -334,6 +415,7 @@ async function handleFile(file) {
 
     setOriginalCollapsed(renderResult(payload, els) === "note");
     resetExactCount();
+    updateTokSave();
     maybeOfferOcr();
     showResult();
     saveToHistory(payload, activePreset);
@@ -407,6 +489,7 @@ async function handleFiles(files) {
   els.meta.textContent = `${payloads.length} files converted${failNote} · showing ${current.filename} · Download .zip bundles all`;
   setOriginalCollapsed(renderResult(current, els) === "note");
   resetExactCount();
+  updateTokSave();
   maybeOfferOcr();
   showResult();
 }
@@ -507,6 +590,7 @@ function restoreFromHistory(entry) {
   els.meta.textContent = `${entry.filename} · restored from local history (${timeAgo(entry.ts)}) — stored only in this browser`;
   setOriginalCollapsed(renderResult(current, els) === "note");
   resetExactCount();
+  updateTokSave();
   maybeOfferOcr();
   showResult();
 }
@@ -559,11 +643,17 @@ if (sampleParam) loadSample(sampleParam === "1" ? "sales-analysis" : sampleParam
 document.getElementById("btn-new")?.addEventListener("click", showLanding);
 
 function flashCopied() {
-  els.btnCopy.textContent = "Copied ✓";
+  const copyIcon = els.btnCopy.querySelector(".ic-copy");
+  const checkIcon = els.btnCopy.querySelector(".ic-check");
+  copyIcon.hidden = true;
+  checkIcon.hidden = false;
   els.btnCopy.classList.add("is-done");
+  els.btnCopy.setAttribute("aria-label", "Copied");
   setTimeout(() => {
-    els.btnCopy.textContent = "Copy";
+    copyIcon.hidden = false;
+    checkIcon.hidden = true;
     els.btnCopy.classList.remove("is-done");
+    els.btnCopy.setAttribute("aria-label", "Copy Markdown");
   }, 1200);
 }
 

@@ -118,7 +118,15 @@ compute()
       <div class="article-cta">
         <p>Or skip the hand-work: drop a file and get all ten rules applied,
         with a fidelity report of what was detected.</p>
-        <a href="/">Open MakeItMarkdown →</a>
+        <button type="button" class="drop-target drop-target-inline" data-href="/">
+          <svg class="drop-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12" />
+            <path d="m7 11 5 5 5-5" />
+            <path d="M4 19h16" />
+          </svg>
+          <span class="drop-cta">Drop a file here &mdash; or click to open the converter</span>
+          <span class="drop-formats">.ipynb &middot; .docx &middot; .pptx &middot; .xlsx &middot; .csv &middot; .json &middot; .html &middot; .pdf &middot; .tex &middot; .eml &middot; .srt &middot; .md</span>
+        </button>
       </div>
 
       <div class="ad-slot ad-demo" data-unit="display" aria-hidden="true"></div>
@@ -132,5 +140,6 @@ compute()
   </main>
   <div class="ad-slot ad-demo ad-rail-fixed rail-left" data-unit="display (160×600)" aria-hidden="true"></div>
   <div class="ad-slot ad-demo ad-rail-fixed rail-right" data-unit="display (160×600)" aria-hidden="true"></div>
+  <script defer src="/assets/js/cta-drop.js"></script>
 </body>
 </html>

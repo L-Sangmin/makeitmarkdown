@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Offline — MakeItMarkdown</title>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <script>
+    try {
+      const t = localStorage.getItem("mim-theme");
+      if (t) document.documentElement.dataset.theme = t;
+    } catch {}
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/">MakeItMarkdown</a>
+  </header>
+  <main style="display:grid;place-content:center;text-align:center;padding:3rem 1.5rem;gap:0.75rem">
+    <p style="font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg-faint);margin:0">Offline</p>
+    <h1 style="margin:0;font-size:1.5rem;letter-spacing:-0.02em">This page isn&rsquo;t cached yet</h1>
+    <p style="margin:0;max-width:26rem;color:var(--fg-muted);font-size:0.9375rem;line-height:1.6">
+      You&rsquo;re offline and this page hasn&rsquo;t been visited on this device.
+      The converter itself works offline &mdash; conversions never needed a network.
+    </p>
+    <p style="margin:0.5rem 0 0"><a href="/" style="color:var(--accent)">Open the converter &rarr;</a></p>
+  </main>
+</body>
+</html>
