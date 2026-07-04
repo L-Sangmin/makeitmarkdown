@@ -13,6 +13,17 @@
   var href = target.dataset.href || "/";
   target.addEventListener("click", function () { location.href = href; });
 
+  // Articles that promise a specific preset ("convert with the Obsidian
+  // preset") carry it in data-href; the drop redirect must keep that
+  // promise too, not fall back to the default preset.
+  var presetId = "";
+  try {
+    presetId = new URL(href, location.origin).searchParams.get("preset") || "";
+  } catch (err) {}
+  var dropHref = presetId
+    ? "/?preset=" + encodeURIComponent(presetId) + "#dropped"
+    : "/#dropped";
+
   if (!("indexedDB" in window)) return;
 
   function openDb() {
@@ -46,7 +57,7 @@
       .then(function (db) {
         var tx = db.transaction("files", "readwrite");
         tx.objectStore("files").put({ files: list, ts: Date.now() }, "pending");
-        tx.oncomplete = function () { location.href = "/#dropped"; };
+        tx.oncomplete = function () { location.href = dropHref; };
         tx.onerror = function () { location.href = "/"; };
       })
       .catch(function () { location.href = "/"; });
