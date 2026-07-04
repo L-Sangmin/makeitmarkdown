@@ -1057,6 +1057,36 @@ kbd {
   color: var(--fg-muted);
 }
 
+/* real slide rendering (result-view renderPptxSlides) — slides keep a
+   white canvas in both themes, like the deck itself */
+.pptx-slides { display: flex; flex-direction: column; gap: 1rem; }
+.pptx-slide-item { margin: 0; }
+.pptx-slide {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  container-type: inline-size;
+  background: #ffffff;
+  color: #1a1a1e;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 1px 3px var(--shadow-color);
+}
+.pptx-shape { position: absolute; overflow: hidden; }
+.pptx-pic { position: absolute; object-fit: contain; }
+/* shapes whose box can't be resolved stack top-down instead of vanishing */
+.pptx-flow { position: absolute; inset: 6% 5%; display: flex; flex-direction: column; gap: 4cqw; }
+.pptx-shape-flow { position: static; overflow: visible; }
+.pptx-pic-flow { position: static; max-width: 60%; max-height: 45%; object-fit: contain; align-self: flex-start; }
+.pptx-par { margin: 0; line-height: 1.25; overflow-wrap: break-word; }
+.pptx-slide-num {
+  margin: 0.375rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--fg-muted);
+}
+
 .pane {
   display: flex;
   flex-direction: column;
