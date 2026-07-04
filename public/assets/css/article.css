@@ -50,6 +50,75 @@ article h2 .sec-num {
   color: var(--accent);
 }
 
+/* related — two-tier keep-reading nav at the foot of every article. */
+.related {
+  margin: 3rem 0 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.related-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.related-head a { font-size: 0.8125rem; }
+
+.related-kicker {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.related-label {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+
+.related-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 0.6rem;
+  padding: 0;
+  margin: 0;
+}
+
+.related-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  height: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-raised);
+  text-decoration: none;
+  transition: border-color 120ms ease;
+}
+
+.related-card:hover { border-color: var(--accent); }
+
+.related-group {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--fg-faint);
+}
+
+.related-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--fg);
+}
+
 /* fig-panel — inline concept diagrams, same visual language as the hero. */
 .fig-panel {
   margin: 1.25rem 0 1.5rem;
