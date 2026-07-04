@@ -325,6 +325,8 @@ kbd {
   font-size: 0.75rem;
 }
 
+.site-footer a.footer-version { font-family: var(--font-mono); }
+
 .site-footer a {
   color: var(--fg-faint);
   text-decoration: none;
@@ -1604,3 +1606,12 @@ kbd {
   }
   .ad-rail-side { display: grid; min-height: 600px; }
 }
+
+/* --- Pre-approval ad kill-switch ------------------------------------------
+   Every reserved unit stays in the markup as the ready-to-fill AdSense
+   backup, but the deployed site shows none of them until approval.
+   To go live after "adsense approved": delete this block — the inject
+   script styles the real units (they don't carry .ad-demo). */
+.ad-slot.ad-demo,
+.ad-card,
+.ad-rail-fixed { display: none !important; }
