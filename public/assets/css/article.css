@@ -471,6 +471,12 @@ article p a, article li a, article td a, article figcaption a {
 .gallery-grid .ad-card { list-style: none; }
 .ad-infeed { margin: 0; height: 100%; min-height: 16rem; }
 
+/* two-cell in-feed unit — fills a section's trailing free cells; only spans
+   when the grid is guaranteed a second column */
+@media (min-width: 768px) {
+  .gallery-grid > .ad-card-wide { grid-column: span 2; }
+}
+
 /* Fixed side rails on wide screens — the 42rem content column is untouched;
    rails ride the empty margins (hidden below 1240px, AdSense-supported). */
 .ad-rail-fixed {
