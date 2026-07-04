@@ -473,6 +473,13 @@ function setBusy(filename) {
 
 async function handleFile(file) {
   hideError();
+  if (file.size === 0) {
+    showError(
+      `<code>${escapeText(file.name)}</code> is empty — 0 bytes, nothing to convert. ` +
+        `Re-export or re-download it, then drop it again.`
+    );
+    return;
+  }
   const clearBusy = setBusy(file.name);
   const busyLabel = els.dropTarget.querySelector(".drop-busy-label");
   try {
@@ -503,6 +510,15 @@ async function handleFile(file) {
     } else if (NOT_READY.test(err.message ?? "")) {
       showError(
         `That format's parser isn't wired up yet — drop one of the supported types listed under the target.`
+      );
+    } else if (/corrupted zip|end of data|central directory|not a zip/i.test(err.message ?? "")) {
+      // JSZip's internals ("asked index = 4") mean one thing to a user:
+      // the container didn't open.
+      showError(
+        `<code>${escapeText(file.name)}</code> couldn't be opened as a document container — ` +
+          `it may be damaged, or renamed from another file type. Re-export it from the ` +
+          `original app and drop it again. ` +
+          `<a href="/blog/llm-file-upload-errors.html">Why files get rejected →</a>`
       );
     } else {
       showError(
